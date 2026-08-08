@@ -68,4 +68,4 @@ jobs:
         run: npm test
 
       - name: Verify API Startup Syntax
-        run: node -e "require('./src/app'); console.log('API syntax verification passed.');"
+        run: node -e "require('./src/app'); console.log('API syntax verification passed.'); process.exit(0)"
