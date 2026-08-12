@@ -49,23 +49,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
+          cache-dependency-path: backend/package-lock.json
 
       - name: Install dependencies
+        working-directory: backend
         run: npm ci
 
       - name: Validate Prisma Schema
+        working-directory: backend
         run: npx prisma validate --schema=src/models/schema.prisma
 
       - name: Generate Prisma Client
-        run: npx prisma generate --schema=src/models/schema.prisma
+        working-directory: backend
+        run: npm run generate
 
       - name: Run Unit & Integration Tests
+        working-directory: backend
         run: npm test
 
-      - name: Verify API Startup Syntax
-        run: node -e "require('./src/app'); console.log('API syntax verification passed.'); process.exit(0)"
+      - name: Verify API Startup
+        working-directory: backend
+        run: node --input-type=module -e "import('./src/app.js').then(() => console.log('API startup verification passed.')).catch(err => { console.error(err); process.exit(1); })"
