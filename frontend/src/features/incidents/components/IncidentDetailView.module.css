@@ -1,0 +1,11 @@
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .layoutGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

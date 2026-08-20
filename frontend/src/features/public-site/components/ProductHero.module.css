@@ -1,0 +1,247 @@
+.heroSection {
+  background-color: var(--surface-cream);
+  padding: 3.5rem 0 4.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+/* Left Column */
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Pill Badge */
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background-color: rgba(232, 163, 61, 0.1);
+  border: 1px solid rgba(232, 163, 61, 0.35);
+  border-radius: var(--radius-full);
+  margin-bottom: 1.5rem;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-amber-500);
+}
+
+.badgeText {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-amber-600);
+  text-transform: uppercase;
+}
+
+/* Headline */
+.headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.2vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1.12;
+  color: var(--color-text-primary);
+  margin: 0 0 1.25rem 0;
+  letter-spacing: -0.02em;
+}
+
+.headlineAccent {
+  color: var(--color-amber-500);
+  font-style: normal;
+}
+
+/* Subheading */
+.subheading {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0 0 2rem 0;
+  max-width: 520px;
+}
+
+/* CTA Group */
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: var(--surface-dark);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.8rem 1.65rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: 1px solid var(--surface-dark);
+  transition: all var(--transition-fast);
+  box-shadow: var(--elevation-rest);
+}
+
+.primaryBtn:hover {
+  background-color: var(--color-navy-800);
+  transform: translateY(-1px);
+  box-shadow: var(--elevation-hover);
+  color: #FFFFFF;
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.8rem 1.65rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: 1px solid var(--color-border-strong);
+  transition: all var(--transition-fast);
+}
+
+.secondaryBtn:hover {
+  background-color: var(--surface-cream-warm);
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+/* 4 Feature Pills Row */
+.featurePillsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.featurePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  box-shadow: 0 1px 2px rgba(11, 31, 42, 0.03);
+}
+
+.featurePill svg {
+  color: var(--color-amber-500);
+}
+
+/* Social Proof Row */
+.socialProofRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatarStack {
+  display: flex;
+  align-items: center;
+}
+
+.stackAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  margin-left: -8px;
+  object-fit: cover;
+}
+
+.stackAvatar:first-child {
+  margin-left: 0;
+}
+
+.ratingInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.starsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.scoreText {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-left: 0.25rem;
+}
+
+.trustText {
+  font-size: 0.775rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* Right Column */
+.rightCol {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 1080px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .leftCol {
+    max-width: 650px;
+    margin: 0 auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .headline {
+    text-align: center;
+  }
+
+  .subheading {
+    text-align: center;
+  }
+
+  .featurePillsRow {
+    justify-content: center;
+  }
+
+  .socialProofRow {
+    justify-content: center;
+  }
+}

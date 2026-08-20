@@ -1,0 +1,85 @@
+.container {
+  padding: var(--space-4) 0;
+  font-family: var(--font-sans);
+}
+
+.card {
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elevation-rest);
+  padding: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  margin: 0 0 8px 0;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+.customBadge {
+  background-color: rgba(45, 74, 83, 0.1);
+  color: var(--color-teal-600);
+  border: 1px solid rgba(45, 74, 83, 0.25);
+}
+
+.inheritedBadge {
+  background-color: var(--surface-muted);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.thresholdGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.thresholdBox {
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-xs);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+}
+
+.thresholdLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.thresholdValue {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: 4px;
+  font-family: var(--font-mono);
+}
+
+.thresholdSubtext {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}

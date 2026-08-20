@@ -1,0 +1,223 @@
+:root {
+  /* ==========================================================================
+     MASTER VISUAL DESIGN SYSTEM — SENTRAOPS REDESIGN
+     Warm cream page base (#FDF8F0), deep navy (#0B1F2A), warm amber (#E8A33D)
+     ========================================================================== */
+
+  /* Surface Colors */
+  --surface-cream: #FDF8F0;
+  --surface-cream-tint: #FAF5EE;
+  --surface-cream-warm: #F7EFE4;
+  --surface-dark: #0B1F2A;        /* Deep Navy for header, footer, dark hero bar & final CTA */
+  --surface-dark-card: #102837;   /* Dark navy card surface */
+  --surface-dark-subtle: #081720; /* Darker navy background */
+  --surface-light: #FFFFFF;       /* Pure white card surface */
+  --surface-muted: #F8F9FA;       /* Muted gray surface */
+  --surface-page: var(--surface-cream);
+
+  /* Warm Brand Amber Accents */
+  --color-amber-400: #F3B755;
+  --color-amber-500: #E8A33D;    /* Primary brand amber */
+  --color-amber-600: #D98A2B;    /* Hover / active amber */
+  --color-amber-700: #B86E18;
+  --color-amber-subtle: rgba(232, 163, 61, 0.12);
+  --color-amber-border: rgba(232, 163, 61, 0.3);
+
+  /* Deep Navy Brand Accents */
+  --color-navy-950: #07141C;
+  --color-navy-900: #0B1F2A;
+  --color-navy-800: #132E3E;
+  --color-navy-700: #1D3F54;
+  --color-navy-600: #2C546E;
+
+  /* Technical Brand Accents (Backwards Compatibility) */
+  --color-teal-800: #132E35;
+  --color-teal-600: #2D4A53;
+  --color-slate-500: #69818D;
+  --color-slate-600: #5A636A;
+  --color-slate-300: #AFB3B7;
+
+  /* Universal Borders */
+  --color-border: #E8E5DF;
+  --color-border-card: #EAE6DF;
+  --color-border-light: #F0EDE6;
+  --color-border-strong: #D5D0C6;
+  --color-border-dark: rgba(255, 255, 255, 0.1);
+  --color-border-dark-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-subtle: #F2EFE9;
+
+  /* Text Colors */
+  --color-text-primary: #0B1F2A;    /* Dark navy near-black */
+  --color-text-secondary: #5F6B76;  /* Muted slate gray */
+  --color-text-muted: #8E99A4;
+  --color-text-amber: #E8A33D;
+  --color-text-inverse: #FFFFFF;
+  --color-text-inverse-muted: #94A3B8;
+
+  /* Semantic Status Colors */
+  --color-status-healthy: #16A34A;
+  --color-status-degraded: #E8A33D;
+  --color-status-down: #DC2626;
+  --color-status-maintenance: #2563EB;
+  --color-status-unknown: var(--color-slate-600);
+
+  --color-status-operational: var(--color-status-healthy);
+  --color-status-incident: var(--color-status-down);
+
+  --color-success: var(--color-status-healthy);
+  --color-success-bg: rgba(22, 163, 74, 0.08);
+  --color-success-border: rgba(22, 163, 74, 0.25);
+
+  --color-warning: var(--color-amber-500);
+  --color-warning-bg: rgba(232, 163, 61, 0.08);
+  --color-warning-border: rgba(232, 163, 61, 0.25);
+
+  --color-danger: var(--color-status-down);
+  --color-danger-bg: rgba(220, 38, 38, 0.08);
+  --color-danger-border: rgba(220, 38, 38, 0.25);
+
+  --color-info: #2563EB;
+  --color-info-bg: rgba(37, 99, 235, 0.08);
+  --color-info-border: rgba(37, 99, 235, 0.25);
+
+  --color-paynes-grey: var(--color-slate-600);
+  --color-paynes-grey-bg: rgba(90, 99, 106, 0.08);
+
+  /* Semantic Token Mappings */
+  --color-ink-900: var(--surface-dark);
+  --color-ink-800: var(--surface-dark);
+  --color-ink-700: var(--color-navy-700);
+  --color-surface-0: var(--surface-light);
+  --color-surface-1: var(--surface-cream);
+  --color-surface-2: var(--surface-muted);
+  --color-surface-card: var(--surface-light);
+  --color-surface-elevated: var(--surface-light);
+
+  --color-bg-app: var(--surface-page);
+  --color-bg-subtle: var(--surface-cream-tint);
+  --color-bg-surface: var(--surface-light);
+  --color-bg-surface-hover: var(--surface-muted);
+  --color-bg-elevated: var(--surface-light);
+  --color-bg-input: var(--surface-light);
+  --color-bg-mist: var(--surface-cream-warm);
+  --color-bg-navy: var(--surface-dark);
+  --color-bg-midnight: var(--surface-dark);
+  --color-bg-buttercream: var(--surface-cream-warm);
+
+  --color-midnight-blue: var(--surface-dark);
+  --color-deep-navy: var(--surface-dark);
+  --color-dusty-blue: var(--color-slate-600);
+  --color-mist-blue: var(--color-slate-300);
+  --color-mist-blue-light: var(--surface-cream-tint);
+  --color-mist-blue-subtle: var(--surface-cream-tint);
+  --color-buttercream: var(--color-amber-500);
+  --color-buttercream-light: var(--surface-cream-tint);
+  --color-warm-stone: #D5D0C6;
+  --color-warm-stone-light: var(--surface-cream-warm);
+  --color-white: #FFFFFF;
+
+  --color-midnight: var(--surface-dark);
+  --color-navy: var(--surface-dark);
+  --color-dusty: var(--color-slate-600);
+  --color-mist: var(--color-slate-300);
+
+  --color-brand-primary: var(--surface-dark);
+  --color-brand-dark: var(--surface-dark);
+  --color-brand-secondary: var(--color-amber-500);
+  --color-brand-accent: var(--color-amber-500);
+  --color-brand-500: var(--color-amber-500);
+  --color-brand-600: var(--surface-dark);
+
+  --color-text-navy: var(--surface-dark);
+  --color-text-dusty: var(--color-slate-600);
+  --color-text-mist: var(--color-slate-300);
+
+  /* ==========================================================================
+     TYPOGRAPHY SYSTEM
+     ========================================================================== */
+  --font-family-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-family-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-family-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  --font-display: var(--font-family-display);
+  --font-sans: var(--font-family-sans);
+  --font-mono: var(--font-family-mono);
+
+  /* Typography Scale */
+  --text-hero: clamp(2.25rem, 4vw, 3.5rem);
+  --text-display: clamp(1.85rem, 3.2vw, 2.75rem);
+  --text-h1: clamp(1.75rem, 2.8vw, 2.5rem);
+  --text-h2: clamp(1.35rem, 2.2vw, 1.85rem);
+  --text-h3: 1.15rem;
+  --text-body: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+  --text-micro: 0.6875rem;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.85rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3.25rem;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ==========================================================================
+     SPACING & LAYOUT
+     ========================================================================== */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ==========================================================================
+     ROUNDED RADII
+     ========================================================================== */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Focus Ring */
+  --focus-ring: 0 0 0 3px rgba(232, 163, 61, 0.35);
+  --focus-ring-offset: 2px;
+
+  /* ==========================================================================
+     ELEVATION & SOFT SHADOWS
+     ========================================================================== */
+  --elevation-rest: 0 1px 3px rgba(11, 31, 42, 0.04), 0 4px 14px rgba(11, 31, 42, 0.05);
+  --elevation-hover: 0 4px 8px rgba(11, 31, 42, 0.06), 0 16px 32px rgba(11, 31, 42, 0.08);
+  --elevation-card: 0 2px 8px rgba(11, 31, 42, 0.04), 0 12px 24px -6px rgba(11, 31, 42, 0.06);
+  --elevation-mockup: 0 20px 48px -12px rgba(11, 31, 42, 0.12), 0 0 0 1px rgba(11, 31, 42, 0.04);
+
+  /* Elevation aliases for legacy compatibility */
+  --shadow-xs: var(--elevation-rest);
+  --shadow-sm: var(--elevation-rest);
+  --shadow-md: var(--elevation-hover);
+  --shadow-lg: var(--elevation-hover);
+  --shadow-focus: 0 0 0 3px rgba(232, 163, 61, 0.35);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}

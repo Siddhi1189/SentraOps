@@ -1,0 +1,96 @@
+.card {
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-rest);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.textareaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.textareaLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: var(--space-3);
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-teal-600);
+  box-shadow: var(--shadow-focus);
+}
+
+.charCount {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.charCountNearLimit {
+  color: var(--color-status-down);
+  font-weight: var(--font-weight-semibold);
+}
+
+.conflictBanner {
+  background-color: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.conflictMessage {
+  color: var(--color-status-down);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+}

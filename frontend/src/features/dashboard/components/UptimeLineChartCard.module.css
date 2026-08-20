@@ -1,0 +1,83 @@
+.card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--elevation-base);
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #2563EB;
+}
+
+.legendText {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.chartContainer {
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 180px;
+}
+
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.675rem;
+  color: #94A3B8;
+  padding-bottom: 1.5rem;
+  text-align: right;
+  min-width: 32px;
+}
+
+.svgWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.chartSvg {
+  width: 100%;
+  height: 160px;
+  overflow: visible;
+}
+
+.xAxis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.675rem;
+  color: #94A3B8;
+  margin-top: 0.35rem;
+  padding: 0 10px;
+}

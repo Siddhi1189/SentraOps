@@ -1,0 +1,144 @@
+.card {
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elevation-rest);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0 0 1rem 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statBox {
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-xs);
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-top: 4px;
+  letter-spacing: -0.02em;
+  font-family: var(--font-mono);
+}
+
+.sectionTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 1.25rem 0 0.75rem 0;
+}
+
+.distributionRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.distLabel {
+  width: 90px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+}
+
+.barTrack {
+  flex: 1;
+  height: 6px;
+  background-color: var(--color-border-subtle);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: var(--radius-xs);
+  transition: width 0.3s ease;
+}
+
+.barLow {
+  background-color: var(--color-status-operational);
+}
+
+.barMedium {
+  background-color: var(--color-teal-600);
+}
+
+.barHigh {
+  background-color: var(--color-status-degraded);
+}
+
+.barCritical {
+  background-color: var(--color-status-incident);
+}
+
+.barOpen {
+  background-color: var(--color-status-incident);
+}
+
+.barInvestigating {
+  background-color: var(--color-status-degraded);
+}
+
+.barIdentified {
+  background-color: var(--surface-dark);
+}
+
+.barMonitoring {
+  background-color: var(--color-teal-600);
+}
+
+.barResolved {
+  background-color: var(--color-status-operational);
+}
+
+.distValue {
+  width: 40px;
+  text-align: right;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

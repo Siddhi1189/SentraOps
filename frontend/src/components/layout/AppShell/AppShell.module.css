@@ -1,0 +1,22 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  background-color: var(--surface-cream);
+}
+
+.mainLayout {
+  flex: 1;
+  margin-left: 240px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-cream);
+  width: calc(100% - 240px);
+}
+
+@media (max-width: 1024px) {
+  .mainLayout {
+    margin-left: 0;
+    width: 100%;
+  }
+}

@@ -1,0 +1,128 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sm {
+  font-size: var(--font-size-xs);
+  padding: 0.375rem 0.75rem;
+}
+
+.md {
+  font-size: var(--font-size-sm);
+  padding: 0.5rem 1rem;
+}
+
+.lg {
+  font-size: var(--font-size-base);
+  padding: 0.75rem 1.5rem;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* 1. Primary */
+.primary {
+  background-color: var(--surface-dark);
+  color: #ffffff;
+  border-color: var(--surface-dark);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-teal-800);
+  border-color: var(--color-teal-800);
+  color: #ffffff;
+}
+
+/* 2. Secondary */
+.secondary {
+  background-color: var(--surface-light);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--surface-muted);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+/* 3. Accent */
+.accent {
+  background-color: var(--color-teal-600);
+  color: #ffffff;
+  border-color: var(--color-teal-600);
+}
+
+.accent:hover:not(:disabled) {
+  background-color: var(--surface-dark);
+  border-color: var(--surface-dark);
+  color: #ffffff;
+}
+
+/* 4. Warm / Alternate */
+.warm {
+  background-color: var(--surface-muted);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.warm:hover:not(:disabled) {
+  background-color: var(--surface-light);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+/* 5. Success */
+.success {
+  background-color: var(--color-status-healthy);
+  color: #ffffff;
+  border-color: var(--color-status-healthy);
+}
+
+.success:hover:not(:disabled) {
+  background-color: #336650;
+  border-color: #336650;
+}
+
+/* 6. Danger */
+.danger {
+  background-color: var(--color-status-down);
+  color: #ffffff;
+  border-color: var(--color-status-down);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: #8c3a3a;
+  border-color: #8c3a3a;
+}
+
+/* 7. Ghost */
+.ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: var(--surface-muted);
+  color: var(--color-text-primary);
+}

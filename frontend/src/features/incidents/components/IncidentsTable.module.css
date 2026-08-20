@@ -1,0 +1,56 @@
+.incidentLink {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.incidentLink:hover {
+  color: var(--color-teal-600);
+}
+
+.severityBadge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+}
+
+.severity_low {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: var(--color-info-border);
+}
+
+.severity_medium {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border-color: var(--color-warning-border);
+}
+
+.severity_high {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: var(--color-danger-border);
+}
+
+.severity_critical {
+  background-color: rgba(153, 27, 27, 0.1);
+  color: #991b1b;
+  border-color: rgba(153, 27, 27, 0.3);
+}
+
+.desktopOnly {
+  display: table-cell;
+}
+
+@media (max-width: 767px) {
+  .desktopOnly {
+    display: none !important;
+  }
+}

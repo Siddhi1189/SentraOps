@@ -1,0 +1,162 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface-cream);
+  background-image: radial-gradient(#E8E0D2 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 3rem 1.5rem;
+  font-family: var(--font-sans);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top-Left Back to Home Link */
+.backHomeLink {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-xs);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.backHomeLink:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+.backHomeLink:focus-visible {
+  outline: 2px solid var(--color-amber-500);
+  outline-offset: 2px;
+}
+
+/* Background Decorative Corner SVGs */
+.bgDecorTopRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 340px;
+  height: 340px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.bgDecorBottomLeft {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 340px;
+  height: 340px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.authWrapper {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Top Trust Pill Badge */
+.trustBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.15rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid #EAE4D8;
+  border-radius: var(--radius-full);
+  font-size: 0.775rem;
+  color: var(--color-text-secondary);
+  box-shadow: 0 1px 3px rgba(11, 31, 42, 0.04);
+  backdrop-filter: blur(8px);
+}
+
+.amberText {
+  color: var(--color-amber-600);
+  font-weight: 700;
+}
+
+/* Centered White Auth Card */
+.authCard {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 48px -12px rgba(11, 31, 42, 0.08), 0 1px 3px rgba(11, 31, 42, 0.04);
+  padding: 2.75rem 2.5rem;
+}
+
+/* Card Brand Header */
+.cardBrandHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+}
+
+.brandLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.logoSvg {
+  width: 36px;
+  height: 36px;
+}
+
+.wordmark {
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.brandNavy {
+  color: #0B1F2A;
+}
+
+.brandAmber {
+  color: var(--color-amber-500);
+}
+
+.tagline {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .backHomeLink {
+    top: 1rem;
+    left: 1rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .authCard {
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+}

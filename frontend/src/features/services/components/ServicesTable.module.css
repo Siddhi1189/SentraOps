@@ -1,0 +1,44 @@
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.serviceLink {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.serviceLink:hover {
+  color: var(--color-teal-600);
+}
+
+.urlText {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.tagChip {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  background-color: var(--surface-muted);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  margin-right: 4px;
+  font-family: var(--font-mono);
+}
+
+.priorityBadge {
+  text-transform: uppercase;
+  font-weight: var(--font-weight-semibold);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+}

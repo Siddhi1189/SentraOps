@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: flex-end;
+  margin-bottom: var(--space-6);
+  background-color: var(--surface-light);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--elevation-rest);
+  font-family: var(--font-sans);
+}
+
+.filterGroup {
+  flex: 1 1 200px;
+}
+
+.actionGroup {
+  display: flex;
+  align-items: flex-end;
+}

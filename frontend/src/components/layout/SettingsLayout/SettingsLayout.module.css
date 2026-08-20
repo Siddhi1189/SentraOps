@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6) 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .layoutGrid {
+    grid-template-columns: 240px 1fr;
+  }
+}
+
+.railNav {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .railNav {
+    flex-direction: column;
+    overflow-x: visible;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border);
+    padding-bottom: 0;
+    padding-right: var(--space-4);
+  }
+}
+
+.railLink {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.railLink:hover {
+  background-color: var(--surface-muted);
+  color: var(--color-text-primary);
+}
+
+.railLinkActive {
+  background-color: rgba(45, 74, 83, 0.1);
+  color: var(--color-teal-600);
+  font-weight: var(--font-weight-semibold);
+}
+
+.contentOutlet {
+  min-width: 0;
+}

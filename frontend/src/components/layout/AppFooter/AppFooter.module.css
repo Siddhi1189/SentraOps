@@ -1,0 +1,115 @@
+.footer {
+  background-color: var(--surface-light);
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  font-family: var(--font-sans);
+}
+
+.footerInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.topRow {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: var(--space-8);
+}
+
+.brandCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.brandName {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.brandTagline {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+.linkCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.colHeader {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.footerLink {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footerLink:hover {
+  color: var(--color-text-primary);
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-status-healthy);
+}
+
+@media (max-width: 768px) {
+  .topRow {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .brandCol {
+    grid-column: span 2;
+  }
+
+  .bottomRow {
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: flex-start;
+  }
+}

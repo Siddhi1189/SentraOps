@@ -1,0 +1,88 @@
+.heroSection {
+  padding: var(--space-20) 0 var(--space-16) 0;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.white {
+  background-color: var(--surface-cream);
+}
+
+.navy {
+  background-color: var(--surface-dark);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mist {
+  background-color: var(--surface-cream-warm);
+}
+
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-amber-600);
+  background-color: rgba(232, 163, 61, 0.1);
+  border: 1px solid rgba(232, 163, 61, 0.3);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: fit-content;
+}
+
+.navy .eyebrow {
+  color: var(--color-amber-500);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-amber-500);
+  border-radius: 50%;
+}
+
+.navy .eyebrowDot {
+  background-color: var(--color-amber-500);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  max-width: 880px;
+}
+
+.navy .title {
+  color: #ffffff;
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.navy .subtitle {
+  color: var(--color-text-inverse-muted);
+}

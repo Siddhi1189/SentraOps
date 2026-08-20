@@ -1,0 +1,37 @@
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-cream);
+}
+
+.mainContent {
+  flex: 1;
+}
+
+.bottomSection {
+  background-color: var(--surface-cream);
+  padding: 3.5rem 0 5.5rem 0;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.bottomThreeColGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .bottomThreeColGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+}

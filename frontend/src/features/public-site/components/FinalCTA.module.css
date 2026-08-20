@@ -1,0 +1,116 @@
+/* Card Mode (Used in 3-column row) */
+.card {
+  background-color: var(--surface-dark);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  box-shadow: var(--elevation-hover);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.25;
+  margin: 0 0 0.85rem 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: #94A3B8;
+  line-height: 1.5;
+  margin: 0 0 1.75rem 0;
+}
+
+.amberBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 260px;
+  background-color: var(--color-amber-500);
+  color: #0B1F2A;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.8rem 1.25rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(232, 163, 61, 0.3);
+  margin-bottom: 0.85rem;
+}
+
+.amberBtn:hover {
+  background-color: var(--color-amber-600);
+  color: #0B1F2A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(232, 163, 61, 0.45);
+}
+
+.microcopy {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+/* Full Width Section Mode (for secondary pages) */
+.fullSection {
+  background-color: var(--surface-cream);
+  padding: 5rem 0;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.fullCard {
+  background-color: var(--surface-dark);
+  border-radius: var(--radius-xl);
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--elevation-hover);
+}
+
+.fullTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.fullSubtitle {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: #94A3B8;
+  max-width: 600px;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.ctaRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}

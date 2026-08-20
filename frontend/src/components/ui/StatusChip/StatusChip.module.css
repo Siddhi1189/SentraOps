@@ -1,0 +1,71 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 1. Operational / Up / Resolved / Success */
+.up, .resolved, .success {
+  background-color: var(--color-success-bg);
+  color: var(--color-status-healthy);
+  border-color: var(--color-success-border);
+}
+.up .dot, .resolved .dot, .success .dot {
+  background-color: var(--color-status-healthy);
+}
+
+/* 2. Down / Critical / Danger */
+.down, .critical, .danger {
+  background-color: var(--color-danger-bg);
+  color: var(--color-status-down);
+  border-color: var(--color-danger-border);
+}
+.down .dot, .critical .dot, .danger .dot {
+  background-color: var(--color-status-down);
+}
+
+/* 3. Degraded / Warning / Investigating */
+.degraded, .warning, .investigating {
+  background-color: var(--color-warning-bg);
+  color: var(--color-status-degraded);
+  border-color: var(--color-warning-border);
+}
+.degraded .dot, .warning .dot, .investigating .dot {
+  background-color: var(--color-status-degraded);
+}
+
+/* 4. Maintenance / Info / Monitoring / Open */
+.info, .monitoring, .open, .maintenance {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: var(--color-info-border);
+}
+.info .dot, .monitoring .dot, .open .dot, .maintenance .dot {
+  background-color: var(--color-info);
+}
+
+/* 5. Unknown */
+.unknown {
+  background-color: rgba(45, 74, 83, 0.08);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+.unknown .dot {
+  background-color: var(--color-text-secondary);
+}
