@@ -23,10 +23,10 @@
     "noImplicitReturns": true,
 
     /* Path Aliases */
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "e2e"],
   "references": [{ "path": "./tsconfig.node.json" }]
