@@ -12,6 +12,7 @@
     "start:worker": "node worker/worker.js",
     "migrate": "npx prisma migrate dev --schema=src/models/schema.prisma",
     "generate": "npx prisma generate --schema=src/models/schema.prisma",
+    "postinstall": "npx prisma generate --schema=src/models/schema.prisma",
     "seed": "node src/seed/seed.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
   },
