@@ -11,7 +11,7 @@ import {
   TablePagination,
 } from '../../../components/ui/Table/Table';
 import { StatusChip } from '../../../components/ui/StatusChip/StatusChip';
-import { Button } from '../../../components/ui/Button/Button';
+import { TableActionsMenu } from '../../../components/ui/TableActionsMenu/TableActionsMenu';
 import styles from './ServicesTable.module.css';
 
 export interface ServicesTableProps {
@@ -93,28 +93,28 @@ export function ServicesTable({
 
               {showActions && (
                 <TableCell dataLabel="Actions">
-                  <div className={styles.actions}>
-                    {canUpdate && onEditService && (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => onEditService(service)}
-                        aria-label={`Edit ${service.name}`}
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    {canDelete && onDeleteService && (
-                      <Button
-                        type="button"
-                        variant="danger"
-                        onClick={() => onDeleteService(service)}
-                        aria-label={`Delete ${service.name}`}
-                      >
-                        Delete
-                      </Button>
-                    )}
-                  </div>
+                  <TableActionsMenu
+                    label={`Actions for ${service.name}`}
+                    items={[
+                      ...(canUpdate && onEditService
+                        ? [
+                            {
+                              label: 'Edit',
+                              onClick: () => onEditService(service),
+                            },
+                          ]
+                        : []),
+                      ...(canDelete && onDeleteService
+                        ? [
+                            {
+                              label: 'Delete',
+                              variant: 'danger' as const,
+                              onClick: () => onDeleteService(service),
+                            },
+                          ]
+                        : []),
+                    ]}
+                  />
                 </TableCell>
               )}
             </TableRow>
