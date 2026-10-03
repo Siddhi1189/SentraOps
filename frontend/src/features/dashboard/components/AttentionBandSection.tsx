@@ -75,7 +75,7 @@ export function AttentionBandSection() {
             </p>
           </div>
         </div>
-        <Link to="/incidents" className={styles.link}>
+        <Link to="/app/incidents" className={styles.link}>
           View Active Incidents →
         </Link>
       </div>

@@ -6,9 +6,16 @@ export function DashboardStatCards() {
   const { data: servicesRes } = useServicesQuery({ page: 1, limit: 50 });
   const { data: incidentsRes } = useIncidentsQuery({ page: 1, limit: 50, status: 'open' });
 
-  const totalServices = servicesRes?.pagination?.total ?? (servicesRes?.data?.length || 248);
-  const openIncidents = incidentsRes?.pagination?.total ?? (incidentsRes?.data?.length || 14);
-  const healthyServices = servicesRes?.data?.filter((s) => s.currentStatus === 'up').length || 892;
+  const totalServices = servicesRes?.pagination?.total ?? (servicesRes?.data ? servicesRes.data.length : 0);
+  const openIncidents = incidentsRes?.pagination?.total ?? (incidentsRes?.data ? incidentsRes.data.length : 0);
+  const healthyServices = servicesRes?.data?.filter((s) => s.currentStatus === 'up').length ?? 0;
+
+  const uptimeDisplay = totalServices > 0
+    ? `${((healthyServices / totalServices) * 100).toFixed(1)}%`
+    : '—';
+  const uptimeSubtext = totalServices > 0
+    ? `${healthyServices} of ${totalServices} operational`
+    : 'No services active';
 
   return (
     <div className={styles.statsGrid}>
@@ -19,7 +26,7 @@ export function DashboardStatCards() {
         </div>
         <div className={styles.statValue}>{totalServices}</div>
         <div className={styles.trendPositive}>
-          <span>&uarr; 15% vs last 7 days</span>
+          <span>Registered monitors</span>
         </div>
       </div>
 
@@ -29,8 +36,8 @@ export function DashboardStatCards() {
           <span className={styles.statLabel}>Open Incidents</span>
         </div>
         <div className={styles.statValue}>{openIncidents}</div>
-        <div className={styles.trendNegative}>
-          <span>&darr; 8% vs last week</span>
+        <div className={openIncidents > 0 ? styles.trendNegative : styles.trendPositive}>
+          <span>{openIncidents > 0 ? 'Active issues' : 'All clear'}</span>
         </div>
       </div>
 
@@ -41,30 +48,20 @@ export function DashboardStatCards() {
         </div>
         <div className={styles.statValue}>{healthyServices}</div>
         <div className={styles.trendPositive}>
-          <span>&uarr; 2% vs last month</span>
+          <span>Status up</span>
         </div>
       </div>
 
-      {/* 4. Uptime 30d */}
+      {/* 4. Service Health */}
       <div className={styles.statCard}>
         <div className={styles.cardHeader}>
-          <span className={styles.statLabel}>Uptime (30d)</span>
+          <span className={styles.statLabel}>Current Health</span>
         </div>
         <div className={styles.statValueRow}>
-          <span className={styles.statValue}>99.99%</span>
-          {/* Mini SVG Sparkline */}
-          <svg className={styles.miniSparkline} viewBox="0 0 60 28" fill="none">
-            <polyline
-              points="0,24 10,20 20,22 30,14 40,16 50,8 60,4"
-              stroke="#16A34A"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <span className={styles.statValue}>{uptimeDisplay}</span>
         </div>
         <div className={styles.trendPositive}>
-          <span>Excellent</span>
+          <span>{uptimeSubtext}</span>
         </div>
       </div>
     </div>
