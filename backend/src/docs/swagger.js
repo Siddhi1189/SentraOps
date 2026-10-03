@@ -120,6 +120,47 @@ const options = {
             createdAt: { type: 'string', format: 'date-time' },
           },
         },
+        Notification: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            channel: { type: 'string', enum: ['email', 'slack', 'discord', 'webhook'] },
+            recipient: { type: 'string' },
+            status: { type: 'string', enum: ['pending', 'sent', 'failed'] },
+            sentAt: { type: 'string', format: 'date-time', nullable: true },
+            createdAt: { type: 'string', format: 'date-time' },
+            title: { type: 'string' },
+            isRead: { type: 'boolean' },
+            incident: {
+              type: 'object',
+              nullable: true,
+              properties: {
+                id: { type: 'string', format: 'uuid' },
+                title: { type: 'string' },
+                severity: { type: 'string' },
+              },
+            },
+            maintenance: {
+              type: 'object',
+              nullable: true,
+              properties: {
+                id: { type: 'string', format: 'uuid' },
+                title: { type: 'string' },
+              },
+            },
+          },
+        },
+        StatusPageSettings: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            organizationId: { type: 'string', format: 'uuid' },
+            subdomain: { type: 'string', example: 'acme-status' },
+            customDomain: { type: 'string', nullable: true, example: 'status.acme.com' },
+            logoUrl: { type: 'string', nullable: true },
+            theme: { type: 'string', example: 'light' },
+          },
+        },
       },
     },
     security: [

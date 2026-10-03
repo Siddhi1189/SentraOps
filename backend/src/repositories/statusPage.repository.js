@@ -46,6 +46,23 @@ class StatusPageRepository {
   }
 
   /**
+   * Upsert status page settings
+   * @param {string} organizationId
+   * @param {Object} updateData
+   * @param {Object} createData
+   */
+  static async upsert(organizationId, updateData, createData) {
+    return prisma.statusPageSettings.upsert({
+      where: { organizationId },
+      update: updateData,
+      create: {
+        ...createData,
+        organizationId,
+      },
+    });
+  }
+
+  /**
    * Get all active services for a public status page
    * @param {string} organizationId
    */

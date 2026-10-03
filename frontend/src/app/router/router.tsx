@@ -36,6 +36,8 @@ import { OrganizationPage } from '../../pages/OrganizationPage';
 import { TeamPage } from '../../pages/TeamPage';
 import { EscalationPoliciesPage } from '../../pages/EscalationPoliciesPage';
 import { AuditLogPage } from '../../pages/AuditLogPage';
+import { NotificationsPage } from '../../pages/NotificationsPage';
+import { StatusPageSettingsPage } from '../../pages/StatusPageSettingsPage';
 
 // Public Customer Status Pages
 import { PublicStatusOverviewPage } from '../../pages/PublicStatusOverviewPage';
@@ -97,11 +99,14 @@ export function AppRouter() {
             <Route path="maintenance" element={<MaintenancePage />} />
             <Route path="maintenance/:id" element={<MaintenanceDetailPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="status-pages" element={<Navigate to="/app/settings/status-page" replace />} />
             <Route path="settings" element={<SettingsPage />}>
               <Route index element={<Navigate to="/app/settings/organization" replace />} />
               <Route path="organization" element={<OrganizationPage />} />
               <Route path="team" element={<TeamPage />} />
               <Route path="escalation-policies" element={<EscalationPoliciesPage />} />
+              <Route path="status-page" element={<StatusPageSettingsPage />} />
               <Route
                 path="audit-log"
                 element={

@@ -18,6 +18,9 @@ export type Permission =
   | 'escalation:manage'
   | 'organization:manage'
   | 'settings:manage'
+  | 'statusPage:read'
+  | 'statusPage:manage'
+  | 'notification:read'
   | 'audit:read'
   | 'member:invite'
   | 'member:changeRole'
@@ -42,6 +45,9 @@ const ROLE_PERMISSIONS: Record<Lowercase<UserRole>, Permission[]> = {
     'escalation:manage',
     'organization:manage',
     'settings:manage',
+    'statusPage:read',
+    'statusPage:manage',
+    'notification:read',
     'audit:read',
     'member:invite',
     'member:changeRole',
@@ -63,6 +69,9 @@ const ROLE_PERMISSIONS: Record<Lowercase<UserRole>, Permission[]> = {
     'maintenance:delete',
     'maintenance:manage',
     'escalation:manage',
+    'statusPage:read',
+    'statusPage:manage',
+    'notification:read',
     'audit:read',
     'member:invite',
   ],
@@ -70,6 +79,8 @@ const ROLE_PERMISSIONS: Record<Lowercase<UserRole>, Permission[]> = {
     'service:read',
     'incident:read',
     'maintenance:read',
+    'statusPage:read',
+    'notification:read',
   ],
 };
 

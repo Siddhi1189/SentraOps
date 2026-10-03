@@ -59,3 +59,14 @@ export const statusKeys = {
   incidents: (orgSlug: string) => [...statusKeys.all, orgSlug, 'incidents'] as const,
   maintenance: (orgSlug: string) => [...statusKeys.all, orgSlug, 'maintenance'] as const,
 };
+
+export const notificationsKeys = {
+  all: ['notifications'] as const,
+  lists: () => [...notificationsKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...notificationsKeys.lists(), { filters }] as const,
+};
+
+export const statusPageSettingsKeys = {
+  all: ['status-page-settings'] as const,
+  settings: () => [...statusPageSettingsKeys.all, 'current'] as const,
+};

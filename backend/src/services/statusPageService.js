@@ -1,4 +1,5 @@
 import StatusPageRepository from '../repositories/statusPage.repository.js';
+import OrganizationRepository from '../repositories/organization.repository.js';
 import AppError from '../utils/AppError.js';
 import { redis } from '../config/redis.js';
 import logger from '../utils/logger.js';
@@ -92,6 +93,54 @@ class StatusPageService {
     const maintenance = await StatusPageRepository.findMaintenanceForStatusPage(organizationId);
     await setCache(cacheKey, maintenance);
     return maintenance;
+  }
+
+  /**
+   * Get status page settings for an organization (returns defaults if not yet created)
+   * @param {string} organizationId
+   */
+  static async getSettings(organizationId) {
+    const settings = await StatusPageRepository.findByOrganization(organizationId);
+    if (settings) {
+      return settings;
+    }
+
+    const org = await OrganizationRepository.findById(organizationId);
+    return {
+      id: null,
+      organizationId,
+      subdomain: org ? org.slug : '',
+      customDomain: null,
+      logoUrl: null,
+      theme: 'light',
+    };
+  }
+
+  /**
+   * Upsert status page settings for an organization
+   * @param {string} organizationId
+   * @param {Object} updates
+   */
+  static async updateSettings(organizationId, updates) {
+    const org = await OrganizationRepository.findById(organizationId);
+    if (!org) throw new AppError('Organization not found', 404, 'NOT_FOUND');
+
+    const createData = {
+      subdomain: updates.subdomain || org.slug,
+      customDomain: updates.customDomain !== undefined ? updates.customDomain : null,
+      logoUrl: updates.logoUrl !== undefined ? updates.logoUrl : null,
+      theme: updates.theme || 'light',
+    };
+
+    const updateData = {};
+    if (updates.subdomain !== undefined) updateData.subdomain = updates.subdomain;
+    if (updates.customDomain !== undefined) updateData.customDomain = updates.customDomain;
+    if (updates.logoUrl !== undefined) updateData.logoUrl = updates.logoUrl;
+    if (updates.theme !== undefined) updateData.theme = updates.theme;
+
+    const settings = await StatusPageRepository.upsert(organizationId, updateData, createData);
+    await this.invalidateCache(organizationId);
+    return settings;
   }
 }
 

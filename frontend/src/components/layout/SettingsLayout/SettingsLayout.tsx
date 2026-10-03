@@ -14,6 +14,7 @@ export const SETTINGS_TABS: SettingsTabItem[] = [
   { label: 'Organization', path: '/app/settings/organization' },
   { label: 'Team', path: '/app/settings/team' },
   { label: 'Escalation Policies', path: '/app/settings/escalation-policies' },
+  { label: 'Status Page', path: '/app/settings/status-page', permission: 'statusPage:read' },
   { label: 'Audit Log', path: '/app/settings/audit-log', permission: 'audit:read' },
 ];
 

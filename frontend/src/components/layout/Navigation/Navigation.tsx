@@ -74,7 +74,7 @@ export function Navigation() {
     },
     {
       label: 'Notifications',
-      path: '/app/settings/team',
+      path: '/app/notifications',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -95,7 +95,8 @@ export function Navigation() {
     },
     {
       label: 'Status Pages',
-      path: '/status/acme-corp',
+      path: '/app/settings/status-page',
+      requiredPermission: 'statusPage:read',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
