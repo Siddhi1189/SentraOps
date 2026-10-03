@@ -63,10 +63,9 @@ export function PublicFooter() {
           <div className={styles.linksCol}>
             <span className={styles.colHeading}>PRODUCT</span>
             <ul className={styles.linksList}>
-              <li><Link to="/platform" className={styles.link}>Overview</Link></li>
+              <li><Link to="/docs" className={styles.link}>Overview</Link></li>
               <li><a href="#features" className={styles.link}>Features</a></li>
               <li><a href="#how-it-works" className={styles.link}>How It Works</a></li>
-              <li><a href="#pricing" className={styles.link}>Pricing</a></li>
               <li><Link to="/status/acme-corp" className={styles.link}>Status Page</Link></li>
             </ul>
           </div>
@@ -75,33 +74,8 @@ export function PublicFooter() {
           <div className={styles.linksCol}>
             <span className={styles.colHeading}>RESOURCES</span>
             <ul className={styles.linksList}>
-              <li><Link to="/platform" className={styles.link}>Documentation</Link></li>
-              <li><Link to="/platform" className={styles.link}>API Reference</Link></li>
-              <li><Link to="/about" className={styles.link}>Guides</Link></li>
-              <li><Link to="/platform" className={styles.link}>Changelog</Link></li>
-              <li><Link to="/about" className={styles.link}>Blog</Link></li>
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div className={styles.linksCol}>
-            <span className={styles.colHeading}>COMPANY</span>
-            <ul className={styles.linksList}>
-              <li><Link to="/about" className={styles.link}>About Us</Link></li>
-              <li><Link to="/about" className={styles.link}>Careers</Link></li>
-              <li><Link to="/contact" className={styles.link}>Partner With Us</Link></li>
-              <li><Link to="/contact" className={styles.link}>Contact Us</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal Links */}
-          <div className={styles.linksCol}>
-            <span className={styles.colHeading}>LEGAL</span>
-            <ul className={styles.linksList}>
-              <li><Link to="/about" className={styles.link}>Terms of Service</Link></li>
-              <li><Link to="/about" className={styles.link}>Privacy Policy</Link></li>
-              <li><Link to="/platform" className={styles.link}>Security</Link></li>
-              <li><Link to="/about" className={styles.link}>Data Processing</Link></li>
+              <li><Link to="/docs" className={styles.link}>Documentation</Link></li>
+              <li><Link to="/docs" className={styles.link}>API Reference</Link></li>
             </ul>
           </div>
 

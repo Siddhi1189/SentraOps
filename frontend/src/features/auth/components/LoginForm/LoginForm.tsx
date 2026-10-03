@@ -182,7 +182,7 @@ export function LoginForm() {
         <span className={styles.dividerText}>
           Don&apos;t have an account?{' '}
           <Link to="/register" className={styles.signupLink}>
-            Start Free Trial &rarr;
+            Register &rarr;
           </Link>
         </span>
         <span className={styles.dividerLine} />

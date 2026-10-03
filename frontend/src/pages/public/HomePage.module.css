@@ -20,15 +20,15 @@
   padding: 0 1.5rem;
 }
 
-.bottomThreeColGrid {
+.bottomGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.75rem;
   align-items: stretch;
 }
 
 @media (max-width: 1024px) {
-  .bottomThreeColGrid {
+  .bottomGrid {
     grid-template-columns: 1fr;
     gap: 2rem;
     max-width: 580px;

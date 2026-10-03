@@ -226,26 +226,12 @@ export function Navigation() {
 
         {/* Bottom Sidebar Promo / Help Cards */}
         <div className={styles.sidebarBottom}>
-          {/* 14-Day Free Trial Upsell Card */}
-          <div className={styles.trialCard}>
-            <div className={styles.trialHeader}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8A33D" strokeWidth="2.2">
-                <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
-              </svg>
-              <span className={styles.trialTitle}>14-Day Free Trial</span>
-            </div>
-            <p className={styles.trialText}>Your trial ends in 10 days</p>
-            <Link to="/#pricing" className={styles.upgradeBtn}>
-              Upgrade Now
-            </Link>
-          </div>
-
           {/* Need Help Card */}
           <div className={styles.helpCard}>
             <div className={styles.helpTitle}>Need Help?</div>
             <p className={styles.helpText}>Check our documentation or contact support.</p>
-            <Link to="/contact" className={styles.helpLink}>
-              <span>Visit Help Center</span>
+            <Link to="/docs" className={styles.helpLink}>
+              <span>Visit Documentation</span>
               <span>&rarr;</span>
             </Link>
           </div>
