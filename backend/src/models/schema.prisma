@@ -129,6 +129,7 @@ model User {
   passwordResetTokens PasswordResetToken[]
   incidents      Incident[]
   auditLogs      AuditLog[]
+  notificationReads NotificationRead[]
 
   @@index([organizationId], map: "idx_users_organization_id")
   @@map("users")
@@ -347,6 +348,7 @@ model Notification {
   organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   incident       Incident?           @relation(fields: [incidentId], references: [id], onDelete: Cascade)
   maintenance    MaintenanceWindow?  @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+  notificationReads NotificationRead[]
 
   @@index([organizationId], map: "idx_notifications_org_id")
   @@index([status], map: "idx_notifications_status")
@@ -379,4 +381,17 @@ model AuditLog {
 
   @@index([organizationId, createdAt(sort: Desc)], map: "idx_audit_logs_org_id")
   @@map("audit_logs")
+}
+
+model NotificationRead {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId String       @map("notification_id") @db.Uuid
+  userId         String       @map("user_id") @db.Uuid
+  readAt         DateTime     @default(now()) @map("read_at") @db.Timestamptz
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, userId])
+  @@index([userId], map: "idx_notification_reads_user_id")
+  @@map("notification_reads")
 }
