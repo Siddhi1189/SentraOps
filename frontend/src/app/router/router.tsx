@@ -7,13 +7,7 @@ import { AuditLogGuard } from './AuditLogGuard';
 
 // Public Website Pages
 import { HomePage } from '../../pages/public/HomePage';
-import { PlatformPage } from '../../pages/public/PlatformPage';
-import { PublicServicesPage } from '../../pages/public/PublicServicesPage';
-import { PublicIncidentsPage } from '../../pages/public/PublicIncidentsPage';
-import { PublicMaintenancePage } from '../../pages/public/PublicMaintenancePage';
-import { PublicAnalyticsPage } from '../../pages/public/PublicAnalyticsPage';
-import { AboutPage } from '../../pages/public/AboutPage';
-import { ContactPage } from '../../pages/public/ContactPage';
+import { DocsPage } from '../../pages/public/DocsPage';
 
 // Authentication Pages
 import { LoginPage } from '../../pages/LoginPage';
@@ -68,15 +62,18 @@ export function AppRouter() {
         <Route path="/status/:orgSlug/maintenance" element={<PublicStatusMaintenancePage />} />
         <Route path="/status" element={<Navigate to="/status/acme-corp" replace />} />
 
-        {/* Public Marketing Website Pages */}
+        {/* Public Website Pages */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/platform" element={<PlatformPage />} />
-        <Route path="/services" element={<PublicServicesPage />} />
-        <Route path="/incidents" element={<PublicIncidentsPage />} />
-        <Route path="/maintenance" element={<PublicMaintenancePage />} />
-        <Route path="/analytics" element={<PublicAnalyticsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/docs" element={<DocsPage />} />
+
+        {/* Redirects for removed marketing sub-pages */}
+        <Route path="/platform" element={<Navigate to="/" replace />} />
+        <Route path="/services" element={<Navigate to="/" replace />} />
+        <Route path="/incidents" element={<Navigate to="/" replace />} />
+        <Route path="/maintenance" element={<Navigate to="/" replace />} />
+        <Route path="/analytics" element={<Navigate to="/" replace />} />
+        <Route path="/about" element={<Navigate to="/" replace />} />
+        <Route path="/contact" element={<Navigate to="/" replace />} />
 
         {/* Authenticated Application Shell (mounts SessionProvider, ToastProvider, SocketProvider) */}
         <Route element={<AuthenticatedAppShell />}>
