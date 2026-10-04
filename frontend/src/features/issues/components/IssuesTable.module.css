@@ -1,0 +1,45 @@
+.titleCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+}
+
+.titleLink {
+  color: var(--color-primary-text, #1e293b);
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  font-size: 0.9375rem;
+}
+
+.titleLink:hover {
+  text-decoration: underline;
+  color: var(--color-brand-primary, #6366f1);
+}
+
+.subInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: 0.75rem;
+  color: var(--color-secondary-text, #64748b);
+}
+
+.regressionBadge {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.desktopOnly {
+  display: table-cell;
+}
+
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none;
+  }
+}

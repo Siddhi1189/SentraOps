@@ -11,10 +11,12 @@ export interface SettingsTabItem {
 }
 
 export const SETTINGS_TABS: SettingsTabItem[] = [
+  { label: 'Projects', path: '/app/settings/projects', permission: 'project:read' },
   { label: 'Organization', path: '/app/settings/organization' },
   { label: 'Team', path: '/app/settings/team' },
   { label: 'Escalation Policies', path: '/app/settings/escalation-policies' },
   { label: 'Status Page', path: '/app/settings/status-page', permission: 'statusPage:read' },
+  { label: 'Alerts', path: '/app/settings/alerts', permission: 'alert:read' },
   { label: 'Audit Log', path: '/app/settings/audit-log', permission: 'audit:read' },
 ];
 

@@ -32,6 +32,9 @@ import { EscalationPoliciesPage } from '../../pages/EscalationPoliciesPage';
 import { AuditLogPage } from '../../pages/AuditLogPage';
 import { NotificationsPage } from '../../pages/NotificationsPage';
 import { StatusPageSettingsPage } from '../../pages/StatusPageSettingsPage';
+import { IssuesPage } from '../../pages/IssuesPage';
+import { IssueDetailPage } from '../../pages/IssueDetailPage';
+import { ProjectsPage } from '../../pages/ProjectsPage';
 
 // Public Customer Status Pages
 import { PublicStatusOverviewPage } from '../../pages/PublicStatusOverviewPage';
@@ -89,6 +92,8 @@ export function AppRouter() {
           {/* Protected Application Console Routes under /app */}
           <Route path="/app" element={<ProtectedRoute />}>
             <Route index element={<OverviewPage />} />
+            <Route path="issues" element={<IssuesPage />} />
+            <Route path="issues/:id" element={<IssueDetailPage />} />
             <Route path="services" element={<ServicesPage />} />
             <Route path="services/:id" element={<ServiceDetailPage />} />
             <Route path="incidents" element={<IncidentsPage />} />
@@ -100,6 +105,7 @@ export function AppRouter() {
             <Route path="status-pages" element={<Navigate to="/app/settings/status-page" replace />} />
             <Route path="settings" element={<SettingsPage />}>
               <Route index element={<Navigate to="/app/settings/organization" replace />} />
+              <Route path="projects" element={<ProjectsPage />} />
               <Route path="organization" element={<OrganizationPage />} />
               <Route path="team" element={<TeamPage />} />
               <Route path="escalation-policies" element={<EscalationPoliciesPage />} />

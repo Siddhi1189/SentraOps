@@ -63,6 +63,23 @@
   flex: 1;
 }
 
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.navGroupTitle {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  padding: 0.25rem 0.85rem;
+  margin-top: 0.25rem;
+}
+
 .navItem {
   display: flex;
   align-items: center;

@@ -1,0 +1,39 @@
+.stackContainer {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-radius: 8px;
+  padding: var(--space-4, 16px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+  margin-bottom: var(--space-6, 24px);
+}
+
+.stackHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3, 12px);
+  padding-bottom: var(--space-2, 8px);
+  border-bottom: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stackContent {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.emptyStack {
+  color: #64748b;
+  font-style: italic;
+  padding: var(--space-4, 16px);
+  text-align: center;
+}
