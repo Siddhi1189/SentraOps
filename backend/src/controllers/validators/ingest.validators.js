@@ -14,6 +14,14 @@ export const ingestEventSchema = z.object({
   occurredAt: z.union([z.string().datetime(), z.string().pipe(z.coerce.date())]).optional().nullable(),
 });
 
+export const ingestReleaseSchema = z.object({
+  version: z.string().min(1, 'Version is required').max(100),
+  commitSha: z.string().max(100).optional().nullable(),
+  environment: z.string().max(50).default('production'),
+  deployedAt: z.union([z.string().datetime(), z.string().pipe(z.coerce.date())]).optional().nullable(),
+});
+
 export default {
   ingestEventSchema,
+  ingestReleaseSchema,
 };

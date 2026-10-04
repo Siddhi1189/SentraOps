@@ -32,6 +32,7 @@ export function DocsPage() {
                 <li><a href="#incidents-alerts" className={styles.sidebarLink}>Incidents &amp; Alerts</a></li>
                 <li><a href="#status-pages" className={styles.sidebarLink}>Public Status Pages</a></li>
                 <li><a href="#api-reference" className={styles.sidebarLink}>API Reference</a></li>
+                <li><a href="#releases-cicd" className={styles.sidebarLink}>Releases &amp; Deploys</a></li>
               </ul>
             </aside>
 
@@ -108,6 +109,39 @@ curl https://api.sentraops.com/health
                 <p className={styles.paragraph}>
                   Interactive OpenAPI / Swagger documentation is available at <code>/api/v1/docs</code> and <code>/docs</code>.
                   All mutating endpoints enforce Optimistic Concurrency Control (OCC) and write immutable audit logs.
+                </p>
+              </div>
+
+              {/* Releases, Deploys & CI/CD */}
+              <div id="releases-cicd" className={styles.sectionBlock}>
+                <h2 className={styles.sectionHeading}>7. Releases, Deploys &amp; CI/CD Tracking</h2>
+                <p className={styles.paragraph}>
+                  SentraOps correlates error events and regressions with deployed application versions.
+                  Notify SentraOps whenever a new build or deploy is released to your environment.
+                </p>
+                <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: '16px 0 8px 0', color: 'var(--color-text-primary)' }}>
+                  GitHub Actions Example Step
+                </h3>
+                <div className={styles.codeBlock}>
+                  <code>
+{`- name: Notify SentraOps Release
+  if: success()
+  run: |
+    curl -s -X POST "\${{ secrets.SENTRAOPS_URL }}/api/ingest/releases" \\
+      -H "Content-Type: application/json" \\
+      -H "x-sentraops-key: \${{ secrets.SENTRAOPS_API_KEY }}" \\
+      -d '{
+        "version": "\${{ github.ref_name }}",
+        "commitSha": "\${{ github.sha }}",
+        "environment": "production"
+      }'`}
+                  </code>
+                </div>
+                <p className={styles.paragraph} style={{ marginTop: '12px' }}>
+                  When an event is captured by the SentraOps Node SDK or API with a <code>release</code> tag,
+                  it links to the tracked release. If a previously resolved issue re-occurs in a release newer than
+                  <code>resolvedInRelease</code>, SentraOps automatically flags the issue with a
+                  <strong>&quot;Regression in &lt;version&gt;&quot;</strong> indicator and notifies responders.
                 </p>
               </div>
             </article>

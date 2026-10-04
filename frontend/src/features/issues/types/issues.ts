@@ -23,6 +23,16 @@ export interface ApiKey {
   createdAt: string;
 }
 
+export interface Release {
+  id: string;
+  projectId: string;
+  version: string;
+  commitSha?: string | null;
+  deployedAt: string;
+  environment: string;
+  createdAt: string;
+}
+
 export interface ErrorEventDetail {
   id: string;
   projectId: string;
@@ -32,6 +42,8 @@ export interface ErrorEventDetail {
   stack?: string | null;
   environment: string;
   release?: string | null;
+  releaseId?: string | null;
+  releaseRef?: Release | null;
   level: IssueLevel;
   tags: Record<string, string>;
   breadcrumbs: Array<{
@@ -75,6 +87,7 @@ export interface Issue {
   assignedUserId?: string | null;
   resolvedAt?: string | null;
   resolvedInRelease?: string | null;
+  regressedInRelease?: string | null;
   isRegression: boolean;
   linkedIncidentId?: string | null;
   createdAt: string;

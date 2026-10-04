@@ -2,8 +2,9 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import apiKeyAuth from '../middlewares/apiKeyAuth.js';
 import validate from '../middlewares/validate.js';
-import { ingestEventSchema } from '../controllers/validators/ingest.validators.js';
+import { ingestEventSchema, ingestReleaseSchema } from '../controllers/validators/ingest.validators.js';
 import { ingestEvent } from '../controllers/ingest.controller.js';
+import { ingestRelease } from '../controllers/release.controller.js';
 import ApiResponse from '../utils/apiResponse.js';
 
 const router = express.Router();
@@ -36,6 +37,14 @@ router.post(
   ingestRateLimiter,
   validate({ body: ingestEventSchema }),
   ingestEvent
+);
+
+router.post(
+  '/releases',
+  express.json({ limit: '50kb' }),
+  apiKeyAuth,
+  validate({ body: ingestReleaseSchema }),
+  ingestRelease
 );
 
 export default router;

@@ -60,7 +60,11 @@ export function IssueDetailHeader({
               status={issue.status === 'resolved' ? 'resolved' : issue.status === 'ignored' ? 'maintenance' : 'open'}
               label={issue.status}
             />
-            {issue.isRegression && <span className={styles.regressionBadge}>Regression</span>}
+            {issue.isRegression && (
+              <span className={styles.regressionBadge}>
+                {issue.regressedInRelease ? `Regression in ${issue.regressedInRelease}` : 'Regression'}
+              </span>
+            )}
           </div>
 
           <h1 className={styles.title}>{issue.title}</h1>

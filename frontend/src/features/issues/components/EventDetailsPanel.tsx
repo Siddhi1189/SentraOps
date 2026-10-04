@@ -87,6 +87,45 @@ export function EventDetailsPanel({ event }: EventDetailsPanelProps) {
           </div>
         )}
       </div>
+
+      {/* Release & Deploy Marker Card */}
+      <div className={styles.card} data-testid="release-marker-card">
+        <div className={styles.cardTitle}>Release & Deploy Marker</div>
+        {!event.release && !event.releaseRef ? (
+          <div className={styles.empty}>No release version tagged with this event.</div>
+        ) : (
+          <div className={styles.detailList}>
+            <div className={styles.detailRow}>
+              <span className={styles.detailLabel}>Release Version</span>
+              <span className={styles.detailValue} style={{ fontWeight: 600, fontFamily: 'var(--font-mono, monospace)' }}>
+                {event.releaseRef?.version || event.release}
+              </span>
+            </div>
+            {event.releaseRef?.commitSha && (
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Commit SHA</span>
+                <span className={styles.detailValue} style={{ fontFamily: 'var(--font-mono, monospace)' }}>
+                  {event.releaseRef.commitSha.substring(0, 8)}
+                </span>
+              </div>
+            )}
+            {event.releaseRef?.deployedAt && (
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Deployed At</span>
+                <span className={styles.detailValue}>
+                  {new Date(event.releaseRef.deployedAt).toLocaleString()}
+                </span>
+              </div>
+            )}
+            <div className={styles.detailRow}>
+              <span className={styles.detailLabel}>Environment</span>
+              <span className={styles.detailValue} style={{ textTransform: 'capitalize' }}>
+                {event.releaseRef?.environment || event.environment}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import type {
   IssueQueryParams,
   UpdateIssuePayload,
   CreateIncidentFromIssuePayload,
+  Release,
 } from '../features/issues/types/issues';
 
 export async function listIssues(
@@ -110,4 +111,17 @@ export async function createIncidentFromIssue(
     method: 'POST',
     body: payload,
   });
+}
+
+export async function getProjectReleases(
+  projectId: string,
+  params?: { environment?: string; page?: number; limit?: number }
+): Promise<ApiPaginatedResponse<Release>> {
+  const query = new URLSearchParams();
+  if (params?.environment) query.set('environment', params.environment);
+  if (params?.page) query.set('page', String(params.page));
+  if (params?.limit) query.set('limit', String(params.limit));
+
+  const endpoint = `/projects/${projectId}/releases${query.toString() ? `?${query.toString()}` : ''}`;
+  return apiRequest<Release[]>(endpoint, { method: 'GET' }) as Promise<ApiPaginatedResponse<Release>>;
 }

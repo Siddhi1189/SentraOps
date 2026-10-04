@@ -1,6 +1,7 @@
 import { computeFingerprint } from '../../src/utils/fingerprint.js';
 import IssueRepository from '../../src/repositories/issue.repository.js';
 import ErrorEventRepository from '../../src/repositories/errorEvent.repository.js';
+import ReleaseRepository from '../../src/repositories/release.repository.js';
 import AlertRuleService from '../../src/services/alertRuleService.js';
 import logger from '../../src/utils/logger.js';
 
@@ -22,6 +23,20 @@ export async function processIngestJob(job, publishEvent) {
     const occurredAt = event.occurredAt ? new Date(event.occurredAt) : new Date();
     const userId = event.user?.id ? String(event.user.id) : null;
 
+    // Look up release record if event has release specified
+    let releaseRecord = null;
+    if (event.release) {
+      try {
+        releaseRecord = await ReleaseRepository.findByProjectAndVersion(
+          projectId,
+          event.release,
+          event.environment || 'production'
+        );
+      } catch (e) {
+        // Non-critical if release record not found
+      }
+    }
+
     // 3. Atomically upsert the issue
     const { issue, isNew, isRegression, isIgnored } = await IssueRepository.upsertFromEvent({
       projectId,
@@ -33,6 +48,8 @@ export async function processIngestJob(job, publishEvent) {
       environment: event.environment || 'production',
       occurredAt,
       userId,
+      release: event.release || null,
+      releaseRecord,
     });
 
     // 4. Persist the ErrorEvent
@@ -40,6 +57,7 @@ export async function processIngestJob(job, publishEvent) {
       id: eventId,
       projectId,
       issueId: issue.id,
+      releaseId: releaseRecord?.id || null,
       type: event.type || 'Error',
       message: event.message || '',
       stack: event.stack || null,

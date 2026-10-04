@@ -17,6 +17,7 @@ import {
   listApiKeys,
   revokeApiKey,
 } from '../controllers/project.controller.js';
+import { listProjectReleases } from '../controllers/release.controller.js';
 
 const router = express.Router();
 
@@ -30,6 +31,9 @@ router.route('/:id')
   .get(getProject)
   .patch(authorize('owner', 'admin'), validate({ body: updateProjectSchema }), updateProject)
   .delete(authorize('owner', 'admin'), deleteProject);
+
+router.route('/:id/releases')
+  .get(listProjectReleases);
 
 router.route('/:id/keys')
   .get(listApiKeys)

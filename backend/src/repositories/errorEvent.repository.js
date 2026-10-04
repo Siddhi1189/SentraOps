@@ -16,6 +16,7 @@ class ErrorEventRepository {
     const [events, total] = await Promise.all([
       prisma.errorEvent.findMany({
         where: { issueId },
+        include: { releaseRef: true },
         orderBy: { occurredAt: 'desc' },
         skip,
         take: limit,

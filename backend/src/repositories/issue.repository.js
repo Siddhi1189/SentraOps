@@ -14,6 +14,7 @@ class IssueRepository {
     environment = 'production',
     occurredAt = new Date(),
     userId = null,
+    release = null,
   }) {
     return prisma.$transaction(async (tx) => {
       const existing = await tx.issue.findUnique({
@@ -48,7 +49,21 @@ class IssueRepository {
       }
 
       const isIgnored = existing.status === 'ignored';
-      const isRegression = existing.status === 'resolved';
+      let isRegression = false;
+      let regressedInRelease = null;
+
+      if (existing.status === 'resolved') {
+        if (existing.resolvedInRelease) {
+          // If event has release and is newer or different from resolvedInRelease, it's a regression
+          if (release) {
+            isRegression = true;
+            regressedInRelease = release;
+          }
+        } else {
+          isRegression = true;
+          regressedInRelease = release || null;
+        }
+      }
 
       const updateData = {
         lastSeenAt: occurredAt,
@@ -58,6 +73,7 @@ class IssueRepository {
       if (isRegression) {
         updateData.status = 'unresolved';
         updateData.isRegression = true;
+        updateData.regressedInRelease = regressedInRelease;
         updateData.resolvedAt = null;
       }
 
@@ -169,6 +185,9 @@ class IssueRepository {
         errorEvents: {
           orderBy: { occurredAt: 'desc' },
           take: 1,
+          include: {
+            releaseRef: true,
+          },
         },
       },
     });

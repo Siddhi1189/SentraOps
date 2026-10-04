@@ -90,7 +90,9 @@ export function IssuesTable({
                     <div className={styles.subInfo}>
                       <span>{issue.project?.name || 'Project'}</span>
                       {issue.isRegression && (
-                        <span className={styles.regressionBadge}>Regression</span>
+                        <span className={styles.regressionBadge}>
+                          {issue.regressedInRelease ? `Regression in ${issue.regressedInRelease}` : 'Regression'}
+                        </span>
                       )}
                     </div>
                   </div>
