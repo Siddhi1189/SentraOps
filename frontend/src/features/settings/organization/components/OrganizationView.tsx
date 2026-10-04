@@ -10,6 +10,9 @@ import styles from './OrganizationView.module.css';
 
 export function OrganizationView() {
   const { data: orgData, isLoading, isError, error, refetch } = useOrganizationQuery();
+  const [isSeeding, setIsSeeding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const { showToast } = useToast();
 
   if (isLoading) {
     return (
@@ -34,10 +37,6 @@ export function OrganizationView() {
     name: string;
     slug: string;
   };
-
-  const [isSeeding, setIsSeeding] = useState(false);
-  const [isRemoving, setIsRemoving] = useState(false);
-  const { showToast } = useToast();
 
   const handleLoadDemo = async () => {
     setIsSeeding(true);
