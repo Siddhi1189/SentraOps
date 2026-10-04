@@ -2,9 +2,11 @@
 import { runCli } from '../src/cli.js';
 
 runCli(process.argv.slice(2)).then(
-  (code) => process.exit(code || 0),
+  (code) => {
+    process.exitCode = code || 0;
+  },
   (err) => {
     console.error(`Error: ${err.message}`);
-    process.exit(1);
+    process.exitCode = 1;
   }
 );
