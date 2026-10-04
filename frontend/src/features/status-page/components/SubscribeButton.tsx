@@ -3,6 +3,7 @@ import type React from 'react';
 import { Modal } from '../../../components/ui/Modal/Modal';
 import { Button } from '../../../components/ui/Button/Button';
 import { Input } from '../../../components/ui/Input/Input';
+import { apiClient } from '../../../api/client';
 import styles from './SubscribeButton.module.css';
 
 export interface SubscribeButtonProps {
@@ -14,24 +15,37 @@ export function SubscribeButton({ companyName, orgSlug }: SubscribeButtonProps) 
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleOpen = () => {
     setIsOpen(true);
     setIsSubmitted(false);
     setEmail('');
+    setError(null);
   };
 
   const handleClose = () => {
     setIsOpen(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
-    // TODO: wire to backend subscribe endpoint once available (e.g. POST /api/v1/status/:orgSlug/subscribe)
-    console.info(`[Status Page] Subscription requested for ${email} on org: ${orgSlug}`);
-    setIsSubmitted(true);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      await apiClient.post(`/status/${orgSlug}/subscribe`, { email });
+      setIsSubmitted(true);
+    } catch (err: unknown) {
+      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        || 'Failed to subscribe. Please try again.';
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -72,9 +86,9 @@ export function SubscribeButton({ companyName, orgSlug }: SubscribeButtonProps) 
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h3 className={styles.successTitle}>Subscription Request Received</h3>
+            <h3 className={styles.successTitle}>Check Your Inbox</h3>
             <p className={styles.successText}>
-              Updates for <strong>{email}</strong> will be sent whenever incidents or maintenance are posted.
+              A confirmation email has been sent to <strong>{email}</strong>. Click the link in the email to confirm your subscription.
             </p>
             <Button variant="secondary" onClick={handleClose} className={styles.closeActionBtn}>
               Done
@@ -97,12 +111,18 @@ export function SubscribeButton({ companyName, orgSlug }: SubscribeButtonProps) 
               autoFocus
             />
 
+            {error && (
+              <p role="alert" style={{ color: 'var(--color-error, #ef4444)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+                {error}
+              </p>
+            )}
+
             <div className={styles.modalActions}>
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button type="submit" variant="primary" disabled={!email.trim()}>
-                Subscribe
+              <Button type="submit" variant="primary" disabled={!email.trim() || isLoading}>
+                {isLoading ? 'Subscribing…' : 'Subscribe'}
               </Button>
             </div>
           </form>

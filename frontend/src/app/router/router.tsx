@@ -36,11 +36,16 @@ import { IssuesPage } from '../../pages/IssuesPage';
 import { IssueDetailPage } from '../../pages/IssueDetailPage';
 import { ProjectsPage } from '../../pages/ProjectsPage';
 import { AlertsPage } from '../../pages/AlertsPage';
+import { LimitsPage } from '../../pages/LimitsPage';
+
 
 // Public Customer Status Pages
 import { PublicStatusOverviewPage } from '../../pages/PublicStatusOverviewPage';
 import { PublicStatusIncidentsPage } from '../../pages/PublicStatusIncidentsPage';
 import { PublicStatusMaintenancePage } from '../../pages/PublicStatusMaintenancePage';
+import { StatusConfirmPage } from '../../pages/StatusConfirmPage';
+import { StatusUnsubscribePage } from '../../pages/StatusUnsubscribePage';
+
 
 import { SocketProvider } from '../providers/SocketProvider';
 
@@ -61,10 +66,14 @@ export function AppRouter() {
     <BrowserRouter>
       <Routes>
         {/* Unauthenticated Public Status Page Routes — Rendered OUTSIDE SessionProvider & ToastProvider */}
+        {/* Confirm/unsubscribe MUST come before :orgSlug to avoid param conflict */}
+        <Route path="/status/confirm/:token" element={<StatusConfirmPage />} />
+        <Route path="/status/unsubscribe/:token" element={<StatusUnsubscribePage />} />
         <Route path="/status/:orgSlug" element={<PublicStatusOverviewPage />} />
         <Route path="/status/:orgSlug/incidents" element={<PublicStatusIncidentsPage />} />
         <Route path="/status/:orgSlug/maintenance" element={<PublicStatusMaintenancePage />} />
         <Route path="/status" element={<Navigate to="/status/acme-corp" replace />} />
+
 
         {/* Public Website Pages */}
         <Route path="/" element={<HomePage />} />
@@ -112,6 +121,8 @@ export function AppRouter() {
               <Route path="team" element={<TeamPage />} />
               <Route path="escalation-policies" element={<EscalationPoliciesPage />} />
               <Route path="status-page" element={<StatusPageSettingsPage />} />
+              <Route path="limits" element={<LimitsPage />} />
+
               <Route
                 path="audit-log"
                 element={

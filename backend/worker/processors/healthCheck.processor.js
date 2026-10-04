@@ -4,9 +4,12 @@ import EscalationPolicyRepository from '../../src/repositories/escalationPolicy.
 import MaintenanceWindowRepository from '../../src/repositories/maintenanceWindow.repository.js';
 import IncidentRepository from '../../src/repositories/incident.repository.js';
 import AlertRuleService from '../../src/services/alertRuleService.js';
+import StatusSubscriberService from '../../src/services/statusSubscriberService.js';
+import OrganizationRepository from '../../src/repositories/organization.repository.js';
 import { evaluateAssertions } from '../../src/utils/assertionEvaluator.js';
 import { getSslDaysRemaining } from '../../src/utils/sslChecker.js';
 import logger from '../../src/utils/logger.js';
+
 
 /**
  * Process a health-check BullMQ job
@@ -220,6 +223,23 @@ async function processHealthCheckJob(job, publishEvent) {
   if (createdIncident) {
     publishEvent(service.organizationId, 'incident-created', { incident: createdIncident });
     logger.info(`Created incident ${createdIncident.id} for service ${service.name} after ${newFailures} failures`);
+    // Notify status-page subscribers of new incident
+    try {
+      const org = await OrganizationRepository.findById(service.organizationId);
+      if (org) {
+        await StatusSubscriberService.notifySubscribers(
+          service.organizationId,
+          org.name,
+          org.slug,
+          {
+            subject: `[${org.name}] New Incident: ${createdIncident.title}`,
+            body: `<p>A new incident has been created for <strong>${service.name}</strong>.</p><p><strong>Incident:</strong> ${createdIncident.title}</p><p>View the status page for details.</p>`,
+          }
+        );
+      }
+    } catch (e) {
+      logger.error(`Failed to notify subscribers on incident creation: ${e.message}`);
+    }
   } else if (escalatedIncident) {
     publishEvent(service.organizationId, 'incident-updated', {
       incidentId: escalatedIncident.id,

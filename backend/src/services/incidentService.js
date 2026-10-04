@@ -1,8 +1,17 @@
 import IncidentRepository from '../repositories/incident.repository.js';
 import TimelineEventRepository from '../repositories/timelineEvent.repository.js';
 import StatusPageService from './statusPageService.js';
+import OrganizationRepository from '../repositories/organization.repository.js';
 import AppError from '../utils/AppError.js';
 import { TimelineEventTypes } from '../constants.js';
+import logger from '../utils/logger.js';
+
+// Lazy import to avoid circular deps
+async function getSubscriberService() {
+  const mod = await import('./statusSubscriberService.js');
+  return mod.default;
+}
+
 
 class IncidentService {
   /**
@@ -101,6 +110,29 @@ class IncidentService {
       currentUpdatedAt
     );
     await StatusPageService.invalidateCache(organizationId);
+
+    // Notify confirmed status-page subscribers on status changes
+    if (updates.status && updates.status !== existing.status) {
+      try {
+        const org = await OrganizationRepository.findById(organizationId);
+        if (org) {
+          const SubscriberService = await getSubscriberService();
+          const statusLabel = updates.status === 'resolved' ? 'Resolved' : updates.status.charAt(0).toUpperCase() + updates.status.slice(1);
+          await SubscriberService.notifySubscribers(
+            organizationId,
+            org.name,
+            org.slug,
+            {
+              subject: `[${org.name}] Incident ${statusLabel}: ${existing.title}`,
+              body: `<p>Incident <strong>${existing.title}</strong> has been updated to status: <strong>${statusLabel}</strong>.</p><p>View the status page for details.</p>`,
+            }
+          );
+        }
+      } catch (e) {
+        logger.error(`Failed to notify subscribers on incident update: ${e.message}`);
+      }
+    }
+
     return result;
   }
 

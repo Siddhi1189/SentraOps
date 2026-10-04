@@ -1,0 +1,87 @@
+import { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { apiClient } from '../../api/client';
+
+/**
+ * StatusUnsubscribePage
+ * Accessed via unsubscribe link in email footer:
+ *   GET /status/unsubscribe/:token
+ */
+export function StatusUnsubscribePage() {
+  const { token } = useParams<{ token: string }>();
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!token) {
+      setStatus('error');
+      setMessage('Invalid unsubscribe link.');
+      return;
+    }
+
+    apiClient
+      .get(`/status/unsubscribe/${token}`)
+      .then((res) => {
+        setMessage(res.data?.message || 'You have been unsubscribed.');
+        setStatus('success');
+      })
+      .catch((err) => {
+        setMessage(
+          err?.response?.data?.message || 'Invalid or expired unsubscribe link.'
+        );
+        setStatus('error');
+      });
+  }, [token]);
+
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Inter, sans-serif',
+        background: '#0F172A',
+        color: '#e2e8f0',
+        gap: '1rem',
+        padding: '2rem',
+        textAlign: 'center',
+      }}
+    >
+      {status === 'loading' && <p>Processing your request…</p>}
+      {status === 'success' && (
+        <>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Unsubscribed</h1>
+          <p style={{ color: '#94a3b8', maxWidth: '420px' }}>{message}</p>
+          <Link
+            to="/"
+            style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}
+          >
+            Return to home
+          </Link>
+        </>
+      )}
+      {status === 'error' && (
+        <>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Error</h1>
+          <p style={{ color: '#94a3b8', maxWidth: '420px' }}>{message}</p>
+          <Link
+            to="/"
+            style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}
+          >
+            Return to home
+          </Link>
+        </>
+      )}
+    </div>
+  );
+}
