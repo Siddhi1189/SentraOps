@@ -102,6 +102,9 @@ export interface Incident {
   organizationId: string;
   serviceId: string;
   assignedUserId: string | null;
+  acknowledgedAt?: string | null;
+  acknowledgedByUserId?: string | null;
+  acknowledgedByUser?: User | null;
   title: string;
   status: IncidentStatus;
   severity: IncidentSeverity;

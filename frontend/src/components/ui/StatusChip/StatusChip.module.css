@@ -69,3 +69,14 @@
 .unknown .dot {
   background-color: var(--color-text-secondary);
 }
+
+/* 6. Paused */
+.paused {
+  background-color: rgba(100, 116, 139, 0.12);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+.paused .dot {
+  background-color: var(--color-text-muted);
+}
+

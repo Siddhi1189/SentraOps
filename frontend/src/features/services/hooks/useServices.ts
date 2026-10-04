@@ -12,6 +12,14 @@ import {
   updateGroup,
   deleteGroup,
   getHealthChecks,
+  pauseService,
+  resumeService,
+  checkNow,
+  bulkPause,
+  bulkResume,
+  bulkInterval,
+  bulkGroup,
+  bulkDelete,
 } from '../../../api/services';
 import type {
   CreateServicePayload,
@@ -157,3 +165,137 @@ export function useHealthCheckHistoryQuery(
     enabled: !!serviceId && enabled,
   });
 }
+
+export function usePauseServiceMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: (id: string) => pauseService(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: servicesKeys.detail(id) });
+      toast.showToast('Service paused', 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to pause service', 'error');
+    },
+  });
+}
+
+export function useResumeServiceMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: (id: string) => resumeService(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: servicesKeys.detail(id) });
+      toast.showToast('Service resumed', 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to resume service', 'error');
+    },
+  });
+}
+
+export function useCheckNowMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: (id: string) => checkNow(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: servicesKeys.detail(id) });
+      toast.showToast('Health check enqueued', 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to trigger health check', 'error');
+    },
+  });
+}
+
+export function useBulkPauseMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => bulkPause(ids),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      toast.showToast(`Paused ${res.data?.count ?? 'selected'} services`, 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to bulk pause services', 'error');
+    },
+  });
+}
+
+export function useBulkResumeMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => bulkResume(ids),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      toast.showToast(`Resumed ${res.data?.count ?? 'selected'} services`, 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to bulk resume services', 'error');
+    },
+  });
+}
+
+export function useBulkIntervalMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: ({ ids, interval }: { ids: string[]; interval: number }) =>
+      bulkInterval(ids, interval),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      toast.showToast(`Updated check interval for ${res.data?.count ?? 'selected'} services`, 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to update check interval', 'error');
+    },
+  });
+}
+
+export function useBulkGroupMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: ({ ids, groupId }: { ids: string[]; groupId: string | null }) =>
+      bulkGroup(ids, groupId),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      toast.showToast(`Updated group for ${res.data?.count ?? 'selected'} services`, 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to update group', 'error');
+    },
+  });
+}
+
+export function useBulkDeleteMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => bulkDelete(ids),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: servicesKeys.lists() });
+      toast.showToast(`Deleted ${res.data?.count ?? 'selected'} services`, 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to delete services', 'error');
+    },
+  });
+}
+

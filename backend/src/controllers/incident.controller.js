@@ -25,10 +25,61 @@ const updateIncident = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, { incident });
 });
 
+const acknowledgeIncident = asyncHandler(async (req, res) => {
+  const { updatedAt } = req.body || {};
+  const incident = await IncidentService.acknowledgeIncident(
+    req.user.organizationId,
+    req.params.id,
+    req.user,
+    updatedAt
+  );
+  await AuditService.record(
+    req.user.organizationId,
+    req.user.id,
+    'incident.acknowledged',
+    'Incident',
+    incident.id
+  );
+  return ApiResponse.success(res, { incident });
+});
+
+const addComment = asyncHandler(async (req, res) => {
+  const { comment } = req.body;
+  const event = await IncidentService.addComment(
+    req.user.organizationId,
+    req.params.id,
+    comment,
+    req.user
+  );
+  await AuditService.record(
+    req.user.organizationId,
+    req.user.id,
+    'incident.comment_added',
+    'Incident',
+    req.params.id,
+    { comment }
+  );
+  return ApiResponse.success(res, { event }, 201);
+});
+
 const getTimeline = asyncHandler(async (req, res) => {
   const events = await IncidentService.getTimeline(req.user.organizationId, req.params.id);
   return ApiResponse.success(res, { events });
 });
 
-export { listIncidents, getIncident, updateIncident, getTimeline };
-export default { listIncidents, getIncident, updateIncident, getTimeline };
+export {
+  listIncidents,
+  getIncident,
+  updateIncident,
+  acknowledgeIncident,
+  addComment,
+  getTimeline,
+};
+export default {
+  listIncidents,
+  getIncident,
+  updateIncident,
+  acknowledgeIncident,
+  addComment,
+  getTimeline,
+};

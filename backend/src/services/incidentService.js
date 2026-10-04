@@ -114,6 +114,67 @@ class IncidentService {
     if (!incident) throw new AppError('Incident not found', 404, 'NOT_FOUND');
     return TimelineEventRepository.findManyByIncident(incidentId, organizationId);
   }
+
+  /**
+   * Acknowledge an incident
+   * @param {string} organizationId
+   * @param {string} incidentId
+   * @param {Object} user
+   * @param {string|Date} [currentUpdatedAt]
+   */
+  static async acknowledgeIncident(organizationId, incidentId, user, currentUpdatedAt = null) {
+    const existing = await IncidentRepository.findById(incidentId, organizationId);
+    if (!existing) throw new AppError('Incident not found', 404, 'NOT_FOUND');
+
+    const acknowledgedAt = new Date();
+    const updateData = {
+      acknowledgedAt,
+      acknowledgedByUserId: user.id,
+    };
+
+    const timelineEntries = [
+      {
+        eventType: TimelineEventTypes.STATUS_CHANGED,
+        description: `Incident acknowledged by ${user.name || user.email}`,
+        metadata: {
+          acknowledgedBy: user.id,
+          acknowledgedByName: user.name,
+          acknowledgedAt,
+        },
+      },
+    ];
+
+    return IncidentRepository.updateWithTimelineAndService(
+      incidentId,
+      organizationId,
+      updateData,
+      timelineEntries,
+      currentUpdatedAt
+    );
+  }
+
+  /**
+   * Add a comment / note to an incident timeline
+   * @param {string} organizationId
+   * @param {string} incidentId
+   * @param {string} comment
+   * @param {Object} user
+   */
+  static async addComment(organizationId, incidentId, comment, user) {
+    const existing = await IncidentRepository.findById(incidentId, organizationId);
+    if (!existing) throw new AppError('Incident not found', 404, 'NOT_FOUND');
+
+    return TimelineEventRepository.create({
+      incidentId,
+      eventType: TimelineEventTypes.COMMENT_ADDED,
+      description: comment,
+      metadata: {
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email,
+      },
+    });
+  }
 }
 
 export default IncidentService;

@@ -88,6 +88,20 @@ const serviceQuerySchema = z.object({
   search: z.string().optional(),
 });
 
+const bulkActionBaseSchema = z.object({
+  serviceIds: z.array(z.string().uuid()).min(1, 'At least one service ID must be provided'),
+});
+
+const bulkIntervalSchema = z.object({
+  serviceIds: z.array(z.string().uuid()).min(1, 'At least one service ID must be provided'),
+  checkIntervalSeconds: z.number().int().min(30, 'Interval must be at least 30 seconds').max(3600),
+});
+
+const bulkGroupSchema = z.object({
+  serviceIds: z.array(z.string().uuid()).min(1, 'At least one service ID must be provided'),
+  groupId: z.string().uuid().nullable().optional(),
+});
+
 export {
   assertionSchema,
   createServiceSchema,
@@ -95,6 +109,9 @@ export {
   createGroupSchema,
   updateGroupSchema,
   serviceQuerySchema,
+  bulkActionBaseSchema,
+  bulkIntervalSchema,
+  bulkGroupSchema,
 };
 export default {
   assertionSchema,
@@ -103,4 +120,7 @@ export default {
   createGroupSchema,
   updateGroupSchema,
   serviceQuerySchema,
+  bulkActionBaseSchema,
+  bulkIntervalSchema,
+  bulkGroupSchema,
 };

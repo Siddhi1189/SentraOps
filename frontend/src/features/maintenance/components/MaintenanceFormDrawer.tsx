@@ -169,6 +169,70 @@ export function MaintenanceFormDrawer({
         </div>
 
         <div className={styles.fieldGroup}>
+          <label className={styles.label}>Quick Presets (Local Time)</label>
+          <div className={styles.presetsRow}>
+            <button
+              type="button"
+              className={styles.presetBtn}
+              onClick={() => {
+                const now = new Date();
+                const end = new Date(now.getTime() + 30 * 60 * 1000);
+                setStartTime(toDatetimeLocalValue(now.toISOString()));
+                setEndTime(toDatetimeLocalValue(end.toISOString()));
+                setValidationError(null);
+              }}
+            >
+              30 minutes
+            </button>
+            <button
+              type="button"
+              className={styles.presetBtn}
+              onClick={() => {
+                const now = new Date();
+                const end = new Date(now.getTime() + 60 * 60 * 1000);
+                setStartTime(toDatetimeLocalValue(now.toISOString()));
+                setEndTime(toDatetimeLocalValue(end.toISOString()));
+                setValidationError(null);
+              }}
+            >
+              1 hour
+            </button>
+            <button
+              type="button"
+              className={styles.presetBtn}
+              onClick={() => {
+                const now = new Date();
+                const end = new Date(now.getTime() + 4 * 60 * 60 * 1000);
+                setStartTime(toDatetimeLocalValue(now.toISOString()));
+                setEndTime(toDatetimeLocalValue(end.toISOString()));
+                setValidationError(null);
+              }}
+            >
+              4 hours
+            </button>
+            <button
+              type="button"
+              className={styles.presetBtn}
+              onClick={() => {
+                const now = new Date();
+                const start = new Date(now);
+                if (now.getHours() >= 2) {
+                  start.setDate(start.getDate() + 1);
+                }
+                start.setHours(2, 0, 0, 0);
+                const end = new Date(start);
+                end.setHours(4, 0, 0, 0);
+                setStartTime(toDatetimeLocalValue(start.toISOString()));
+                setEndTime(toDatetimeLocalValue(end.toISOString()));
+                setValidationError(null);
+              }}
+            >
+              Tonight 02:00–04:00
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.fieldGroup}>
           <label className={styles.label} htmlFor="startTime">
             Start Time
           </label>

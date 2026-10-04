@@ -155,6 +155,7 @@ model User {
   refreshTokens  RefreshToken[]
   passwordResetTokens PasswordResetToken[]
   incidents      Incident[]
+  acknowledgedIncidents Incident[]          @relation("AcknowledgedIncidents")
   auditLogs      AuditLog[]
   notificationReads NotificationRead[]
   assignedIssues Issue[]              @relation("AssignedIssues")
@@ -304,20 +305,23 @@ model Incident {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   organizationId String           @map("organization_id") @db.Uuid
   serviceId      String           @map("service_id") @db.Uuid
-  assignedUserId String?          @map("assigned_user_id") @db.Uuid
-  title          String           @db.VarChar(255)
-  status         IncidentStatus   @default(open)
-  severity       IncidentSeverity @default(medium)
-  rootCause      String?          @map("root_cause")
-  resolutionNotes String?         @map("resolution_notes")
-  detectedAt     DateTime         @default(now()) @map("detected_at") @db.Timestamptz
-  resolvedAt     DateTime?        @map("resolved_at") @db.Timestamptz
-  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt      DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
-  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  service        Service          @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  assignedUser   User?            @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
-  timelineEvents TimelineEvent[]
+  assignedUserId        String?          @map("assigned_user_id") @db.Uuid
+  acknowledgedAt        DateTime?        @map("acknowledged_at") @db.Timestamptz
+  acknowledgedByUserId  String?          @map("acknowledged_by_user_id") @db.Uuid
+  title                 String           @db.VarChar(255)
+  status                IncidentStatus   @default(open)
+  severity              IncidentSeverity @default(medium)
+  rootCause             String?          @map("root_cause")
+  resolutionNotes       String?          @map("resolution_notes")
+  detectedAt            DateTime         @default(now()) @map("detected_at") @db.Timestamptz
+  resolvedAt            DateTime?        @map("resolved_at") @db.Timestamptz
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization          Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  service               Service          @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  assignedUser          User?            @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+  acknowledgedByUser    User?            @relation("AcknowledgedIncidents", fields: [acknowledgedByUserId], references: [id], onDelete: SetNull)
+  timelineEvents        TimelineEvent[]
   issues         Issue[]          @relation("LinkedIssues")
   notifications  Notification[]
 

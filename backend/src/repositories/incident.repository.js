@@ -14,6 +14,7 @@ class IncidentRepository {
       include: {
         service: true,
         assignedUser: true,
+        acknowledgedByUser: true,
         timelineEvents: {
           orderBy: { createdAt: 'asc' },
         },
@@ -56,6 +57,7 @@ class IncidentRepository {
         include: {
           service: true,
           assignedUser: true,
+          acknowledgedByUser: true,
         },
         orderBy: { createdAt: 'desc' },
       }),

@@ -22,6 +22,13 @@ export interface ServicesTableProps {
   onPageChange: (newPage: number) => void;
   onEditService?: (service: Service) => void;
   onDeleteService?: (service: Service) => void;
+  selectedIds?: string[];
+  onToggleSelect?: (id: string) => void;
+  onToggleSelectAll?: () => void;
+  onPauseService?: (service: Service) => void;
+  onResumeService?: (service: Service) => void;
+  onCheckNow?: (service: Service) => void;
+  isCheckingNowId?: string | null;
 }
 
 export function ServicesTable({
@@ -32,17 +39,35 @@ export function ServicesTable({
   onPageChange,
   onEditService,
   onDeleteService,
+  selectedIds,
+  onToggleSelect,
+  onToggleSelectAll,
+  onPauseService,
+  onResumeService,
+  onCheckNow,
+  isCheckingNowId,
 }: ServicesTableProps) {
   const { user } = useSession();
   const canUpdate = can(user, 'service:update');
   const canDelete = can(user, 'service:delete');
   const showActions = canUpdate || canDelete;
+  const showSelect = selectedIds !== undefined;
 
   return (
     <>
       <Table responsive>
         <TableHeader>
           <TableRow>
+            {showSelect && (
+              <TableCell as="th" style={{ width: '40px', textAlign: 'center' }}>
+                <input
+                  type="checkbox"
+                  aria-label="Select all services"
+                  checked={services.length > 0 && selectedIds.length === services.length}
+                  onChange={onToggleSelectAll}
+                />
+              </TableCell>
+            )}
             <TableCell as="th">Service Name</TableCell>
             <TableCell as="th">Status</TableCell>
             <TableCell as="th">Environment</TableCell>
@@ -56,6 +81,17 @@ export function ServicesTable({
         <TableBody>
           {services.map((service) => (
             <TableRow key={service.id}>
+              {showSelect && (
+                <TableCell dataLabel="Select" style={{ width: '40px', textAlign: 'center' }}>
+                  <input
+                    type="checkbox"
+                    aria-label={`Select ${service.name}`}
+                    checked={selectedIds.includes(service.id)}
+                    onChange={() => onToggleSelect?.(service.id)}
+                  />
+                </TableCell>
+              )}
+
               <TableCell dataLabel="Service Name">
                 <div>
                   <Link to={`/app/services/${service.id}`} className={styles.serviceLink}>
@@ -74,7 +110,11 @@ export function ServicesTable({
               </TableCell>
 
               <TableCell dataLabel="Status">
-                <StatusChip status={service.currentStatus} />
+                {!service.isActive ? (
+                  <StatusChip status="paused" label="Paused" />
+                ) : (
+                  <StatusChip status={service.currentStatus} />
+                )}
               </TableCell>
 
               <TableCell dataLabel="Environment">
@@ -86,7 +126,7 @@ export function ServicesTable({
               </TableCell>
 
               <TableCell dataLabel="Target URL">
-                <span className={styles.urlText}>{service.url}</span>
+                <span className={styles.urlText}>{service.url || '—'}</span>
               </TableCell>
 
               <TableCell dataLabel="Check Interval">{service.checkIntervalSeconds}s</TableCell>
@@ -96,6 +136,31 @@ export function ServicesTable({
                   <TableActionsMenu
                     label={`Actions for ${service.name}`}
                     items={[
+                      ...(canUpdate && onCheckNow
+                        ? [
+                            {
+                              label: isCheckingNowId === service.id ? 'Checking...' : 'Check Now',
+                              onClick: () => onCheckNow(service),
+                              disabled: isCheckingNowId === service.id,
+                            },
+                          ]
+                        : []),
+                      ...(canUpdate && onPauseService && service.isActive
+                        ? [
+                            {
+                              label: 'Pause Monitoring',
+                              onClick: () => onPauseService(service),
+                            },
+                          ]
+                        : []),
+                      ...(canUpdate && onResumeService && !service.isActive
+                        ? [
+                            {
+                              label: 'Resume Monitoring',
+                              onClick: () => onResumeService(service),
+                            },
+                          ]
+                        : []),
                       ...(canUpdate && onEditService
                         ? [
                             {

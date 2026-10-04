@@ -75,7 +75,7 @@ export function IncidentDetailView({ incidentId }: IncidentDetailViewProps) {
             <Spinner size="md" />
           </div>
         ) : (
-          <IncidentTimeline events={timelineEvents} />
+          <IncidentTimeline events={timelineEvents} incidentId={incident.id} />
         )}
       </div>
     </div>
