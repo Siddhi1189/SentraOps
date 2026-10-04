@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { apiClient } from '../../api/client';
+import { apiRequest } from '../api/client';
 
-/**
- * StatusConfirmPage
- * Accessed via the confirmation link in the subscription email:
- *   GET /status/confirm/:token
- */
 export function StatusConfirmPage() {
   const { token } = useParams<{ token: string }>();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -19,16 +14,13 @@ export function StatusConfirmPage() {
       return;
     }
 
-    apiClient
-      .get(`/status/confirm/${token}`)
+    apiRequest<{ message?: string }>(`/status/confirm/${token}`, { isPublic: true })
       .then((res) => {
         setMessage(res.data?.message || 'Subscription confirmed!');
         setStatus('success');
       })
-      .catch((err) => {
-        setMessage(
-          err?.response?.data?.message || 'Invalid or expired confirmation link.'
-        );
+      .catch((err: { error?: { message?: string } }) => {
+        setMessage(err?.error?.message || 'Invalid or expired confirmation link.');
         setStatus('error');
       });
   }, [token]);
@@ -57,10 +49,7 @@ export function StatusConfirmPage() {
           </svg>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Subscription Confirmed</h1>
           <p style={{ color: '#94a3b8', maxWidth: '420px' }}>{message}</p>
-          <Link
-            to="/"
-            style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}
-          >
+          <Link to="/" style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}>
             Return to home
           </Link>
         </>
@@ -74,10 +63,7 @@ export function StatusConfirmPage() {
           </svg>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Confirmation Failed</h1>
           <p style={{ color: '#94a3b8', maxWidth: '420px' }}>{message}</p>
-          <Link
-            to="/"
-            style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}
-          >
+          <Link to="/" style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}>
             Return to home
           </Link>
         </>

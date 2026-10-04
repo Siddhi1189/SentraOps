@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '../../../api/client';
+import { apiRequest } from '../../../api/client';
+
 
 interface LimitsData {
   limits: {
@@ -38,14 +39,19 @@ function UsageBar({ current, max }: { current: number; max: number }) {
   );
 }
 
+import type { ApiSuccess } from '../../../types/api';
+
 export function LimitsSection() {
-  const { data, isLoading, error } = useQuery<{ data: LimitsData }>({
+  const { data, isLoading, error } = useQuery<ApiSuccess<LimitsData>>({
+
     queryKey: ['limits'],
-    queryFn: () => apiClient.get('/limits').then((r) => r.data),
+    queryFn: () => apiRequest<LimitsData>('/limits').then((r) => r),
+
     staleTime: 60_000,
   });
 
   const limitsData = data?.data;
+
 
   const card: React.CSSProperties = {
     background: '#0f172a',

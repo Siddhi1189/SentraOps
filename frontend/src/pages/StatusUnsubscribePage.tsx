@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { apiClient } from '../../api/client';
+import { apiRequest } from '../api/client';
 
-/**
- * StatusUnsubscribePage
- * Accessed via unsubscribe link in email footer:
- *   GET /status/unsubscribe/:token
- */
 export function StatusUnsubscribePage() {
   const { token } = useParams<{ token: string }>();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -19,16 +14,13 @@ export function StatusUnsubscribePage() {
       return;
     }
 
-    apiClient
-      .get(`/status/unsubscribe/${token}`)
+    apiRequest<{ message?: string }>(`/status/unsubscribe/${token}`, { isPublic: true })
       .then((res) => {
         setMessage(res.data?.message || 'You have been unsubscribed.');
         setStatus('success');
       })
-      .catch((err) => {
-        setMessage(
-          err?.response?.data?.message || 'Invalid or expired unsubscribe link.'
-        );
+      .catch((err: { error?: { message?: string } }) => {
+        setMessage(err?.error?.message || 'Invalid or expired unsubscribe link.');
         setStatus('error');
       });
   }, [token]);
@@ -57,10 +49,7 @@ export function StatusUnsubscribePage() {
           </svg>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Unsubscribed</h1>
           <p style={{ color: '#94a3b8', maxWidth: '420px' }}>{message}</p>
-          <Link
-            to="/"
-            style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}
-          >
+          <Link to="/" style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}>
             Return to home
           </Link>
         </>
@@ -74,10 +63,7 @@ export function StatusUnsubscribePage() {
           </svg>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Error</h1>
           <p style={{ color: '#94a3b8', maxWidth: '420px' }}>{message}</p>
-          <Link
-            to="/"
-            style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}
-          >
+          <Link to="/" style={{ marginTop: '1rem', color: '#6366f1', textDecoration: 'underline' }}>
             Return to home
           </Link>
         </>

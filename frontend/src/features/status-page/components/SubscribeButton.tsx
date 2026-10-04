@@ -3,7 +3,8 @@ import type React from 'react';
 import { Modal } from '../../../components/ui/Modal/Modal';
 import { Button } from '../../../components/ui/Button/Button';
 import { Input } from '../../../components/ui/Input/Input';
-import { apiClient } from '../../../api/client';
+import { apiRequest } from '../../../api/client';
+
 import styles from './SubscribeButton.module.css';
 
 export interface SubscribeButtonProps {
@@ -37,12 +38,13 @@ export function SubscribeButton({ companyName, orgSlug }: SubscribeButtonProps) 
     setError(null);
 
     try {
-      await apiClient.post(`/status/${orgSlug}/subscribe`, { email });
+      await apiRequest(`/status/${orgSlug}/subscribe`, { method: 'POST', body: { email }, isPublic: true });
       setIsSubmitted(true);
     } catch (err: unknown) {
-      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+      const message = (err as { error?: { message?: string } })?.error?.message
         || 'Failed to subscribe. Please try again.';
       setError(message);
+
     } finally {
       setIsLoading(false);
     }

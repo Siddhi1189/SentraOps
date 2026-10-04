@@ -135,6 +135,7 @@ model Organization {
   issues              Issue[]
   alertChannels       AlertChannel[]
   alertRules          AlertRule[]
+  subscribers         StatusSubscriber[]
 
   @@map("organizations")
 }
@@ -612,5 +613,24 @@ model AlertRuleFire {
 
   @@index([ruleId, firedAt(sort: Desc)], map: "idx_alert_rule_fires_rule_fired")
   @@map("alert_rule_fires")
+}
+
+model StatusSubscriber {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId    String       @map("organization_id") @db.Uuid
+  email             String       @db.VarChar(255)
+  confirmToken      String       @unique @map("confirm_token") @db.VarChar(255)
+  unsubscribeToken  String       @unique @map("unsubscribe_token") @db.VarChar(255)
+  confirmedAt       DateTime?    @map("confirmed_at") @db.Timestamptz
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+  @@index([confirmToken])
+  @@index([unsubscribeToken])
+  @@map("status_subscribers")
 }
 
