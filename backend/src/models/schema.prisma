@@ -128,6 +128,8 @@ model Organization {
   inviteTokens        InviteToken[]
   projects            Project[]
   issues              Issue[]
+  alertChannels       AlertChannel[]
+  alertRules          AlertRule[]
 
   @@map("organizations")
 }
@@ -238,6 +240,7 @@ model Service {
   incidents             Incident[]
   maintenanceWindows    MaintenanceWindow[]
   escalationPolicies    EscalationPolicy[]
+  alertRules            AlertRule[]
 
   @@index([organizationId], map: "idx_services_organization_id")
   @@index([groupId], map: "idx_services_group_id")
@@ -430,6 +433,7 @@ model Project {
   apiKeys            ApiKey[]
   errorEvents        ErrorEvent[]
   issues             Issue[]
+  alertRules         AlertRule[]
 
   @@unique([organizationId, name])
   @@index([organizationId], map: "idx_projects_org_id")
@@ -507,5 +511,64 @@ model ErrorEvent {
   @@index([projectId, occurredAt(sort: Desc)], map: "idx_error_events_project_occurred")
   @@index([issueId, occurredAt(sort: Desc)], map: "idx_error_events_issue_occurred")
   @@map("error_events")
+}
+
+enum AlertRuleTrigger {
+  service_down_consecutive_failures
+  new_issue_in_environment
+  event_rate_threshold
+  response_time_threshold
+}
+
+model AlertChannel {
+  id             String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String              @map("organization_id") @db.Uuid
+  type           NotificationChannel
+  name           String              @db.VarChar(255)
+  config         Json                @default("{}")
+  isActive       Boolean             @default(true) @map("is_active")
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  rules          AlertRule[]         @relation("AlertRuleChannels")
+
+  @@index([organizationId], map: "idx_alert_channels_org_id")
+  @@map("alert_channels")
+}
+
+model AlertRule {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId  String           @map("organization_id") @db.Uuid
+  name            String           @db.VarChar(255)
+  trigger         AlertRuleTrigger
+  conditions      Json             @default("{}")
+  serviceId       String?          @map("service_id") @db.Uuid
+  projectId       String?          @map("project_id") @db.Uuid
+  cooldownSeconds Int              @default(300) @map("cooldown_seconds")
+  snoozedUntil    DateTime?        @map("snoozed_until") @db.Timestamptz
+  isActive        Boolean          @default(true) @map("is_active")
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  service         Service?         @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  project         Project?         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  channels        AlertChannel[]   @relation("AlertRuleChannels")
+  fires           AlertRuleFire[]
+
+  @@index([organizationId], map: "idx_alert_rules_org_id")
+  @@index([serviceId], map: "idx_alert_rules_service_id")
+  @@index([projectId], map: "idx_alert_rules_project_id")
+  @@map("alert_rules")
+}
+
+model AlertRuleFire {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ruleId    String    @map("rule_id") @db.Uuid
+  firedAt   DateTime  @default(now()) @map("fired_at") @db.Timestamptz
+  context   Json?     @default("{}")
+  rule      AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId, firedAt(sort: Desc)], map: "idx_alert_rule_fires_rule_fired")
+  @@map("alert_rule_fires")
 }
 

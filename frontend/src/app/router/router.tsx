@@ -35,6 +35,7 @@ import { StatusPageSettingsPage } from '../../pages/StatusPageSettingsPage';
 import { IssuesPage } from '../../pages/IssuesPage';
 import { IssueDetailPage } from '../../pages/IssueDetailPage';
 import { ProjectsPage } from '../../pages/ProjectsPage';
+import { AlertsPage } from '../../pages/AlertsPage';
 
 // Public Customer Status Pages
 import { PublicStatusOverviewPage } from '../../pages/PublicStatusOverviewPage';
@@ -106,6 +107,7 @@ export function AppRouter() {
             <Route path="settings" element={<SettingsPage />}>
               <Route index element={<Navigate to="/app/settings/organization" replace />} />
               <Route path="projects" element={<ProjectsPage />} />
+              <Route path="alerts" element={<AlertsPage />} />
               <Route path="organization" element={<OrganizationPage />} />
               <Route path="team" element={<TeamPage />} />
               <Route path="escalation-policies" element={<EscalationPoliciesPage />} />

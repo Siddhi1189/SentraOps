@@ -31,6 +31,8 @@ import statusPageSettingsRoutes from './routes/statusPageSettings.routes.js';
 import projectRoutes from './routes/project.routes.js';
 import ingestRoutes from './routes/ingest.routes.js';
 import issueRoutes from './routes/issue.routes.js';
+import alertChannelRoutes from './routes/alertChannel.routes.js';
+import alertRuleRoutes from './routes/alertRule.routes.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json');
@@ -100,6 +102,8 @@ v1Router.use('/notifications', apiRateLimiter, notificationRoutes);
 v1Router.use('/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
 v1Router.use('/projects', apiRateLimiter, projectRoutes);
 v1Router.use('/issues', apiRateLimiter, issueRoutes);
+v1Router.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
+v1Router.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
 
 // Mount versioned API router at /api/v1
 app.use('/api/v1', v1Router);
@@ -109,6 +113,8 @@ app.use('/api/notifications', apiRateLimiter, notificationRoutes);
 app.use('/api/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
 app.use('/api/projects', apiRateLimiter, projectRoutes);
 app.use('/api/issues', apiRateLimiter, issueRoutes);
+app.use('/api/alert-channels', apiRateLimiter, alertChannelRoutes);
+app.use('/api/alert-rules', apiRateLimiter, alertRuleRoutes);
 
 // Unversioned fallback routing for backward compatibility
 app.use('/auth', authRateLimiter, authRoutes);
@@ -125,6 +131,8 @@ app.use('/notifications', apiRateLimiter, notificationRoutes);
 app.use('/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
 app.use('/projects', apiRateLimiter, projectRoutes);
 app.use('/issues', apiRateLimiter, issueRoutes);
+app.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
+app.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
 
 // Return JSON for unmatched API routes instead of Express's default "Cannot GET /path".
 app.use((req, res) => ApiResponse.error(

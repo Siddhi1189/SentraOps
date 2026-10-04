@@ -62,6 +62,18 @@ class ErrorEventRepository {
     }
     return userIds.size;
   }
+
+  /**
+   * Count events for a project since a specific date
+   */
+  static async countEventsByProjectSince(projectId, sinceDate) {
+    return prisma.errorEvent.count({
+      where: {
+        projectId,
+        occurredAt: { gte: sinceDate },
+      },
+    });
+  }
 }
 
 export default ErrorEventRepository;

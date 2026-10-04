@@ -3,7 +3,7 @@ import HealthCheckRepository from '../../src/repositories/healthCheck.repository
 import EscalationPolicyRepository from '../../src/repositories/escalationPolicy.repository.js';
 import MaintenanceWindowRepository from '../../src/repositories/maintenanceWindow.repository.js';
 import IncidentRepository from '../../src/repositories/incident.repository.js';
-import { enqueueNotification } from '../../src/config/queue.js';
+import AlertRuleService from '../../src/services/alertRuleService.js';
 import logger from '../../src/utils/logger.js';
 import { NotificationChannels } from '../../src/constants.js';
 
@@ -93,6 +93,16 @@ async function processHealthCheckJob(job, publishEvent) {
 
   // 6. Handle SUCCESS branch (including AUTOMATIC RECOVERY LOGIC)
   if (status === 'up') {
+    // Evaluate response_time_threshold rules on healthy checks
+    await AlertRuleService.evaluateHealthCheckAlerts({
+      service,
+      status: 'up',
+      consecutiveFailures: 0,
+      responseTimeMs,
+      errorMessage: null,
+      activeMaintenance: false,
+    });
+
     const openIncident = await IncidentRepository.processWorkerRecovery(
       service,
       responseTimeMs,
@@ -129,16 +139,18 @@ async function processHealthCheckJob(job, publishEvent) {
     httpStatusCode
   );
 
-  if (createdIncident) {
-    // Enqueue notification job
-    await enqueueNotification({
-      organizationId: service.organizationId,
-      incidentId: createdIncident.id,
-      channel: NotificationChannels.EMAIL,
-      subject: `🚨 Incident Created: ${service.name} is DOWN`,
-      body: `<p>Service <strong>${service.name}</strong> has failed ${newFailures} health checks.</p><p>Error: ${errorMessage}</p>`,
-    });
+  // Evaluate alert rules (replaces hardcoded notification with rule evaluation & default fallback)
+  await AlertRuleService.evaluateHealthCheckAlerts({
+    service,
+    status,
+    consecutiveFailures: newFailures,
+    responseTimeMs,
+    errorMessage,
+    activeMaintenance: false,
+    createdIncident,
+  });
 
+  if (createdIncident) {
     publishEvent(service.organizationId, 'incident-created', { incident: createdIncident });
     logger.info(`Created incident ${createdIncident.id} for service ${service.name} after ${newFailures} failures`);
   } else if (escalatedIncident) {

@@ -89,3 +89,15 @@ export const projectsKeys = {
   keys: (id: string) => [...projectsKeys.detail(id), 'keys'] as const,
 };
 
+export const alertChannelsKeys = {
+  all: ['alert-channels'] as const,
+  lists: () => [...alertChannelsKeys.all, 'list'] as const,
+  detail: (id: string) => [...alertChannelsKeys.all, 'detail', id] as const,
+};
+
+export const alertRulesKeys = {
+  all: ['alert-rules'] as const,
+  lists: () => [...alertRulesKeys.all, 'list'] as const,
+  detail: (id: string) => [...alertRulesKeys.all, 'detail', id] as const,
+};
+

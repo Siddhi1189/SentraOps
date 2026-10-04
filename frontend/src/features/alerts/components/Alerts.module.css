@@ -1,0 +1,311 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  padding: var(--space-6, 24px);
+}
+
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-2, 8px);
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-primary-text, #1e293b);
+  margin: 0 0 var(--space-1, 4px) 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.875rem;
+  color: var(--color-secondary-text, #64748b);
+  margin: 0;
+}
+
+.tableWrapper {
+  background-color: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.channelName,
+.ruleName {
+  font-weight: 600;
+  color: var(--color-primary-text, #1e293b);
+}
+
+.channelTypeBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.maskedCode {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.8125rem;
+  background-color: #f8fafc;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #334155;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+}
+
+.deleteBtn {
+  color: #dc2626 !important;
+}
+
+.deleteBtn:hover {
+  background-color: #fee2e2 !important;
+}
+
+/* Rule specific styling */
+.ruleNameCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.snoozedBadge {
+  display: inline-block;
+  font-size: 0.75rem;
+  background-color: #fef3c7;
+  color: #92400e;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.triggerCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.triggerBadge {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-primary-text, #1e293b);
+}
+
+.conditionSummary {
+  font-size: 0.75rem;
+  color: var(--color-secondary-text, #64748b);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.targetScope {
+  font-size: 0.8125rem;
+  color: #334155;
+}
+
+.channelChipsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.channelChip {
+  display: inline-block;
+  font-size: 0.75rem;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.lastFiredTime {
+  font-size: 0.8125rem;
+  color: var(--color-secondary-text, #64748b);
+}
+
+.emptyText {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Forms & Drawers */
+.form,
+.drawerForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+  padding: var(--space-2, 8px) 0;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3, 12px);
+}
+
+.formLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-primary-text, #1e293b);
+}
+
+.fieldHint {
+  font-size: 0.75rem;
+  color: var(--color-secondary-text, #64748b);
+  margin-top: 2px;
+}
+
+.formError {
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+}
+
+.formCheckboxGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  margin-top: var(--space-2, 8px);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--color-primary-text, #1e293b);
+  cursor: pointer;
+}
+
+.channelCheckboxList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 6px;
+  padding: 8px 12px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.noChannelsWarning {
+  font-size: 0.8125rem;
+  color: #d97706;
+  background-color: #fffbeb;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #fef3c7;
+}
+
+.modalActions,
+.drawerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2, 8px);
+  margin-top: var(--space-4, 16px);
+}
+
+/* Snooze Presets */
+.snoozeModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.snoozeDesc {
+  font-size: 0.875rem;
+  color: var(--color-secondary-text, #64748b);
+  margin: 0;
+}
+
+.snoozePresets {
+  display: flex;
+  gap: var(--space-2, 8px);
+}
+
+.customSnoozeForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+  border-top: 1px solid var(--color-border, #e2e8f0);
+  padding-top: var(--space-3, 12px);
+}
+
+.customSnoozeRow {
+  display: flex;
+  gap: var(--space-2, 8px);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12, 48px);
+  gap: var(--space-3, 12px);
+  color: var(--color-secondary-text, #64748b);
+}
+
+/* Tab navigation within AlertsView */
+.tabNav {
+  display: flex;
+  gap: var(--space-4, 16px);
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  margin-bottom: var(--space-4, 16px);
+}
+
+.tabButton {
+  background: none;
+  border: none;
+  padding: var(--space-2, 8px) 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-secondary-text, #64748b);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease;
+}
+
+.tabButton:hover {
+  color: var(--color-primary-text, #1e293b);
+}
+
+.tabButtonActive {
+  color: var(--color-primary, #2563eb);
+  font-weight: 600;
+}
+
+.tabButtonActive::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary, #2563eb);
+}

@@ -1,6 +1,7 @@
 import { computeFingerprint } from '../../src/utils/fingerprint.js';
 import IssueRepository from '../../src/repositories/issue.repository.js';
 import ErrorEventRepository from '../../src/repositories/errorEvent.repository.js';
+import AlertRuleService from '../../src/services/alertRuleService.js';
 import logger from '../../src/utils/logger.js';
 
 /**
@@ -75,6 +76,20 @@ export async function processIngestJob(job, publishEvent) {
           environment: issue.environment,
         });
       }
+    }
+
+    // 7. Evaluate alert rules (new_issue_in_environment, event_rate_threshold)
+    try {
+      await AlertRuleService.evaluateIngestAlerts({
+        projectId,
+        organizationId,
+        issue,
+        isNew,
+        isRegression,
+        isIgnored,
+      });
+    } catch (alertErr) {
+      logger.error(`Error evaluating ingest alert rules: ${alertErr.message}`, { stack: alertErr.stack });
     }
 
     logger.info(`Processed error event ${eventId} for issue ${issue.id} (new: ${isNew}, regression: ${isRegression})`);
