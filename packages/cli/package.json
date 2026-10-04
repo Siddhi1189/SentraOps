@@ -1,0 +1,14 @@
+{
+  "name": "@sentraops/cli",
+  "version": "1.0.0",
+  "description": "SentraOps CLI tool",
+  "type": "module",
+  "bin": {
+    "sentraops": "./bin/sentraops.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "author": "SentraOps Team",
+  "license": "MIT"
+}

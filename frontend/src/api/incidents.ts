@@ -126,3 +126,8 @@ export async function listOrganizationMembers(
     pagination: pagination as any,
   };
 }
+
+export async function generateIncidentSummary(id: string): Promise<ApiSuccess<{ summary: string }>> {
+  return apiRequest<{ summary: string }>(`/incidents/${id}/summary`, { method: 'POST' });
+}
+

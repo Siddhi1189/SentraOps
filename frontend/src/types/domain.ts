@@ -117,6 +117,7 @@ export interface Incident {
   resolutionNotes: string | null;
   detectedAt: string;
   resolvedAt: string | null;
+  aiSummary?: string | null;
   createdAt: string;
   updatedAt: string;
 }

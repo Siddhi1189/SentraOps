@@ -1,5 +1,6 @@
 import IncidentService from '../services/incidentService.js';
 import AuditService from '../services/auditService.js';
+import AiSummaryService from '../services/aiSummaryService.js';
 import ApiResponse from '../utils/apiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
@@ -67,6 +68,14 @@ const getTimeline = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, { events });
 });
 
+const generateSummary = asyncHandler(async (req, res) => {
+  const summary = await AiSummaryService.generateIncidentSummary(
+    req.user.organizationId,
+    req.params.id
+  );
+  return ApiResponse.success(res, { summary });
+});
+
 export {
   listIncidents,
   getIncident,
@@ -74,6 +83,7 @@ export {
   acknowledgeIncident,
   addComment,
   getTimeline,
+  generateSummary,
 };
 export default {
   listIncidents,
@@ -82,4 +92,5 @@ export default {
   acknowledgeIncident,
   addComment,
   getTimeline,
+  generateSummary,
 };

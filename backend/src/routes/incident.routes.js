@@ -43,6 +43,12 @@ router.post(
   controller.addComment
 );
 
+router.post(
+  '/:id/summary',
+  authorize(UserRoles.OWNER, UserRoles.ADMIN, 'member'),
+  controller.generateSummary
+);
+
 router.get('/:id/timeline', controller.getTimeline);
 
 export default router;

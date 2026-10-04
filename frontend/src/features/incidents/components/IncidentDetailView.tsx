@@ -4,6 +4,7 @@ import { ErrorState } from '../../../components/ui/ErrorState/ErrorState';
 import { IncidentDetailHeader } from './IncidentDetailHeader';
 import { IncidentUpdatePanel } from './IncidentUpdatePanel';
 import { IncidentTimeline } from './IncidentTimeline';
+import { IncidentAiSummary } from './IncidentAiSummary';
 import { useIncidentQuery, useIncidentTimelineQuery } from '../hooks/useIncidents';
 import styles from './IncidentDetailView.module.css';
 
@@ -65,6 +66,8 @@ export function IncidentDetailView({ incidentId }: IncidentDetailViewProps) {
       <Breadcrumbs items={breadcrumbs} />
 
       <IncidentDetailHeader incident={incident} />
+
+      <IncidentAiSummary incident={incident} />
 
       {/* Grid stacking single column < 1024px */}
       <div className={styles.layoutGrid}>

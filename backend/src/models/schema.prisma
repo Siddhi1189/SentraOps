@@ -316,6 +316,7 @@ model Incident {
   resolutionNotes       String?          @map("resolution_notes")
   detectedAt            DateTime         @default(now()) @map("detected_at") @db.Timestamptz
   resolvedAt            DateTime?        @map("resolved_at") @db.Timestamptz
+  aiSummary             String?          @map("ai_summary") @db.Text
   createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz
   updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   organization          Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
