@@ -81,6 +81,11 @@ export interface Service {
   lastHeartbeatAt?: string | null;
   tags?: string[];
   group?: ServiceGroup | null;
+  sparkline?: Array<{
+    status: string;
+    responseTimeMs: number;
+    checkedAt: string;
+  }> | number[];
 }
 
 export interface HealthCheck {

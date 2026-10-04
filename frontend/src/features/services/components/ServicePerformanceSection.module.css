@@ -1,0 +1,232 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+  margin-bottom: var(--space-6, 24px);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4, 16px);
+}
+
+.summaryCard {
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-4, 16px);
+  box-shadow: var(--elevation-rest, 0 1px 3px rgba(0, 0, 0, 0.05));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  padding-bottom: 8px;
+}
+
+.cardTitle {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold, 700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary, #64748b);
+  margin: 0;
+}
+
+.totalChecks {
+  font-size: 11px;
+  color: var(--color-text-muted, #94a3b8);
+  font-family: var(--font-mono, monospace);
+}
+
+.uptimeRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.uptimeValue {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold, 700);
+  font-family: var(--font-sans, system-ui);
+  color: var(--color-text-primary, #0f172a);
+}
+
+.uptimeLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #64748b);
+  font-weight: 500;
+}
+
+.percentilesList {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--color-border, #e2e8f0);
+  font-size: 12px;
+  font-family: var(--font-mono, monospace);
+}
+
+.percentileItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pctLabel {
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 10px;
+}
+
+.pctVal {
+  color: var(--color-text-primary, #0f172a);
+  font-weight: 600;
+}
+
+.chartCard {
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-4, 16px);
+  box-shadow: var(--elevation-rest, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3, 12px);
+}
+
+.chartTitle {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary, #0f172a);
+  margin: 0;
+}
+
+.chartLegend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  color: var(--color-text-secondary, #64748b);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendLine {
+  width: 16px;
+  height: 2px;
+  background-color: var(--color-primary, #2563eb);
+}
+
+.legendP95 {
+  width: 16px;
+  height: 2px;
+  border-top: 2px dashed #f59e0b;
+}
+
+.svgWrapper {
+  width: 100%;
+  height: 180px;
+  position: relative;
+}
+
+.svgChart {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.chartEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 140px;
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 13px;
+}
+
+.sslCard {
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--elevation-rest, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.sslLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sslIcon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-teal-600, #0d9488);
+}
+
+.sslText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sslTitle {
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary, #0f172a);
+}
+
+.sslMeta {
+  font-size: 11px;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sslBadge {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold, 700);
+  padding: 4px 10px;
+  border-radius: var(--radius-xs, 4px);
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+}
+
+.sslValid {
+  background-color: var(--color-success-bg, #ecfdf5);
+  color: var(--color-success, #059669);
+  border: 1px solid var(--color-success-border, #a7f3d0);
+}
+
+.sslWarning {
+  background-color: var(--color-warning-bg, #fffbeb);
+  color: var(--color-warning, #d97706);
+  border: 1px solid var(--color-warning-border, #fde68a);
+}
+
+.sslDanger {
+  background-color: var(--color-danger-bg, #fef2f2);
+  color: var(--color-danger, #dc2626);
+  border: 1px solid var(--color-danger-border, #fecaca);
+}

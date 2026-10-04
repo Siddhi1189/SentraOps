@@ -12,6 +12,7 @@ import {
 } from '../../../components/ui/Table/Table';
 import { StatusChip } from '../../../components/ui/StatusChip/StatusChip';
 import { TableActionsMenu } from '../../../components/ui/TableActionsMenu/TableActionsMenu';
+import { ServiceSparkline } from './ServiceSparkline';
 import styles from './ServicesTable.module.css';
 
 export interface ServicesTableProps {
@@ -110,11 +111,40 @@ export function ServicesTable({
               </TableCell>
 
               <TableCell dataLabel="Status">
-                {!service.isActive ? (
-                  <StatusChip status="paused" label="Paused" />
-                ) : (
-                  <StatusChip status={service.currentStatus} />
-                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span
+                      style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        flexShrink: 0,
+                        backgroundColor: !service.isActive
+                          ? 'var(--color-neutral-400, #94a3b8)'
+                          : service.currentStatus === 'up'
+                          ? 'var(--color-success, #10b981)'
+                          : service.currentStatus === 'degraded'
+                          ? 'var(--color-warning, #f59e0b)'
+                          : service.currentStatus === 'down'
+                          ? 'var(--color-danger, #ef4444)'
+                          : 'var(--color-neutral-400, #94a3b8)',
+                        display: 'inline-block',
+                      }}
+                      aria-hidden="true"
+                    />
+                    {!service.isActive ? (
+                      <StatusChip status="paused" label="Paused" />
+                    ) : (
+                      <StatusChip status={service.currentStatus} />
+                    )}
+                  </div>
+                  {service.sparkline && service.sparkline.length > 0 && (
+                    <ServiceSparkline
+                      points={service.sparkline}
+                      status={service.currentStatus}
+                    />
+                  )}
+                </div>
               </TableCell>
 
               <TableCell dataLabel="Environment">

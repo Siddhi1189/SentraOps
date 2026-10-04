@@ -9,5 +9,6 @@ const router = Router();
 router.get('/:orgSlug', controller.getStatusPage);
 router.get('/:orgSlug/incidents', controller.getStatusPageIncidents);
 router.get('/:orgSlug/maintenance', controller.getStatusPageMaintenance);
+router.get('/:orgSlug/uptime', controller.getStatusPageUptime);
 
 export default router;

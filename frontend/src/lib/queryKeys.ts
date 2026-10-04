@@ -58,6 +58,7 @@ export const statusKeys = {
   overview: (orgSlug: string) => [...statusKeys.all, orgSlug, 'overview'] as const,
   incidents: (orgSlug: string) => [...statusKeys.all, orgSlug, 'incidents'] as const,
   maintenance: (orgSlug: string) => [...statusKeys.all, orgSlug, 'maintenance'] as const,
+  uptime: (orgSlug: string) => [...statusKeys.all, orgSlug, 'uptime'] as const,
 };
 
 export const notificationsKeys = {

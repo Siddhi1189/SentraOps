@@ -1,4 +1,5 @@
 import prisma from '../config/db.js';
+import HealthCheckRepository from './healthCheck.repository.js';
 
 class ServiceRepository {
   /**
@@ -61,7 +62,18 @@ class ServiceRepository {
       prisma.service.count({ where }),
     ]);
 
-    return { services, total };
+    const serviceIds = services.map((s) => s.id);
+    let sparklines = {};
+    if (serviceIds.length > 0) {
+      sparklines = await HealthCheckRepository.getRecentSparklines(serviceIds).catch(() => ({}));
+    }
+
+    const servicesWithSparkline = services.map((s) => ({
+      ...s,
+      sparkline: sparklines[s.id] || [],
+    }));
+
+    return { services: servicesWithSparkline, total };
   }
 
   /**

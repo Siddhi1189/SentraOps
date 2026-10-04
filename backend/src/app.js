@@ -113,6 +113,8 @@ app.use('/api/v1', v1Router);
 // Direct /api mount for non-v1 prefixed calls (e.g. /api/notifications, /api/status-page-settings, /api/projects, /api/issues)
 app.use('/api/services', apiRateLimiter, serviceRoutes);
 app.use('/api/incidents', apiRateLimiter, incidentRoutes);
+app.use('/api/analytics', apiRateLimiter, analyticsRoutes);
+app.use('/api/status', statusPageRoutes);
 app.use('/api/notifications', apiRateLimiter, notificationRoutes);
 app.use('/api/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
 app.use('/api/projects', apiRateLimiter, projectRoutes);

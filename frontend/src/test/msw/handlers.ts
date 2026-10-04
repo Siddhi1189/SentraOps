@@ -1175,6 +1175,50 @@ export const handlers = [
       data: { settings: mockStatusPageSettings },
     });
   }),
+
+  // Analytics Performance Endpoint
+  http.get('/api/v1/analytics/services/:id/performance', ({ params }) => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        serviceId: params.id,
+        windows: {
+          '24h': { totalChecks: 144, upChecks: 144, uptimePercentage: 100, p50: 45, p95: 110, p99: 210 },
+          '7d': { totalChecks: 1008, upChecks: 1005, uptimePercentage: 99.7, p50: 48, p95: 115, p99: 220 },
+          '30d': { totalChecks: 4320, upChecks: 4300, uptimePercentage: 99.54, p50: 50, p95: 120, p99: 230 },
+        },
+        timeSeries: [
+          { id: '1', status: 'up', responseTimeMs: 42, checkedAt: new Date().toISOString() },
+          { id: '2', status: 'up', responseTimeMs: 50, checkedAt: new Date(Date.now() - 60000).toISOString() },
+        ],
+        sparkline: [42, 45, 48, 50, 43, 44, 46],
+        ssl: { daysRemaining: 78, checkedAt: new Date().toISOString() },
+      },
+    });
+  }),
+
+  // Public Status Page 90-Day Uptime Endpoint
+  http.get('/api/v1/status/:orgSlug/uptime', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        services: mockServices.map((s) => ({
+          id: s.id,
+          name: s.name,
+          currentStatus: s.currentStatus,
+          environment: s.environment,
+          group: null,
+          overallUptime: 99.9,
+          history: Array.from({ length: 90 }, (_, i) => ({
+            date: `2026-0${Math.floor(i / 30) + 1}-${(i % 30) + 1}`,
+            totalChecks: 24,
+            uptimePercentage: 100,
+            status: 'up' as const,
+          })),
+        })),
+      },
+    });
+  }),
 ];
 
 let mockNotifications = [

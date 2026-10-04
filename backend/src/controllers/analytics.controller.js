@@ -7,10 +7,15 @@ const getServiceAnalytics = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, data);
 });
 
+const getServicePerformance = asyncHandler(async (req, res) => {
+  const data = await AnalyticsService.getServicePerformance(req.params.id, req.user.organizationId);
+  return ApiResponse.success(res, data);
+});
+
 const getIncidentAnalytics = asyncHandler(async (req, res) => {
   const data = await AnalyticsService.getIncidentAnalytics(req.user.organizationId, req.query);
   return ApiResponse.success(res, data);
 });
 
-export { getServiceAnalytics, getIncidentAnalytics };
-export default { getServiceAnalytics, getIncidentAnalytics };
+export { getServiceAnalytics, getServicePerformance, getIncidentAnalytics };
+export default { getServiceAnalytics, getServicePerformance, getIncidentAnalytics };

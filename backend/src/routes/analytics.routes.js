@@ -9,6 +9,7 @@ const router = Router();
 router.use(authenticate);
 
 router.get('/services/:id', controller.getServiceAnalytics);
+router.get('/services/:id/performance', controller.getServicePerformance);
 router.get('/incidents', controller.getIncidentAnalytics);
 
 export default router;

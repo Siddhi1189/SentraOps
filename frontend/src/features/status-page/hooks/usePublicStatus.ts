@@ -4,6 +4,7 @@ import {
   getStatusPageOverview,
   getStatusPageIncidents,
   getStatusPageMaintenance,
+  getStatusPageUptime,
 } from '../../../api/status';
 
 export function usePublicStatusOverviewQuery(orgSlug: string) {
@@ -26,6 +27,14 @@ export function usePublicStatusMaintenanceQuery(orgSlug: string) {
   return useQuery({
     queryKey: statusKeys.maintenance(orgSlug),
     queryFn: () => getStatusPageMaintenance(orgSlug),
+    enabled: Boolean(orgSlug),
+  });
+}
+
+export function usePublicStatusUptimeQuery(orgSlug: string) {
+  return useQuery({
+    queryKey: statusKeys.uptime(orgSlug),
+    queryFn: () => getStatusPageUptime(orgSlug),
     enabled: Boolean(orgSlug),
   });
 }

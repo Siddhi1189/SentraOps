@@ -87,7 +87,7 @@ export function PublicStatusOverviewPage() {
   return (
     <PublicStatusLayout orgSlug={orgSlug} settings={settings}>
       <OverallStatusBanner services={services || []} />
-      <PublicServiceList services={services || []} />
+      <PublicServiceList services={services || []} orgSlug={orgSlug} />
 
       {openIncidents && openIncidents.length > 0 && (
         <PublicIncidentHistory

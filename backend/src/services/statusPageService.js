@@ -39,7 +39,8 @@ class StatusPageService {
       await redis.del(
         `status:${organizationId}`,
         `status:${organizationId}:incidents`,
-        `status:${organizationId}:maintenance`
+        `status:${organizationId}:maintenance`,
+        `status:${organizationId}:uptime`
       );
       logger.debug(`Invalidated status page cache for organization: ${organizationId}`);
     } catch (err) {
@@ -141,6 +142,20 @@ class StatusPageService {
     const settings = await StatusPageRepository.upsert(organizationId, updateData, createData);
     await this.invalidateCache(organizationId);
     return settings;
+  }
+
+  static async getStatusPageUptime(slug) {
+    const settings = await StatusPageRepository.findBySlug(slug);
+    if (!settings) throw new AppError('Status page not found', 404, 'NOT_FOUND');
+
+    const { organizationId } = settings;
+    const cacheKey = `status:${organizationId}:uptime`;
+    const cached = await getCached(cacheKey);
+    if (cached) return cached;
+
+    const data = await StatusPageRepository.get90DayUptimeForStatusPage(organizationId);
+    await setCache(cacheKey, data);
+    return data;
   }
 }
 
