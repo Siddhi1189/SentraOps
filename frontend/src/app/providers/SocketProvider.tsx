@@ -84,6 +84,8 @@ export function SocketProvider({ children }: SocketProviderProps) {
       'health-check-updated',
       'maintenance-started',
       'maintenance-ended',
+      'issue-created',
+      'issue-regression',
     ];
 
     eventTopics.forEach((topic) => {

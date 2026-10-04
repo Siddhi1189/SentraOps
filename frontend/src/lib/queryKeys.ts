@@ -70,3 +70,22 @@ export const statusPageSettingsKeys = {
   all: ['status-page-settings'] as const,
   settings: () => [...statusPageSettingsKeys.all, 'current'] as const,
 };
+
+export const issuesKeys = {
+  all: ['issues'] as const,
+  lists: () => [...issuesKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...issuesKeys.lists(), { filters }] as const,
+  details: () => [...issuesKeys.all, 'detail'] as const,
+  detail: (id: string) => [...issuesKeys.details(), id] as const,
+  events: (id: string, filters?: Record<string, unknown>) => [...issuesKeys.detail(id), 'events', { filters }] as const,
+};
+
+export const projectsKeys = {
+  all: ['projects'] as const,
+  lists: () => [...projectsKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...projectsKeys.lists(), { filters }] as const,
+  details: () => [...projectsKeys.all, 'detail'] as const,
+  detail: (id: string) => [...projectsKeys.details(), id] as const,
+  keys: (id: string) => [...projectsKeys.detail(id), 'keys'] as const,
+};
+

@@ -21,7 +21,7 @@ export function extractInAppFrames(stack) {
     }
 
     // Filter out third-party and runtime frames
-    if (line.includes('node_modules') || line.includes('node:')) {
+    if (line.includes('node_modules') || line.includes('node:') || line.includes('internal/')) {
       continue;
     }
 
