@@ -35,6 +35,7 @@ import alertChannelRoutes from './routes/alertChannel.routes.js';
 import alertRuleRoutes from './routes/alertRule.routes.js';
 import heartbeatRoutes from './routes/heartbeat.routes.js';
 import limitsRoutes from './routes/limits.routes.js';
+import demoRoutes from './routes/demo.routes.js';
 
 
 const require = createRequire(import.meta.url);
@@ -109,6 +110,7 @@ v1Router.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
 v1Router.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
 v1Router.use('/heartbeat', heartbeatRoutes);
 v1Router.use('/limits', apiRateLimiter, limitsRoutes);
+v1Router.use('/demo', apiRateLimiter, demoRoutes);
 
 
 // Mount versioned API router at /api/v1
@@ -127,6 +129,7 @@ app.use('/api/alert-channels', apiRateLimiter, alertChannelRoutes);
 app.use('/api/alert-rules', apiRateLimiter, alertRuleRoutes);
 app.use('/api/heartbeat', heartbeatRoutes);
 app.use('/api/limits', apiRateLimiter, limitsRoutes);
+app.use('/api/demo', apiRateLimiter, demoRoutes);
 
 
 // Unversioned fallback routing for backward compatibility

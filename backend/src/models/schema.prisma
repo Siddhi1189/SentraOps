@@ -246,6 +246,7 @@ model Service {
   currentStatus         ServiceStatus       @default(unknown) @map("current_status")
   consecutiveFailures   Int                 @default(0) @map("consecutive_failures")
   isActive              Boolean             @default(true) @map("is_active")
+  isDemo                Boolean             @default(false) @map("is_demo")
   createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz
   updatedAt             DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   organization          Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -295,6 +296,7 @@ model HealthCheck {
   sslDaysRemaining  Int?         @map("ssl_days_remaining")
   failedAssertion   Json?        @map("failed_assertion")
   errorMessage      String?      @map("error_message")
+  isDemo            Boolean      @default(false) @map("is_demo")
   checkedAt         DateTime     @default(now()) @map("checked_at") @db.Timestamptz
   service           Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
@@ -317,6 +319,7 @@ model Incident {
   detectedAt            DateTime         @default(now()) @map("detected_at") @db.Timestamptz
   resolvedAt            DateTime?        @map("resolved_at") @db.Timestamptz
   aiSummary             String?          @map("ai_summary") @db.Text
+  isDemo                Boolean          @default(false) @map("is_demo")
   createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz
   updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   organization          Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -340,6 +343,7 @@ model TimelineEvent {
   eventType   TimelineEventType @map("event_type")
   description String
   metadata    Json?             @default("{}")
+  isDemo      Boolean           @default(false) @map("is_demo")
   createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
   incident    Incident          @relation(fields: [incidentId], references: [id], onDelete: Cascade)
 
@@ -449,6 +453,7 @@ model Project {
   name               String          @db.VarChar(255)
   platform           PlatformType    @default(node)
   environmentDefault EnvironmentType @default(production) @map("environment_default")
+  isDemo             Boolean         @default(false) @map("is_demo")
   createdAt          DateTime        @default(now()) @map("created_at") @db.Timestamptz
   updatedAt          DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   organization       Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -498,6 +503,7 @@ model Issue {
   resolvedInRelease String?      @map("resolved_in_release") @db.VarChar(100)
   regressedInRelease String?     @map("regressed_in_release") @db.VarChar(100)
   isRegression      Boolean      @default(false) @map("is_regression")
+  isDemo            Boolean      @default(false) @map("is_demo")
   linkedIncidentId  String?      @map("linked_incident_id") @db.Uuid
   createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz
   updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
@@ -528,6 +534,7 @@ model ErrorEvent {
   breadcrumbs Json?      @default("[]")
   user        Json?
   request     Json?
+  isDemo      Boolean    @default(false) @map("is_demo")
   occurredAt  DateTime   @default(now()) @map("occurred_at") @db.Timestamptz
   receivedAt  DateTime   @default(now()) @map("received_at") @db.Timestamptz
   project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
