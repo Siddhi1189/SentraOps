@@ -77,24 +77,17 @@ async function seed() {
   if (demoAppBaseUrl) {
     const servicesData = [
       {
-        name: 'Authentication Service',
-        url: `${demoAppBaseUrl}/api/health`,
+        name: 'Demo Shop Uptime Service',
+        url: `${demoAppBaseUrl}/health`,
         groupId: coreGroup.id,
         checkIntervalSeconds: 30,
         priority: 'high',
         environment: 'production',
       },
       {
-        name: 'Payment Gateway API',
-        url: `${demoAppBaseUrl}/api/checkout`,
-        groupId: coreGroup.id,
-        checkIntervalSeconds: 60,
-        priority: 'critical',
-        environment: 'production',
-      },
-      {
-        name: 'Product Catalog Service',
+        name: 'Demo Shop Products API',
         url: `${demoAppBaseUrl}/api/products`,
+        groupId: coreGroup.id,
         checkIntervalSeconds: 60,
         priority: 'medium',
         environment: 'production',
