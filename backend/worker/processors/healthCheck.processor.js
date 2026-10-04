@@ -4,8 +4,9 @@ import EscalationPolicyRepository from '../../src/repositories/escalationPolicy.
 import MaintenanceWindowRepository from '../../src/repositories/maintenanceWindow.repository.js';
 import IncidentRepository from '../../src/repositories/incident.repository.js';
 import AlertRuleService from '../../src/services/alertRuleService.js';
+import { evaluateAssertions } from '../../src/utils/assertionEvaluator.js';
+import { getSslDaysRemaining } from '../../src/utils/sslChecker.js';
 import logger from '../../src/utils/logger.js';
-import { NotificationChannels } from '../../src/constants.js';
 
 /**
  * Process a health-check BullMQ job
@@ -22,41 +23,104 @@ async function processHealthCheckJob(job, publishEvent) {
     return;
   }
 
-  // 2. Perform HTTP health check request with timeout
   const startTime = Date.now();
   let status = 'down';
   let httpStatusCode = null;
   let responseTimeMs = null;
+  let sslDaysRemaining = null;
+  let failedAssertion = null;
   let errorMessage = null;
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), service.timeoutMs || 5000);
+  // 2. Branch: Heartbeat Monitor vs HTTP Monitor
+  if (service.monitorType === 'heartbeat') {
+    const intervalSec = service.heartbeatIntervalSeconds || 60;
+    const graceSec = service.heartbeatGraceSeconds ?? 30;
+    const allowedMs = (intervalSec + graceSec) * 1000;
+    const lastPingTime = service.lastHeartbeatAt
+      ? new Date(service.lastHeartbeatAt).getTime()
+      : new Date(service.createdAt).getTime();
 
-    const response = await fetch(service.url, {
-      method: service.httpMethod || 'GET',
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'SentraOps-HealthCheck-Worker/1.0',
-      },
-    });
+    const elapsedMs = Date.now() - lastPingTime;
 
-    clearTimeout(timeoutId);
-    responseTimeMs = Date.now() - startTime;
-    httpStatusCode = response.status;
-
-    if (httpStatusCode === (service.expectedStatusCode || 200)) {
+    if (elapsedMs > allowedMs) {
+      status = 'down';
+      errorMessage = `Heartbeat missed: expected ping within ${intervalSec + graceSec}s, last ping was ${Math.round(elapsedMs / 1000)}s ago`;
+    } else {
       status = 'up';
-    } else {
-      errorMessage = `HTTP status ${httpStatusCode} did not match expected ${service.expectedStatusCode || 200}`;
     }
-  } catch (err) {
-    responseTimeMs = Date.now() - startTime;
-    if (err.name === 'AbortError') {
-      status = 'timeout';
-      errorMessage = `Request timed out after ${service.timeoutMs}ms`;
-    } else {
-      errorMessage = err.message || 'Connection failed';
+  } else {
+    // HTTP Monitor
+    try {
+      // Check SSL certificate expiry for HTTPS URLs
+      if (service.url && service.url.startsWith('https:')) {
+        sslDaysRemaining = await getSslDaysRemaining(service.url).catch(() => null);
+        if (sslDaysRemaining !== null && sslDaysRemaining < 30) {
+          await AlertRuleService.evaluateSslAlerts({ service, sslDaysRemaining }).catch((err) => {
+            logger.warn(`Failed evaluating SSL alerts for service ${service.id}: ${err.message}`);
+          });
+        }
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), service.timeoutMs || 5000);
+
+      const requestHeaders = {
+        'User-Agent': 'SentraOps-HealthCheck-Worker/1.0',
+        ...(service.requestHeaders || {}),
+      };
+
+      const fetchOptions = {
+        method: service.httpMethod || 'GET',
+        signal: controller.signal,
+        headers: requestHeaders,
+      };
+
+      if (service.requestBody && ['POST', 'PUT', 'PATCH'].includes(service.httpMethod)) {
+        fetchOptions.body = service.requestBody;
+        if (!requestHeaders['Content-Type'] && !requestHeaders['content-type']) {
+          fetchOptions.headers['Content-Type'] = 'application/json';
+        }
+      }
+
+      const response = await fetch(service.url, fetchOptions);
+
+      clearTimeout(timeoutId);
+      responseTimeMs = Date.now() - startTime;
+      httpStatusCode = response.status;
+      const bodyString = await response.text().catch(() => '');
+
+      // Check assertions if specified
+      const hasAssertions = Array.isArray(service.assertions) && service.assertions.length > 0;
+      if (hasAssertions) {
+        const evalResult = evaluateAssertions(service.assertions, {
+          httpStatusCode,
+          responseTimeMs,
+          bodyString,
+        });
+
+        if (evalResult.passed) {
+          status = 'up';
+        } else {
+          status = 'down';
+          failedAssertion = evalResult.failedAssertion;
+          errorMessage = evalResult.errorMessage;
+        }
+      } else {
+        // Fallback default status code check
+        if (httpStatusCode === (service.expectedStatusCode || 200)) {
+          status = 'up';
+        } else {
+          errorMessage = `HTTP status ${httpStatusCode} did not match expected ${service.expectedStatusCode || 200}`;
+        }
+      }
+    } catch (err) {
+      responseTimeMs = Date.now() - startTime;
+      if (err.name === 'AbortError') {
+        status = 'timeout';
+        errorMessage = `Request timed out after ${service.timeoutMs}ms`;
+      } else {
+        errorMessage = err.message || 'Connection failed';
+      }
     }
   }
 
@@ -66,6 +130,8 @@ async function processHealthCheckJob(job, publishEvent) {
     status,
     httpStatusCode,
     responseTimeMs,
+    sslDaysRemaining,
+    failedAssertion,
     errorMessage,
   });
 
@@ -123,6 +189,7 @@ async function processHealthCheckJob(job, publishEvent) {
       status: 'up',
       consecutiveFailures: 0,
       responseTimeMs,
+      sslDaysRemaining,
       checkedAt: new Date(),
     });
     return;
@@ -165,6 +232,7 @@ async function processHealthCheckJob(job, publishEvent) {
     status,
     consecutiveFailures: newFailures,
     responseTimeMs,
+    sslDaysRemaining,
     errorMessage,
     checkedAt: new Date(),
   });

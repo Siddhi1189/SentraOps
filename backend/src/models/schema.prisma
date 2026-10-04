@@ -41,6 +41,11 @@ enum HealthStatus {
   timeout
 }
 
+enum MonitorType {
+  http
+  heartbeat
+}
+
 enum IncidentStatus {
   open
   investigating
@@ -221,11 +226,19 @@ model Service {
   organizationId        String              @map("organization_id") @db.Uuid
   groupId               String?             @map("group_id") @db.Uuid
   name                  String              @db.VarChar(255)
-  url                   String
+  url                   String?
+  monitorType           MonitorType         @default(http) @map("monitor_type")
   httpMethod            HttpMethod          @default(GET) @map("http_method")
   expectedStatusCode    Int                 @default(200) @map("expected_status_code")
   timeoutMs             Int                 @default(5000) @map("timeout_ms")
   checkIntervalSeconds  Int                 @default(60) @map("check_interval_seconds")
+  requestHeaders        Json?               @map("request_headers")
+  requestBody           String?             @map("request_body") @db.Text
+  assertions            Json?               @default("[]")
+  heartbeatToken        String?             @unique @map("heartbeat_token") @db.VarChar(64)
+  heartbeatIntervalSeconds Int?             @map("heartbeat_interval_seconds")
+  heartbeatGraceSeconds Int?                @map("heartbeat_grace_seconds")
+  lastHeartbeatAt       DateTime?           @map("last_heartbeat_at") @db.Timestamptz
   environment           EnvironmentType     @default(production) @map("environment")
   priority              PriorityLevel       @default(medium) @map("priority")
   currentStatus         ServiceStatus       @default(unknown) @map("current_status")
@@ -246,6 +259,7 @@ model Service {
   @@index([groupId], map: "idx_services_group_id")
   @@index([currentStatus], map: "idx_services_current_status")
   @@index([createdAt(sort: Desc)], map: "idx_services_created_at")
+  @@index([heartbeatToken], map: "idx_services_heartbeat_token")
   @@map("services")
 }
 
@@ -271,14 +285,16 @@ model ServiceTag {
 }
 
 model HealthCheck {
-  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  serviceId      String       @map("service_id") @db.Uuid
-  status         HealthStatus
-  httpStatusCode Int?         @map("http_status_code")
-  responseTimeMs Int?         @map("response_time_ms")
-  errorMessage   String?      @map("error_message")
-  checkedAt      DateTime     @default(now()) @map("checked_at") @db.Timestamptz
-  service        Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId         String       @map("service_id") @db.Uuid
+  status            HealthStatus
+  httpStatusCode    Int?         @map("http_status_code")
+  responseTimeMs    Int?         @map("response_time_ms")
+  sslDaysRemaining  Int?         @map("ssl_days_remaining")
+  failedAssertion   Json?        @map("failed_assertion")
+  errorMessage      String?      @map("error_message")
+  checkedAt         DateTime     @default(now()) @map("checked_at") @db.Timestamptz
+  service           Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@index([serviceId, checkedAt(sort: Desc)], map: "idx_health_checks_service_time")
   @@map("health_checks")
@@ -518,6 +534,7 @@ enum AlertRuleTrigger {
   new_issue_in_environment
   event_rate_threshold
   response_time_threshold
+  ssl_expiration_warning
 }
 
 model AlertChannel {

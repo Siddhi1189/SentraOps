@@ -39,12 +39,28 @@ export interface ServiceGroup {
   services?: Service[];
 }
 
+export type MonitorType = 'http' | 'heartbeat';
+
+export type AssertionKind =
+  | 'status_code_equals'
+  | 'body_contains'
+  | 'body_does_not_contain'
+  | 'json_path_equals'
+  | 'response_time_less_than';
+
+export interface Assertion {
+  kind: AssertionKind;
+  value?: any;
+  path?: string;
+}
+
 export interface Service {
   id: string;
   organizationId: string;
   groupId: string | null;
   name: string;
-  url: string;
+  url: string | null;
+  monitorType?: MonitorType;
   httpMethod: HttpMethod;
   expectedStatusCode: number;
   timeoutMs: number;
@@ -56,6 +72,13 @@ export interface Service {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  requestHeaders?: Record<string, string> | null;
+  requestBody?: string | null;
+  assertions?: Assertion[];
+  heartbeatToken?: string | null;
+  heartbeatIntervalSeconds?: number | null;
+  heartbeatGraceSeconds?: number | null;
+  lastHeartbeatAt?: string | null;
   tags?: string[];
   group?: ServiceGroup | null;
 }
@@ -63,9 +86,13 @@ export interface Service {
 export interface HealthCheck {
   id: string;
   serviceId: string;
-  statusCode: number | null;
+  status?: 'up' | 'down' | 'timeout';
+  statusCode?: number | null;
+  httpStatusCode?: number | null;
   responseTimeMs: number | null;
-  isHealthy: boolean;
+  isHealthy?: boolean;
+  sslDaysRemaining?: number | null;
+  failedAssertion?: Assertion | null;
   errorMessage: string | null;
   checkedAt: string;
 }

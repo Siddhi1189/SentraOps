@@ -317,6 +317,46 @@ class AlertRuleService {
       result,
     };
   }
+
+  /**
+   * Evaluate SSL expiration warnings for services
+   * @param {Object} params
+   * @param {Object} params.service
+   * @param {number} params.sslDaysRemaining
+   */
+  static async evaluateSslAlerts({ service, sslDaysRemaining }) {
+    if (sslDaysRemaining === null || sslDaysRemaining === undefined || sslDaysRemaining >= 30) {
+      return;
+    }
+
+    const organizationId = service.organizationId;
+    const rules = await AlertRuleRepository.findMatchingRules(
+      organizationId,
+      'ssl_expiration_warning',
+      { serviceId: service.id }
+    );
+
+    for (const rule of rules) {
+      const thresholdDays = rule.conditions?.thresholdDays ?? 30;
+      if (sslDaysRemaining <= thresholdDays) {
+        if (this.isRuleSuppressed(rule)) continue;
+
+        const context = {
+          serviceId: service.id,
+          serviceName: service.name,
+          sslDaysRemaining,
+          thresholdDays,
+        };
+
+        await AlertRuleRepository.recordFire(rule.id, context);
+
+        const subject = `⚠️ Warning: SSL Certificate for ${service.name} expires in ${sslDaysRemaining} days`;
+        const body = `<p>The SSL certificate for <strong>${service.name}</strong> (${service.url}) will expire in <strong>${sslDaysRemaining}</strong> days (threshold: ${thresholdDays} days).</p>`;
+
+        await this.dispatchRuleAlert(rule, subject, body, context);
+      }
+    }
+  }
 }
 
 export default AlertRuleService;

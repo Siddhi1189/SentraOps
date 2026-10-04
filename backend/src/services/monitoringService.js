@@ -1,7 +1,9 @@
+import crypto from 'crypto';
 import ServiceRepository from '../repositories/service.repository.js';
 import ServiceGroupRepository from '../repositories/serviceGroup.repository.js';
 import AppError from '../utils/AppError.js';
 import { registerServiceJob, removeServiceJob } from '../config/queue.js';
+import { maskServiceSecrets, maskServicesSecrets, mergeRequestHeaders } from '../utils/maskSecret.js';
 import logger from '../utils/logger.js';
 
 class MonitoringService {
@@ -44,6 +46,18 @@ class MonitoringService {
 
   static async createService(organizationId, data, tagNames) {
     const { tags: _ignored, ...serviceData } = data; // Separate tags from service data
+
+    if (serviceData.monitorType === 'heartbeat') {
+      if (!serviceData.heartbeatToken) {
+        serviceData.heartbeatToken = crypto.randomBytes(20).toString('hex');
+      }
+      serviceData.heartbeatIntervalSeconds = serviceData.heartbeatIntervalSeconds || 60;
+      serviceData.heartbeatGraceSeconds = serviceData.heartbeatGraceSeconds ?? 30;
+      if (!serviceData.url) {
+        serviceData.url = null;
+      }
+    }
+
     const service = await ServiceRepository.create(organizationId, serviceData, tagNames || []);
 
     // Register the repeating health-check job for this service
@@ -53,17 +67,21 @@ class MonitoringService {
       });
     }
 
-    return service;
+    return maskServiceSecrets(service);
   }
 
   static async getService(organizationId, serviceId) {
     const service = await ServiceRepository.findById(serviceId, organizationId);
     if (!service) throw new AppError('Service not found', 404, 'NOT_FOUND');
-    return service;
+    return maskServiceSecrets(service);
   }
 
   static async listServices(organizationId, query) {
-    return ServiceRepository.findMany(organizationId, query);
+    const result = await ServiceRepository.findMany(organizationId, query);
+    return {
+      services: maskServicesSecrets(result.services),
+      total: result.total,
+    };
   }
 
   static async updateService(organizationId, serviceId, data, tagNames, currentUpdatedAt) {
@@ -71,6 +89,10 @@ class MonitoringService {
     if (!existing) throw new AppError('Service not found', 404, 'NOT_FOUND');
 
     const { tags: _ignored, ...serviceData } = data;
+    if (serviceData.requestHeaders && existing.requestHeaders) {
+      serviceData.requestHeaders = mergeRequestHeaders(existing.requestHeaders, serviceData.requestHeaders);
+    }
+
     const updated = await ServiceRepository.update(
       serviceId,
       organizationId,
@@ -99,7 +121,7 @@ class MonitoringService {
       });
     }
 
-    return updated;
+    return maskServiceSecrets(updated);
   }
 
   static async deleteService(organizationId, serviceId) {

@@ -33,6 +33,7 @@ import ingestRoutes from './routes/ingest.routes.js';
 import issueRoutes from './routes/issue.routes.js';
 import alertChannelRoutes from './routes/alertChannel.routes.js';
 import alertRuleRoutes from './routes/alertRule.routes.js';
+import heartbeatRoutes from './routes/heartbeat.routes.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json');
@@ -104,6 +105,7 @@ v1Router.use('/projects', apiRateLimiter, projectRoutes);
 v1Router.use('/issues', apiRateLimiter, issueRoutes);
 v1Router.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
 v1Router.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
+v1Router.use('/heartbeat', heartbeatRoutes);
 
 // Mount versioned API router at /api/v1
 app.use('/api/v1', v1Router);
@@ -115,6 +117,7 @@ app.use('/api/projects', apiRateLimiter, projectRoutes);
 app.use('/api/issues', apiRateLimiter, issueRoutes);
 app.use('/api/alert-channels', apiRateLimiter, alertChannelRoutes);
 app.use('/api/alert-rules', apiRateLimiter, alertRuleRoutes);
+app.use('/api/heartbeat', heartbeatRoutes);
 
 // Unversioned fallback routing for backward compatibility
 app.use('/auth', authRateLimiter, authRoutes);
@@ -133,6 +136,7 @@ app.use('/projects', apiRateLimiter, projectRoutes);
 app.use('/issues', apiRateLimiter, issueRoutes);
 app.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
 app.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
+app.use('/heartbeat', heartbeatRoutes);
 
 // Return JSON for unmatched API routes instead of Express's default "Cannot GET /path".
 app.use((req, res) => ApiResponse.error(

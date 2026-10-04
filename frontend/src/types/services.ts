@@ -1,8 +1,21 @@
 import { z } from 'zod';
 
+export const assertionSchema = z.object({
+  kind: z.enum([
+    'status_code_equals',
+    'body_contains',
+    'body_does_not_contain',
+    'json_path_equals',
+    'response_time_less_than',
+  ]),
+  value: z.any().optional(),
+  path: z.string().optional(),
+});
+
 export const createServiceSchema = z.object({
   name: z.string().min(1, 'Name is required').max(255, 'Name must be 255 characters or less'),
-  url: z.string().url('Must be a valid URL (e.g. https://api.example.com/health)'),
+  monitorType: z.enum(['http', 'heartbeat']).default('http'),
+  url: z.string().url('Must be a valid URL (e.g. https://api.example.com/health)').optional().nullable(),
   httpMethod: z.enum(['GET', 'POST', 'HEAD', 'PUT']).default('GET'),
   expectedStatusCode: z
     .number()
@@ -27,6 +40,12 @@ export const createServiceSchema = z.object({
   groupId: z.string().uuid('Invalid group ID').nullable().optional(),
   isActive: z.boolean().default(true),
   tags: z.array(z.string().max(50, 'Tag length max 50 chars')).optional().default([]),
+  requestHeaders: z.record(z.string()).optional().nullable(),
+  requestBody: z.string().optional().nullable(),
+  assertions: z.array(assertionSchema).max(10, 'Maximum 10 assertions allowed per monitor').optional().default([]),
+  heartbeatIntervalSeconds: z.number().int().min(30).max(86400).optional(),
+  heartbeatGraceSeconds: z.number().int().min(0).max(86400).optional(),
+  heartbeatToken: z.string().optional().nullable(),
 });
 
 export const updateServiceSchema = createServiceSchema.partial();
