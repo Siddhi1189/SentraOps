@@ -17,8 +17,10 @@ export const SETTINGS_TABS: SettingsTabItem[] = [
   { label: 'Escalation Policies', path: '/app/settings/escalation-policies' },
   { label: 'Status Page', path: '/app/settings/status-page', permission: 'statusPage:read' },
   { label: 'Alerts', path: '/app/settings/alerts', permission: 'alert:read' },
+  { label: 'Limits & Supported', path: '/app/settings/limits' },
   { label: 'Audit Log', path: '/app/settings/audit-log', permission: 'audit:read' },
 ];
+
 
 export function SettingsLayout() {
   const location = useLocation();

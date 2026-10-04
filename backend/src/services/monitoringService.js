@@ -59,7 +59,14 @@ class MonitoringService {
       }
     }
 
+    // Enforce max 20 monitors per organization (Q4 quota)
+    const monitorCount = await ServiceRepository.countByOrg(organizationId);
+    if (monitorCount >= 20) {
+      throw new AppError('Monitor quota limit of 20 monitors reached for this organization', 400, 'MONITOR_QUOTA_EXCEEDED');
+    }
+
     const service = await ServiceRepository.create(organizationId, serviceData, tagNames || []);
+
 
     // Register the repeating health-check job for this service
     if (service.isActive) {

@@ -249,6 +249,14 @@ class ServiceRepository {
       data,
     });
   }
+
+  /**
+   * Count all services for an organization (for quota enforcement)
+   */
+  static async countByOrg(organizationId) {
+    return prisma.service.count({ where: { organizationId } });
+  }
 }
 
 export default ServiceRepository;
+
