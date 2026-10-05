@@ -4,7 +4,7 @@ An instrumented e-commerce service designed to demonstrate and validate SentraOp
 
 ---
 
-## 🚀 Features & Endpoints
+## Features & Endpoints
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
@@ -19,7 +19,7 @@ An instrumented e-commerce service designed to demonstrate and validate SentraOp
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 ### 1. Install Dependencies
 The demo shop links directly to the local `@sentraops/node` SDK:
@@ -64,7 +64,7 @@ Visit the dashboard in your browser at `http://localhost:4050`.
 
 ---
 
-## 🧪 Phase 2 Verification Workflows
+## Phase 2 Verification Workflows
 
 ### 1. Verify Error Ingest & Grouping
 1. Click **Throw error** in the demo shop UI (or `curl http://localhost:4050/api/error`).

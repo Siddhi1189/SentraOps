@@ -65,7 +65,6 @@ export function AttentionBandSection() {
     <div className={styles.container} role="region" aria-label="Attention Band">
       <div className={styles.content}>
         <div className={styles.titleGroup}>
-          <span className={styles.icon} aria-hidden="true">⚠️</span>
           <div>
             <h2 className={styles.title}>
               Attention band summarizing currently open/investigating incidents ({totalActive})

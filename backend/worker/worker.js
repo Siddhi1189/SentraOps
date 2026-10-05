@@ -117,7 +117,7 @@ const cleanupInterval = setInterval(async () => {
 }, 24 * 60 * 60 * 1000);
 
 // Initialize worker
-logger.info('⚡ SentraOps Worker Process initialized and listening for jobs.');
+logger.info('SentraOps Worker Process initialized and listening for jobs.');
 syncActiveServiceJobs();
 processCleanupJob();
 

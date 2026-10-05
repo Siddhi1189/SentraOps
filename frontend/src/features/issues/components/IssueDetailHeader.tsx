@@ -91,7 +91,7 @@ export function IssueDetailHeader({
                 to={`/app/incidents/${issue.linkedIncident.id}`}
                 className={styles.linkedIncident}
               >
-                🔗 Linked Incident: {issue.linkedIncident.title} ({issue.linkedIncident.status})
+                Linked Incident: {issue.linkedIncident.title} ({issue.linkedIncident.status})
               </Link>
             </div>
           )}

@@ -31,7 +31,6 @@ export function LiveIncidentToast({ notifications, onDismiss }: LiveIncidentToas
           <div key={item.id} className={styles.toast}>
             <div className={styles.header}>
               <div className={styles.titleGroup}>
-                <span className={styles.icon} aria-hidden="true">🚨</span>
                 <span className={styles.label}>New Incident Created</span>
               </div>
               <button

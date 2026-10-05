@@ -26,13 +26,13 @@ async function processCleanupJob() {
 
   try {
     const deletedHealthChecks = await HealthCheckRepository.deleteOlderThan(hcCutoff);
-    logger.info(`🧹 Background Cleanup: Purged ${deletedHealthChecks.count} health check records older than ${healthCheckRetentionDays} days.`);
+    logger.info(`Background Cleanup: Purged ${deletedHealthChecks.count} health check records older than ${healthCheckRetentionDays} days.`);
 
     const deletedAuditLogs = await AuditLogRepository.deleteOlderThan(auditCutoff);
-    logger.info(`🧹 Background Cleanup: Purged ${deletedAuditLogs.count} audit log records older than ${auditLogRetentionDays} days.`);
+    logger.info(`Background Cleanup: Purged ${deletedAuditLogs.count} audit log records older than ${auditLogRetentionDays} days.`);
 
     const deletedErrorEvents = await ErrorEventRepository.deleteOlderThan(errorEventCutoff);
-    logger.info(`🧹 Background Cleanup: Purged ${deletedErrorEvents.count} error event records older than ${errorEventRetentionDays} days.`);
+    logger.info(`Background Cleanup: Purged ${deletedErrorEvents.count} error event records older than ${errorEventRetentionDays} days.`);
   } catch (err) {
     logger.error(`Error during background retention cleanup: ${err.message}`);
   }

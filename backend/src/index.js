@@ -39,7 +39,7 @@ subscriber.on('message', (channel, message) => {
 });
 
 server.listen(env.PORT, () => {
-  logger.info(`🚀 SentraOps API Server running on port ${env.PORT} (${env.NODE_ENV})`);
+  logger.info(`SentraOps API Server running on port ${env.PORT} (${env.NODE_ENV})`);
 });
 
 // Graceful shutdown handling

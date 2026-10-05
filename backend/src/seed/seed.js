@@ -108,7 +108,7 @@ async function seed() {
     logger.info('DEMO_APP_BASE_URL not set — skipping demo service seeding (targets demo-shop in Phase 4).');
   }
 
-  logger.info('✅ SentraOps database seed completed successfully.');
+  logger.info('SentraOps database seed completed successfully.');
 }
 
 seed()

@@ -111,7 +111,7 @@ class AlertRuleService {
           organizationId,
           incidentId: createdIncident.id,
           channel: NotificationChannels.EMAIL,
-          subject: `🚨 Incident Created: ${service.name} is DOWN`,
+          subject: `Incident Created: ${service.name} is DOWN`,
           body: `<p>Service <strong>${service.name}</strong> has failed ${consecutiveFailures} health checks.</p><p>Error: ${errorMessage}</p>`,
         });
       }
@@ -143,7 +143,7 @@ class AlertRuleService {
 
           await AlertRuleRepository.recordFire(rule.id, context);
 
-          const subject = `🚨 Alert: ${service.name} is DOWN (${consecutiveFailures} consecutive failures)`;
+          const subject = `Alert: ${service.name} is DOWN (${consecutiveFailures} consecutive failures)`;
           const body = `<p>Service <strong>${service.name}</strong> reached ${consecutiveFailures} consecutive failures (Rule: <em>${rule.name}</em>).</p><p>Error: ${errorMessage || 'No error message provided'}</p>`;
 
           await this.dispatchRuleAlert(rule, subject, body, context);
@@ -175,7 +175,7 @@ class AlertRuleService {
 
           await AlertRuleRepository.recordFire(rule.id, context);
 
-          const subject = `⏱️ Alert: ${service.name} slow response (${responseTimeMs}ms >= ${thresholdMs}ms)`;
+          const subject = `Alert: ${service.name} slow response (${responseTimeMs}ms >= ${thresholdMs}ms)`;
           const body = `<p>Service <strong>${service.name}</strong> response time was ${responseTimeMs}ms, exceeding threshold of ${thresholdMs}ms (Rule: <em>${rule.name}</em>).</p>`;
 
           await this.dispatchRuleAlert(rule, subject, body, context);
@@ -236,7 +236,7 @@ class AlertRuleService {
           await AlertRuleRepository.recordFire(rule.id, context);
 
           const typeLabel = isRegression ? 'Issue Regressed' : 'New Issue';
-          const subject = `🔥 Alert: ${typeLabel} in ${issue.environment} - ${issue.title}`;
+          const subject = `Alert: ${typeLabel} in ${issue.environment} - ${issue.title}`;
           const body = `<p>A ${typeLabel.toLowerCase()} was detected in environment <strong>${issue.environment}</strong>.</p><p><strong>${issue.title}</strong></p><p>Rule: <em>${rule.name}</em></p>`;
 
           await this.dispatchRuleAlert(rule, subject, body, context);
@@ -271,7 +271,7 @@ class AlertRuleService {
 
         await AlertRuleRepository.recordFire(rule.id, context);
 
-        const subject = `📈 Alert: High error rate on project (${count} events in ${windowSeconds}s)`;
+        const subject = `Alert: High error rate on project (${count} events in ${windowSeconds}s)`;
         const body = `<p>Error event rate exceeded threshold: <strong>${count}</strong> events occurred in the last ${windowSeconds} seconds (Threshold: ${threshold}).</p><p>Rule: <em>${rule.name}</em></p>`;
 
         await this.dispatchRuleAlert(rule, subject, body, context);
@@ -350,7 +350,7 @@ class AlertRuleService {
 
         await AlertRuleRepository.recordFire(rule.id, context);
 
-        const subject = `⚠️ Warning: SSL Certificate for ${service.name} expires in ${sslDaysRemaining} days`;
+        const subject = `Warning: SSL Certificate for ${service.name} expires in ${sslDaysRemaining} days`;
         const body = `<p>The SSL certificate for <strong>${service.name}</strong> (${service.url}) will expire in <strong>${sslDaysRemaining}</strong> days (threshold: ${thresholdDays} days).</p>`;
 
         await this.dispatchRuleAlert(rule, subject, body, context);

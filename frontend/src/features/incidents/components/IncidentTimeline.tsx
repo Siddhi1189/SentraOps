@@ -10,13 +10,7 @@ export interface IncidentTimelineProps {
   incidentId?: string;
 }
 
-const EVENT_ICONS: Record<string, string> = {
-  INCIDENT_CREATED: '🚨',
-  STATUS_CHANGED: '🔄',
-  ASSIGNED: '👤',
-  RESOLVED: '✅',
-  COMMENT_ADDED: '💬',
-};
+const EVENT_ICONS: Record<string, string> = {};
 
 const EVENT_LABELS: Record<string, string> = {
   INCIDENT_CREATED: 'Incident Detected & Created',
@@ -91,14 +85,12 @@ export function IncidentTimeline({ events, incidentId }: IncidentTimelineProps) 
 
       <ol className={styles.timelineList}>
         {events.map((event) => {
-          const icon = EVENT_ICONS[event.eventType] || '📌';
+          const icon = '';
           const label = EVENT_LABELS[event.eventType] || event.eventType;
 
           return (
             <li key={event.id} className={styles.item}>
-              <div className={styles.iconContainer} aria-hidden="true">
-                {icon}
-              </div>
+              <div className={styles.iconContainer} aria-hidden="true" />
 
               <div className={styles.content}>
                 <div className={styles.headerRow}>

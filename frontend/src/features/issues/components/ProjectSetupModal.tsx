@@ -88,7 +88,7 @@ SentraOps.init({
     >
       <div className={styles.container}>
         <div className={styles.keyAlert}>
-          ⚠️ <strong>Store this key securely!</strong> This is the only time your full API key and DSN will be displayed in plaintext.
+          <strong>Store this key securely!</strong> This is the only time your full API key and DSN will be displayed in plaintext.
         </div>
 
         <div className={styles.sectionTitle}>Project API Key</div>
@@ -122,7 +122,7 @@ SentraOps.init({
           {hasReceivedEvent ? (
             <>
               <span className={styles.successDot} />
-              <span>🎉 First event received! Project is connected and capturing errors.</span>
+              <span>First event received! Project is connected and capturing errors.</span>
             </>
           ) : (
             <>

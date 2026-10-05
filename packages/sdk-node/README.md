@@ -4,11 +4,11 @@ Official SentraOps Node.js SDK for real-time error tracking, exception diagnosti
 
 ## Features
 
-- 🚀 **Zero runtime dependencies**: Lightweight and fast, using Node.js built-ins.
-- 📦 **Dual ESM & CJS support**: TypeScript type definitions included out of the box.
-- 🛡️ **Fail-safe design**: Non-blocking asynchronous network transport that never crashes or throws into your host application.
-- 🍞 **Automatic breadcrumbs**: Automatically captures outgoing HTTP calls and console logs.
-- ⚡ **Express integration**: One-line Express error handling middleware.
+- **Zero runtime dependencies**: Lightweight and fast, using Node.js built-ins.
+- **Dual ESM & CJS support**: TypeScript type definitions included out of the box.
+- **Fail-safe design**: Non-blocking asynchronous network transport that never crashes or throws into your host application.
+- **Automatic breadcrumbs**: Automatically captures outgoing HTTP calls and console logs.
+- **Express integration**: One-line Express error handling middleware.
 
 ## Installation
 
