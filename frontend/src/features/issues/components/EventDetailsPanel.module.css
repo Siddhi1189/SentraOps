@@ -6,8 +6,8 @@
 }
 
 .card {
-  background-color: var(--color-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 8px;
   padding: var(--space-4, 16px);
 }
@@ -15,7 +15,7 @@
 .cardTitle {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-primary-text, #1e293b);
+  color: var(--color-text-primary);
   margin-bottom: var(--space-3, 12px);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -29,21 +29,21 @@
 }
 
 .tagBadge {
-  background-color: var(--color-surface-subtle, #f8fafc);
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: var(--surface-cream);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 4px;
   padding: 2px 8px;
   font-size: 0.75rem;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-family-mono);
 }
 
 .tagKey {
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary);
 }
 
 .tagVal {
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .detailList {
@@ -61,18 +61,18 @@
 }
 
 .detailLabel {
-  color: var(--color-secondary-text, #64748b);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .detailValue {
-  color: var(--color-primary-text, #1e293b);
+  color: var(--color-text-primary);
   text-align: right;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-family-mono);
 }
 
 .empty {
-  color: var(--color-secondary-text, #94a3b8);
+  color: var(--color-text-muted);
   font-size: 0.8125rem;
   font-style: italic;
 }

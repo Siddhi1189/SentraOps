@@ -82,7 +82,7 @@
   background-color: var(--surface-cream);
   padding: 1px 4px;
   border-radius: var(--radius-sm);
-  font-family: monospace;
+  font-family: var(--font-family-mono);
 }
 
 .actionRow {

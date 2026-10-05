@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Service } from '../../../types/domain';
 import { useServicePerformanceQuery } from '../../analytics/hooks/useAnalytics';
 import styles from './ServicePerformanceSection.module.css';
@@ -8,7 +8,7 @@ export interface ServicePerformanceSectionProps {
 }
 
 export function ServicePerformanceSection({ service }: ServicePerformanceSectionProps) {
-  const { data: res, isLoading, isError } = useServicePerformanceQuery(service.id);
+  const { data: res } = useServicePerformanceQuery(service.id);
   const [hoveredPoint, setHoveredPoint] = useState<{
     x: number;
     y: number;
@@ -188,8 +188,8 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
             >
               <defs>
                 <linearGradient id="latencyGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2563EB" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#2563EB" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="var(--color-teal-600)" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="var(--color-teal-600)" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
@@ -199,7 +199,7 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
                 y1={chartHeight - paddingY}
                 x2={chartWidth - paddingX}
                 y2={chartHeight - paddingY}
-                stroke="#E2E8F0"
+                stroke="var(--color-border-subtle)"
                 strokeWidth="1"
               />
               <line
@@ -207,7 +207,7 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
                 y1={paddingY}
                 x2={chartWidth - paddingX}
                 y2={paddingY}
-                stroke="#E2E8F0"
+                stroke="var(--color-border-subtle)"
                 strokeWidth="1"
                 strokeDasharray="4 4"
               />
@@ -220,7 +220,7 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
                     y={Math.max(paddingY, p95Y)}
                     width={plotWidth}
                     height={Math.max(0, chartHeight - paddingY - p95Y)}
-                    fill="#F59E0B"
+                    fill="var(--color-amber-500)"
                     fillOpacity="0.05"
                   />
                   <line
@@ -228,14 +228,14 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
                     y1={p95Y}
                     x2={chartWidth - paddingX}
                     y2={p95Y}
-                    stroke="#F59E0B"
+                    stroke="var(--color-amber-500)"
                     strokeWidth="1.5"
                     strokeDasharray="4 4"
                   />
                   <text
                     x={chartWidth - paddingX - 4}
                     y={Math.max(paddingY + 12, p95Y - 4)}
-                    fill="#D97706"
+                    fill="var(--color-amber-600)"
                     fontSize="10"
                     fontFamily="monospace"
                     textAnchor="end"
@@ -254,7 +254,7 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
               <polyline
                 points={polylinePoints}
                 fill="none"
-                stroke="#2563EB"
+                stroke="var(--color-teal-600)"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -267,8 +267,8 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
                   cx={c.x}
                   cy={c.y}
                   r="3"
-                  fill="#FFFFFF"
-                  stroke="#2563EB"
+                  fill="var(--surface-light)"
+                  stroke="var(--color-teal-600)"
                   strokeWidth="1.5"
                   style={{ cursor: 'pointer' }}
                   onMouseEnter={() => setHoveredPoint(c)}
@@ -285,13 +285,13 @@ export function ServicePerformanceSection({ service }: ServicePerformanceSection
                     width="80"
                     height="24"
                     rx="4"
-                    fill="#1E293B"
+                    fill="var(--color-text-primary)"
                     opacity="0.9"
                   />
                   <text
                     x="0"
                     y="6"
-                    fill="#FFFFFF"
+                    fill="var(--surface-light)"
                     fontSize="10"
                     fontFamily="monospace"
                     textAnchor="middle"

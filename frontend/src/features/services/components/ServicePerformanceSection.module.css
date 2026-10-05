@@ -12,11 +12,11 @@
 }
 
 .summaryCard {
-  background-color: var(--color-bg-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md, 8px);
   padding: var(--space-4, 16px);
-  box-shadow: var(--elevation-rest, 0 1px 3px rgba(0, 0, 0, 0.05));
+  box-shadow: var(--elevation-rest);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -26,24 +26,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  border-bottom: 1px solid var(--color-border);
   padding-bottom: 8px;
 }
 
 .cardTitle {
-  font-family: var(--font-mono, monospace);
+  font-family: var(--font-family-mono);
   font-size: 11px;
   font-weight: var(--font-weight-bold, 700);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .totalChecks {
   font-size: 11px;
-  color: var(--color-text-muted, #94a3b8);
-  font-family: var(--font-mono, monospace);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
 }
 
 .uptimeRow {
@@ -56,14 +56,14 @@
 .uptimeValue {
   font-size: 1.5rem;
   font-weight: var(--font-weight-bold, 700);
-  font-family: var(--font-sans, system-ui);
-  color: var(--color-text-primary, #0f172a);
+  font-family: var(--font-family-sans);
+  color: var(--color-text-primary);
 }
 
 .uptimeLabel {
   font-size: 11px;
   text-transform: uppercase;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
@@ -72,9 +72,9 @@
   justify-content: space-between;
   margin-top: 6px;
   padding-top: 8px;
-  border-top: 1px dashed var(--color-border, #e2e8f0);
+  border-top: 1px dashed var(--color-border);
   font-size: 12px;
-  font-family: var(--font-mono, monospace);
+  font-family: var(--font-family-mono);
 }
 
 .percentileItem {
@@ -84,21 +84,21 @@
 }
 
 .pctLabel {
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--color-text-muted);
   font-size: 10px;
 }
 
 .pctVal {
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary);
   font-weight: 600;
 }
 
 .chartCard {
-  background-color: var(--color-bg-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md, 8px);
   padding: var(--space-4, 16px);
-  box-shadow: var(--elevation-rest, 0 1px 3px rgba(0, 0, 0, 0.05));
+  box-shadow: var(--elevation-rest);
 }
 
 .chartHeader {
@@ -111,7 +111,7 @@
 .chartTitle {
   font-size: var(--font-size-base, 14px);
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary);
   margin: 0;
 }
 
@@ -120,8 +120,8 @@
   align-items: center;
   gap: 16px;
   font-size: 11px;
-  font-family: var(--font-mono, monospace);
-  color: var(--color-text-secondary, #64748b);
+  font-family: var(--font-family-mono);
+  color: var(--color-text-secondary);
 }
 
 .legendItem {
@@ -133,13 +133,13 @@
 .legendLine {
   width: 16px;
   height: 2px;
-  background-color: var(--color-primary, #2563eb);
+  background-color: var(--color-teal-600);
 }
 
 .legendP95 {
   width: 16px;
   height: 2px;
-  border-top: 2px dashed #f59e0b;
+  border-top: 2px dashed var(--color-amber-500);
 }
 
 .svgWrapper {
@@ -160,19 +160,19 @@
   align-items: center;
   justify-content: center;
   height: 140px;
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--color-text-muted);
   font-size: 13px;
 }
 
 .sslCard {
-  background-color: var(--color-bg-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: var(--surface-light);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md, 8px);
   padding: var(--space-3, 12px) var(--space-4, 16px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: var(--elevation-rest, 0 1px 3px rgba(0, 0, 0, 0.05));
+  box-shadow: var(--elevation-rest);
 }
 
 .sslLeft {
@@ -184,7 +184,7 @@
 .sslIcon {
   width: 20px;
   height: 20px;
-  stroke: var(--color-teal-600, #0d9488);
+  stroke: var(--color-teal-600);
 }
 
 .sslText {
@@ -196,12 +196,12 @@
 .sslTitle {
   font-size: 13px;
   font-weight: var(--font-weight-semibold, 600);
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text-primary);
 }
 
 .sslMeta {
   font-size: 11px;
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--color-text-muted);
 }
 
 .sslBadge {
@@ -209,24 +209,24 @@
   font-weight: var(--font-weight-bold, 700);
   padding: 4px 10px;
   border-radius: var(--radius-xs, 4px);
-  font-family: var(--font-mono, monospace);
+  font-family: var(--font-family-mono);
   text-transform: uppercase;
 }
 
 .sslValid {
-  background-color: var(--color-success-bg, #ecfdf5);
-  color: var(--color-success, #059669);
-  border: 1px solid var(--color-success-border, #a7f3d0);
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
 }
 
 .sslWarning {
-  background-color: var(--color-warning-bg, #fffbeb);
-  color: var(--color-warning, #d97706);
-  border: 1px solid var(--color-warning-border, #fde68a);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
 }
 
 .sslDanger {
-  background-color: var(--color-danger-bg, #fef2f2);
-  color: var(--color-danger, #dc2626);
-  border: 1px solid var(--color-danger-border, #fecaca);
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger-border);
 }

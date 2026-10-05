@@ -146,12 +146,12 @@
 }
 
 .codeBlock {
-  background-color: #0B1F2A;
-  color: #F8FAFC;
+  background-color: var(--surface-dark);
+  color: var(--color-text-inverse);
   padding: 1.25rem;
   border-radius: var(--radius-md);
   overflow-x: auto;
-  font-family: monospace;
+  font-family: var(--font-family-mono);
   font-size: 0.85rem;
   line-height: 1.5;
   margin: 1rem 0;
@@ -161,6 +161,6 @@
   background-color: var(--surface-cream);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
-  font-family: monospace;
+  font-family: var(--font-family-mono);
   font-size: 0.875rem;
 }
