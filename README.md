@@ -28,7 +28,7 @@ graph TD
 
 ## Screenshots
 
-<!-- SCREENSHOTS PLACEHOLDER: Add UI screenshots here (Issues list, Service monitoring, AI summary, Dark mode) -->
+<!-- SCREENSHOTS PLACEHOLDER: Add UI screenshots here (Issues list, Service monitoring, AI summary) -->
 ```
 [ Screenshots will be placed here ]
 - Monitor Dashboard: /app/overview
@@ -46,7 +46,7 @@ graph TD
 - **Incident Management & AI Summaries:** Auto-open incidents on consecutive check failures, manual incident lifecycle (investigating, identified, monitoring, resolved), incident timeline, and AI incident summaries powered by Anthropic Claude.
 - **Alert Rules & Channels:** Flexible alert triggers (`service_down_consecutive_failures`, `new_issue_in_environment`, `event_rate_threshold`, `response_time_threshold`), cooldown periods, snooze intervals, and dispatch via Slack, Webhook, and Email.
 - **Public Status Pages:** Organization-scoped public status pages, 90-day historical uptime bars, and double opt-in email subscriptions for incident updates.
-- **Demo Data & Dark Mode:** One-click demo seed and cleanup via `isDemo` tags, and full theme support with light/dark mode persistence.
+- **Demo Data:** One-click demo seed and cleanup via `isDemo` tags.
 - **Developer CLI & SDK:** Lightweight Node.js SDK (`@sentraops/node`) with Express middleware and a standalone CLI (`@sentraops/cli`) for synthetic event generation.
 
 ---

@@ -7,30 +7,6 @@ export function OrgUserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    try {
-      const saved = localStorage.getItem('sentraops_theme') as 'light' | 'dark' | null;
-      if (saved === 'light' || saved === 'dark') return saved;
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
-    } catch {}
-    return 'light';
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-    document.documentElement.setAttribute('data-theme', nextTheme);
-    try {
-      localStorage.setItem('sentraops_theme', nextTheme);
-    } catch {}
-  };
-
   const orgName = organization?.name || 'My Organization';
   const userName = user?.name || 'User';
   const userRole = user?.role || 'viewer';
@@ -107,41 +83,6 @@ export function OrgUserMenu() {
                 {userRole}
               </span>
             </div>
-          </div>
-
-          <div
-            style={{
-              padding: '8px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderTop: '1px solid var(--color-border)',
-              borderBottom: '1px solid var(--color-border)',
-            }}
-          >
-            <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 500 }}>
-              Theme
-            </span>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '3px 8px',
-                fontSize: '12px',
-                fontWeight: 600,
-                borderRadius: '4px',
-                border: '1px solid var(--color-border)',
-                background: 'var(--color-bg-surface-hover)',
-                color: 'var(--color-text-primary)',
-                cursor: 'pointer',
-              }}
-              aria-label="Toggle dark mode"
-            >
-              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
-            </button>
           </div>
 
           <button

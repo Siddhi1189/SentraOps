@@ -4,10 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { OrgUserMenu } from '../OrgUserMenu';
 import * as sessionModule from '../../../../app/providers/SessionProvider';
 
-describe('OrgUserMenu theme toggle', () => {
+describe('OrgUserMenu', () => {
   beforeEach(() => {
-    localStorage.clear();
-    document.documentElement.removeAttribute('data-theme');
     vi.spyOn(sessionModule, 'useSession').mockReturnValue({
       user: { id: 'u1', name: 'Alice Smith', email: 'alice@example.com', role: 'owner' } as any,
       organization: { id: 'o1', name: 'Acme Corp', slug: 'acme' } as any,
@@ -18,25 +16,16 @@ describe('OrgUserMenu theme toggle', () => {
     });
   });
 
-  it('toggles theme between light and dark and persists to localStorage', async () => {
+  it('renders user and organization name in menu', async () => {
     render(<OrgUserMenu />);
 
     // Open menu
     const trigger = screen.getByLabelText(/user and organization menu/i);
     await userEvent.click(trigger);
 
-    // Find theme toggle button
-    const toggleBtn = screen.getByRole('button', { name: /toggle dark mode/i });
-    expect(toggleBtn).toBeInTheDocument();
-
-    // Default starts at light, click toggles to dark
-    await userEvent.click(toggleBtn);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-    expect(localStorage.getItem('sentraops_theme')).toBe('dark');
-
-    // Click again toggles to light
-    await userEvent.click(toggleBtn);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
-    expect(localStorage.getItem('sentraops_theme')).toBe('light');
+    expect(screen.getAllByText('Alice Smith').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Acme Corp').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
   });
 });
+
