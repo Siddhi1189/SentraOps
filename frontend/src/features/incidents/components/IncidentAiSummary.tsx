@@ -49,9 +49,9 @@ export function IncidentAiSummary({ incident }: IncidentAiSummaryProps) {
       style={{
         margin: 'var(--space-4) 0',
         padding: 'var(--space-4)',
-        background: 'var(--color-surface, #1e293b)',
+        background: 'var(--surface-card, #FFFFFF)',
         borderRadius: 'var(--radius-md, 8px)',
-        border: '1px solid var(--color-border, #334155)',
+        border: '1px solid var(--color-border)',
       }}
     >
       <div
@@ -63,7 +63,7 @@ export function IncidentAiSummary({ incident }: IncidentAiSummaryProps) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontWeight: 600, fontSize: '14px' }}>AI Incident Summary</span>
+          <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text-primary)' }}>AI Incident Summary</span>
           {summary && (
             <span
               style={{
@@ -71,9 +71,9 @@ export function IncidentAiSummary({ incident }: IncidentAiSummaryProps) {
                 fontWeight: 600,
                 padding: '2px 8px',
                 borderRadius: '4px',
-                backgroundColor: 'rgba(99, 102, 241, 0.15)',
-                color: '#818cf8',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
+                backgroundColor: 'rgba(229, 168, 59, 0.15)',
+                color: 'var(--color-amber-600)',
+                border: '1px solid rgba(200, 141, 39, 0.3)',
               }}
             >
               AI-generated
@@ -124,11 +124,12 @@ export function IncidentAiSummary({ incident }: IncidentAiSummaryProps) {
           style={{
             fontSize: '13px',
             lineHeight: '1.6',
-            color: 'var(--color-text-secondary, #94a3b8)',
+            color: 'var(--color-text-secondary)',
             whiteSpace: 'pre-wrap',
             padding: '12px',
-            background: 'rgba(0, 0, 0, 0.2)',
+            background: 'var(--surface-stone)',
             borderRadius: '6px',
+            border: '1px solid var(--color-border-subtle)',
           }}
         >
           {summary}

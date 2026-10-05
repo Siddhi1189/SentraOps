@@ -277,7 +277,7 @@ export function ProjectsView() {
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px 0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.875rem', color: '#64748b' }}>
+              <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
                 Active keys used to ingest error events.
               </span>
               {canCreate && (
@@ -290,14 +290,14 @@ export function ProjectsView() {
             {isLoadingKeys ? (
               <Spinner size="md" />
             ) : keys.length === 0 ? (
-              <p style={{ color: '#94a3b8', fontStyle: 'italic' }}>No API keys generated yet.</p>
+              <p style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>No API keys generated yet.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {keys.map((k) => (
                   <div
                     key={k.id}
                     style={{
-                      border: '1px solid #e2e8f0',
+                      border: '1px solid var(--color-border-subtle)',
                       borderRadius: '6px',
                       padding: '12px',
                       display: 'flex',
@@ -308,10 +308,10 @@ export function ProjectsView() {
                   >
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{k.name}</div>
-                      <div style={{ fontFamily: 'monospace', fontSize: '0.8125rem', color: '#475569' }}>
+                      <div style={{ fontFamily: 'var(--font-family-mono)', fontSize: '0.8125rem', color: 'var(--color-text-secondary)' }}>
                         Prefix: {k.keyPrefix}...
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                         Created: {new Date(k.createdAt).toLocaleDateString()}
                         {k.lastUsedAt && ` • Last used: ${new Date(k.lastUsedAt).toLocaleDateString()}`}
                         {k.revokedAt && ' • REVOKED'}

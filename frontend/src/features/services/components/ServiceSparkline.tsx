@@ -58,7 +58,7 @@ export function ServiceSparkline({
       ? 'var(--color-danger, #ef4444)'
       : status === 'degraded'
       ? 'var(--color-warning, #f59e0b)'
-      : 'var(--color-primary, #2563eb)';
+      : 'var(--surface-dark)';
 
   const lastPoint = coords[coords.length - 1]?.split(',') || [0, 0];
   const lastVal = validPoints[validPoints.length - 1];
@@ -92,9 +92,9 @@ export function ServiceSparkline({
       </svg>
       <span
         style={{
-          fontFamily: 'var(--font-mono, monospace)',
+          fontFamily: 'var(--font-family-mono)',
           fontSize: '10px',
-          color: 'var(--color-text-secondary, #64748b)',
+          color: 'var(--color-text-secondary)',
         }}
       >
         {lastVal}ms

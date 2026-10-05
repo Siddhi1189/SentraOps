@@ -69,7 +69,7 @@ export function CreateIncidentModal({
       }
     >
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
+        <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
           This will declare an official Incident linked to this Issue, record a timeline event, and notify responders.
         </p>
 
