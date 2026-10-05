@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PublicNavbar } from '../../features/public-site/components/PublicNavbar';
 import { ProductHero } from '../../features/public-site/components/ProductHero';
 import { CapabilityStory } from '../../features/public-site/components/CapabilityStory';
@@ -8,6 +10,18 @@ import { PublicFooter } from '../../features/public-site/components/PublicFooter
 import styles from './HomePage.module.css';
 
 export function HomePage() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView();
+      }
+    }
+  }, [location]);
+
   return (
     <div className={styles.pageWrapper}>
       <PublicNavbar />
