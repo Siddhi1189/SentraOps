@@ -10,8 +10,6 @@ export interface IncidentTimelineProps {
   incidentId?: string;
 }
 
-const EVENT_ICONS: Record<string, string> = {};
-
 const EVENT_LABELS: Record<string, string> = {
   INCIDENT_CREATED: 'Incident Detected & Created',
   STATUS_CHANGED: 'Status / Severity Updated',
@@ -85,7 +83,6 @@ export function IncidentTimeline({ events, incidentId }: IncidentTimelineProps) 
 
       <ol className={styles.timelineList}>
         {events.map((event) => {
-          const icon = '';
           const label = EVENT_LABELS[event.eventType] || event.eventType;
 
           return (

@@ -63,7 +63,7 @@ const mockRules: AlertRule[] = [
     serviceId: null,
     projectId: 'proj-1',
     cooldownSeconds: 300,
-    snoozedUntil: '2026-10-04T12:00:00.000Z', // currently snoozed
+    snoozedUntil: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // currently snoozed
     isActive: true,
     createdAt: '2026-10-04T00:00:00.000Z',
     updatedAt: '2026-10-04T00:00:00.000Z',
