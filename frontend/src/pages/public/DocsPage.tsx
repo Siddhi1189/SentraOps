@@ -121,7 +121,7 @@ curl https://api.sentraops.com/health
                   SentraOps correlates error events and regressions with deployed application versions.
                   Notify SentraOps whenever a new build or deploy is released to your environment.
                 </p>
-                <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: '16px 0 8px 0', color: 'var(--color-text-primary)' }}>
+                <h3 className={styles.sectionSubheading}>
                   GitHub Actions Example Step
                 </h3>
                 <div className={styles.codeBlock}>
@@ -139,7 +139,7 @@ curl https://api.sentraops.com/health
       }'`}
                   </code>
                 </div>
-                <p className={styles.paragraph} style={{ marginTop: '12px' }}>
+                <p className={styles.paragraph}>
                   When an event is captured by the SentraOps Node SDK or API with a <code>release</code> tag,
                   it links to the tracked release. If a previously resolved issue re-occurs in a release newer than
                   <code>resolvedInRelease</code>, SentraOps automatically flags the issue with a
@@ -153,38 +153,40 @@ curl https://api.sentraops.com/health
                 <p className={styles.paragraph}>
                   The following quota values are enforced server-side and apply to all organizations on the current plan.
                 </p>
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid #1e293b' }}>
-                      <th style={{ textAlign: 'left', padding: '8px 12px', color: '#94a3b8' }}>Feature</th>
-                      <th style={{ textAlign: 'left', padding: '8px 12px', color: '#94a3b8' }}>Limit</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ['Max projects per org', '5'],
-                      ['Max monitors per org', '20'],
-                      ['Min health-check interval', '30 seconds'],
-                      ['Max assertions per monitor', '10'],
-                      ['Ingest rate limit (per API key)', '100 events / minute'],
-                      ['Health-check data retention', '90 days'],
-                      ['Error event retention', '90 days'],
-                    ].map(([feat, limit]) => (
-                      <tr key={feat} style={{ borderBottom: '1px solid #0f172a' }}>
-                        <td style={{ padding: '8px 12px', color: '#cbd5e1' }}>{feat}</td>
-                        <td style={{ padding: '8px 12px', color: '#6366f1', fontWeight: 600 }}>{limit}</td>
+                <div className={styles.limitsTableWrapper}>
+                  <table className={styles.limitsTable}>
+                    <thead>
+                      <tr>
+                        <th className={styles.limitsTh}>Feature</th>
+                        <th className={styles.limitsTh}>Limit</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {[
+                        ['Max projects per org', '5'],
+                        ['Max monitors per org', '20'],
+                        ['Min health-check interval', '30 seconds'],
+                        ['Max assertions per monitor', '10'],
+                        ['Ingest rate limit (per API key)', '100 events / minute'],
+                        ['Health-check data retention', '90 days'],
+                        ['Error event retention', '90 days'],
+                      ].map(([feat, limit]) => (
+                        <tr key={feat} className={styles.limitsTr}>
+                          <td className={styles.limitsTdFeature}>{feat}</td>
+                          <td className={styles.limitsTdValue}>{limit}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
 
-                <h3 className={styles.sectionSubheading} style={{ marginTop: '1.5rem' }}>Supported Monitor Types</h3>
+                <h3 className={styles.sectionSubheading}>Supported Monitor Types</h3>
                 <ul className={styles.featureList}>
                   <li><strong>http</strong> — Periodic HTTP/HTTPS check with assertions and SSL monitoring</li>
                   <li><strong>heartbeat</strong> — Ping-based check; marks service down when no ping arrives within interval + grace</li>
                 </ul>
 
-                <h3 className={styles.sectionSubheading} style={{ marginTop: '1rem' }}>Supported Assertion Kinds</h3>
+                <h3 className={styles.sectionSubheading}>Supported Assertion Kinds</h3>
                 <ul className={styles.featureList}>
                   <li><code>status_code_equals</code> — HTTP status code must equal a value</li>
                   <li><code>body_contains</code> — Response body must contain a keyword</li>
@@ -193,8 +195,8 @@ curl https://api.sentraops.com/health
                   <li><code>response_time_less_than</code> — Response time must be below N ms</li>
                 </ul>
 
-                <h3 className={styles.sectionSubheading} style={{ marginTop: '1rem' }}>Not Supported Yet</h3>
-                <ul className={styles.featureList} style={{ color: '#64748b' }}>
+                <h3 className={styles.sectionSubheading}>Not Supported Yet</h3>
+                <ul className={styles.unsupportedList}>
                   <li>SMS / phone call alerts</li>
                   <li>Uptime SLA reports (export)</li>
                   <li>Custom data retention beyond 90 days</li>
@@ -205,7 +207,7 @@ curl https://api.sentraops.com/health
                   <li>Stripe or Zapier integrations</li>
                 </ul>
 
-                <p className={styles.paragraph} style={{ marginTop: '1rem' }}>
+                <p className={styles.paragraph}>
                   Current usage against your quotas is visible in <strong>Settings → Limits &amp; Supported</strong>.
                   The same data is available via the authenticated API endpoint <code>GET /api/v1/limits</code>.
                 </p>
