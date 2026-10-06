@@ -72,6 +72,24 @@ export async function getIncidentTimeline(id: string): Promise<ApiSuccess<Timeli
   return { ...res, data: events };
 }
 
+export async function acknowledgeIncident(id: string, updatedAt?: string): Promise<ApiSuccess<IncidentDetail>> {
+  const res = await apiRequest<any>(`/incidents/${id}/acknowledge`, {
+    method: 'POST',
+    body: { updatedAt },
+  });
+  const incident = res.data && typeof res.data === 'object' && 'incident' in res.data ? res.data.incident : res.data;
+  return { ...res, data: incident };
+}
+
+export async function addIncidentComment(id: string, comment: string): Promise<ApiSuccess<TimelineEvent>> {
+  const res = await apiRequest<any>(`/incidents/${id}/comments`, {
+    method: 'POST',
+    body: { comment },
+  });
+  const event = res.data && typeof res.data === 'object' && 'event' in res.data ? res.data.event : res.data;
+  return { ...res, data: event };
+}
+
 export async function listOrganizationMembers(
   params?: MemberQueryParams
 ): Promise<ApiPaginatedResponse<User>> {
@@ -108,3 +126,8 @@ export async function listOrganizationMembers(
     pagination: pagination as any,
   };
 }
+
+export async function generateIncidentSummary(id: string): Promise<ApiSuccess<{ summary: string }>> {
+  return apiRequest<{ summary: string }>(`/incidents/${id}/summary`, { method: 'POST' });
+}
+

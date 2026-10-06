@@ -1,0 +1,42 @@
+{
+  "name": "@sentraops/node",
+  "version": "1.0.0",
+  "description": "Official SentraOps Node.js SDK for error monitoring and diagnostics",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "prepare": "npm run build",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "sentraops",
+    "monitoring",
+    "errors",
+    "sdk",
+    "apm",
+    "sentry"
+  ],
+  "author": "SentraOps Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  }
+}

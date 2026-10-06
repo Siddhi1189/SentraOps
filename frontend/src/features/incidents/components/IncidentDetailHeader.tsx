@@ -1,5 +1,7 @@
 import type { IncidentDetail } from '../types/incidents';
 import { StatusChip, type StatusVariant } from '../../../components/ui/StatusChip/StatusChip';
+import { Button } from '../../../components/ui/Button/Button';
+import { useAcknowledgeIncidentMutation } from '../hooks/useIncidents';
 import styles from './IncidentDetailHeader.module.css';
 
 export interface IncidentDetailHeaderProps {
@@ -16,6 +18,7 @@ const statusChipMap: Record<IncidentDetail['status'], StatusVariant> = {
 
 export function IncidentDetailHeader({ incident }: IncidentDetailHeaderProps) {
   const chipVariant = statusChipMap[incident.status] || 'unknown';
+  const acknowledgeMutation = useAcknowledgeIncidentMutation();
 
   return (
     <div className={styles.card}>
@@ -36,6 +39,21 @@ export function IncidentDetailHeader({ incident }: IncidentDetailHeaderProps) {
           >
             {incident.severity}
           </span>
+          {!incident.acknowledgedAt && incident.status !== 'resolved' && (
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() =>
+                acknowledgeMutation.mutate({
+                  id: incident.id,
+                  updatedAt: incident.updatedAt,
+                })
+              }
+              disabled={acknowledgeMutation.isPending}
+            >
+              {acknowledgeMutation.isPending ? 'Acknowledging...' : 'Acknowledge'}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -66,6 +84,21 @@ export function IncidentDetailHeader({ incident }: IncidentDetailHeaderProps) {
             {incident.resolvedAt
               ? new Date(incident.resolvedAt).toLocaleString()
               : 'Unresolved'}
+          </span>
+        </div>
+
+        <div className={styles.metaItem}>
+          <span className={styles.label}>Acknowledgment</span>
+          <span className={styles.value}>
+            {incident.acknowledgedAt
+              ? `Acknowledged at ${new Date(incident.acknowledgedAt).toLocaleString()}${
+                  incident.acknowledgedByUser
+                    ? ` by ${incident.acknowledgedByUser.name || incident.acknowledgedByUser.email}`
+                    : ''
+                }`
+              : incident.status === 'resolved'
+              ? 'Resolved without acknowledgment'
+              : 'Unacknowledged'}
           </span>
         </div>
       </div>

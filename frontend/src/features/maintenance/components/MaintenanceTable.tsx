@@ -9,7 +9,7 @@ import {
   TablePagination,
 } from '../../../components/ui/Table/Table';
 import { MaintenanceStatusChip } from './MaintenanceStatusChip';
-import { Button } from '../../../components/ui/Button/Button';
+import { TableActionsMenu } from '../../../components/ui/TableActionsMenu/TableActionsMenu';
 import { useSession } from '../../../app/providers/SessionProvider';
 import { can } from '../../../permissions/can';
 import styles from './MaintenanceTable.module.css';
@@ -85,26 +85,28 @@ export function MaintenanceTable({
 
                 {showActions && (
                   <TableCell dataLabel="Actions">
-                    <div className={styles.actionsCell}>
-                      {onEdit && (
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          onClick={() => onEdit(win)}
-                        >
-                          Edit
-                        </Button>
-                      )}
-                      {onDelete && (
-                        <Button
-                          type="button"
-                          variant="danger"
-                          onClick={() => onDelete(win)}
-                        >
-                          Delete
-                        </Button>
-                      )}
-                    </div>
+                    <TableActionsMenu
+                      label={`Actions for ${win.title}`}
+                      items={[
+                        ...(onEdit
+                          ? [
+                              {
+                                label: 'Edit',
+                                onClick: () => onEdit(win),
+                              },
+                            ]
+                          : []),
+                        ...(onDelete
+                          ? [
+                              {
+                                label: 'Delete',
+                                variant: 'danger' as const,
+                                onClick: () => onDelete(win),
+                              },
+                            ]
+                          : []),
+                      ]}
+                    />
                   </TableCell>
                 )}
               </TableRow>

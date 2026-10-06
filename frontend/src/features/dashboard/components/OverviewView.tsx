@@ -12,9 +12,20 @@ import { IncidentTrendsBarCard } from './IncidentTrendsBarCard';
 import { QuickActionsCard } from './QuickActionsCard';
 import styles from './OverviewView.module.css';
 
+function getRollingDateRange(): string {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - 6);
+  const formatOpts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+  const startStr = start.toLocaleDateString('en-US', formatOpts);
+  const endStr = end.toLocaleDateString('en-US', { ...formatOpts, year: 'numeric' });
+  return `${startStr} – ${endStr}`;
+}
+
 export function OverviewView() {
   const { user } = useSession();
-  const userName = user?.name ? user.name.split(' ')[0] : 'John';
+  const userName = user?.name ? user.name.split(' ')[0] : 'Engineer';
+  const dateRange = getRollingDateRange();
 
   return (
     <div className={styles.container}>
@@ -35,7 +46,7 @@ export function OverviewView() {
               <line x1="8" y1="2" x2="8" y2="6" />
               <line x1="3" y1="10" x2="21" y2="10" />
             </svg>
-            <span>May 23 &ndash; May 29, 2025</span>
+            <span>{dateRange}</span>
           </div>
 
           <button type="button" className={styles.exportBtn} onClick={() => window.print()}>

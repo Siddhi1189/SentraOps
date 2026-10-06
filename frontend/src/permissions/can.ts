@@ -18,10 +18,22 @@ export type Permission =
   | 'escalation:manage'
   | 'organization:manage'
   | 'settings:manage'
+  | 'statusPage:read'
+  | 'statusPage:manage'
+  | 'notification:read'
   | 'audit:read'
   | 'member:invite'
   | 'member:changeRole'
-  | 'member:remove';
+  | 'member:remove'
+  | 'project:create'
+  | 'project:read'
+  | 'project:update'
+  | 'project:delete'
+  | 'issue:read'
+  | 'issue:update'
+  | 'issue:createIncident'
+  | 'alert:read'
+  | 'alert:manage';
 
 const ROLE_PERMISSIONS: Record<Lowercase<UserRole>, Permission[]> = {
   owner: [
@@ -42,10 +54,22 @@ const ROLE_PERMISSIONS: Record<Lowercase<UserRole>, Permission[]> = {
     'escalation:manage',
     'organization:manage',
     'settings:manage',
+    'statusPage:read',
+    'statusPage:manage',
+    'notification:read',
     'audit:read',
     'member:invite',
     'member:changeRole',
     'member:remove',
+    'project:create',
+    'project:read',
+    'project:update',
+    'project:delete',
+    'issue:read',
+    'issue:update',
+    'issue:createIncident',
+    'alert:read',
+    'alert:manage',
   ],
   admin: [
     'service:create',
@@ -63,13 +87,30 @@ const ROLE_PERMISSIONS: Record<Lowercase<UserRole>, Permission[]> = {
     'maintenance:delete',
     'maintenance:manage',
     'escalation:manage',
+    'statusPage:read',
+    'statusPage:manage',
+    'notification:read',
     'audit:read',
     'member:invite',
+    'project:create',
+    'project:read',
+    'project:update',
+    'project:delete',
+    'issue:read',
+    'issue:update',
+    'issue:createIncident',
+    'alert:read',
+    'alert:manage',
   ],
   viewer: [
     'service:read',
     'incident:read',
     'maintenance:read',
+    'statusPage:read',
+    'notification:read',
+    'project:read',
+    'issue:read',
+    'alert:read',
   ],
 };
 

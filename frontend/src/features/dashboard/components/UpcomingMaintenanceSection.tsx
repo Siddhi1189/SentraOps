@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useMaintenanceQuery } from '../../maintenance/hooks/useMaintenance';
 import { Spinner } from '../../../components/ui/Spinner/Spinner';
 import { ErrorState } from '../../../components/ui/ErrorState/ErrorState';
+import { EmptyState } from '../../../components/ui/EmptyState/EmptyState';
 import styles from './UpcomingMaintenanceSection.module.css';
 
 export function UpcomingMaintenanceSection() {
@@ -37,19 +38,26 @@ export function UpcomingMaintenanceSection() {
     (w) => w.status === 'scheduled' || w.status === 'in_progress'
   );
 
-  // If no backend maintenance data, render standard operational maintenance schedule
-  const displayWindows = activeWindows.length > 0
-    ? activeWindows.map((w) => ({
-        id: w.id,
-        service: w.title || 'Infrastructure Maintenance',
-        time: `${new Date(w.startTime).toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${new Date(w.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
-        status: w.status === 'in_progress' ? 'In Progress' : 'Upcoming',
-      }))
-    : [
-        { id: '1', service: 'User Service', time: 'May 30, 02:00 AM - 04:00 AM', status: 'Upcoming' },
-        { id: '2', service: 'Payment Service', time: 'Jun 01, 01:00 AM - 03:00 AM', status: 'Upcoming' },
-        { id: '3', service: 'Analytics DB', time: 'Jun 02, 11:00 PM - Jun 03, 01:00 AM', status: 'Scheduled' },
-      ];
+  if (activeWindows.length === 0) {
+    return (
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Maintenance Windows</h2>
+        </div>
+        <EmptyState
+          title="No Scheduled Maintenance"
+          description="No upcoming maintenance windows are currently scheduled."
+        />
+      </div>
+    );
+  }
+
+  const displayWindows = activeWindows.map((w) => ({
+    id: w.id,
+    service: w.title || 'Infrastructure Maintenance',
+    time: `${new Date(w.startTime).toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${new Date(w.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+    status: w.status === 'in_progress' ? 'In Progress' : 'Upcoming',
+  }));
 
   return (
     <div className={styles.card}>

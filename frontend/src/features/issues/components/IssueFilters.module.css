@@ -1,0 +1,16 @@
+.filtersContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 12px);
+  align-items: center;
+  margin-bottom: var(--space-4, 16px);
+}
+
+.searchInput {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.filterSelect {
+  min-width: 140px;
+}

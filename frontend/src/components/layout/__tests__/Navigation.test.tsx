@@ -8,22 +8,34 @@ import { setAccessToken } from '../../../lib/authTokenStore';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../../test/msw/server';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 function renderWithProviders(initialEntries = ['/app']) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0 },
+      mutations: { retry: false },
+    },
+  });
+
   return render(
-    <SessionProvider>
-      <MemoryRouter initialEntries={initialEntries}>
-        <Routes>
-          <Route path="/app" element={<AppShell />}>
-            <Route index element={<h1>Overview Page</h1>} />
-            <Route path="services" element={<h1>Services Page</h1>} />
-            <Route path="incidents" element={<h1>Incidents Page</h1>} />
-            <Route path="maintenance" element={<h1>Maintenance Page</h1>} />
-            <Route path="analytics" element={<h1>Analytics Page</h1>} />
-            <Route path="settings" element={<h1>Settings Page</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <MemoryRouter initialEntries={initialEntries}>
+          <Routes>
+            <Route path="/app" element={<AppShell />}>
+              <Route index element={<h1>Overview Page</h1>} />
+              <Route path="services" element={<h1>Services Page</h1>} />
+              <Route path="incidents" element={<h1>Incidents Page</h1>} />
+              <Route path="maintenance" element={<h1>Maintenance Page</h1>} />
+              <Route path="analytics" element={<h1>Analytics Page</h1>} />
+              <Route path="notifications" element={<h1>Notifications Page</h1>} />
+              <Route path="settings" element={<h1>Settings Page</h1>} />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }
 

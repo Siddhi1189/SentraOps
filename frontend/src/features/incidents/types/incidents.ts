@@ -44,6 +44,7 @@ export interface TimelineEvent {
 export interface IncidentDetail extends Incident {
   service?: Service;
   assignedUser?: User | null;
+  acknowledgedByUser?: User | null;
   timelineEvents?: TimelineEvent[];
 }
 

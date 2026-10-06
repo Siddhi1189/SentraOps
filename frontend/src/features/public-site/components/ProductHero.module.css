@@ -160,56 +160,6 @@
   color: var(--color-amber-500);
 }
 
-/* Social Proof Row */
-.socialProofRow {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.avatarStack {
-  display: flex;
-  align-items: center;
-}
-
-.stackAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid #FFFFFF;
-  margin-left: -8px;
-  object-fit: cover;
-}
-
-.stackAvatar:first-child {
-  margin-left: 0;
-}
-
-.ratingInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.starsRow {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.scoreText {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-text-primary);
-  margin-left: 0.25rem;
-}
-
-.trustText {
-  font-size: 0.775rem;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-  margin-top: 1px;
-}
-
 /* Right Column */
 .rightCol {
   display: flex;
@@ -238,10 +188,6 @@
   }
 
   .featurePillsRow {
-    justify-content: center;
-  }
-
-  .socialProofRow {
     justify-content: center;
   }
 }

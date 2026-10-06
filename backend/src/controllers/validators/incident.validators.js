@@ -10,6 +10,14 @@ const updateIncidentSchema = z.object({
   updatedAt: z.string().datetime().optional(), // For optimistic concurrency
 });
 
+const acknowledgeIncidentSchema = z.object({
+  updatedAt: z.string().datetime().optional(),
+});
+
+const addCommentSchema = z.object({
+  comment: z.string().min(1, 'Comment cannot be empty').max(2000),
+});
+
 const incidentQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(10),
@@ -18,5 +26,15 @@ const incidentQuerySchema = z.object({
   serviceId: z.string().uuid().optional(),
 });
 
-export { updateIncidentSchema, incidentQuerySchema };
-export default { updateIncidentSchema, incidentQuerySchema };
+export {
+  updateIncidentSchema,
+  acknowledgeIncidentSchema,
+  addCommentSchema,
+  incidentQuerySchema,
+};
+export default {
+  updateIncidentSchema,
+  acknowledgeIncidentSchema,
+  addCommentSchema,
+  incidentQuerySchema,
+};

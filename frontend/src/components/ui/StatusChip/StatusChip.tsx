@@ -6,6 +6,7 @@ export type StatusVariant =
   | 'degraded'
   | 'maintenance'
   | 'unknown'
+  | 'paused'
   | 'open'
   | 'investigating'
   | 'resolved'

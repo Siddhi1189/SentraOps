@@ -4,6 +4,7 @@ import { ErrorState } from '../../../components/ui/ErrorState/ErrorState';
 import { IncidentDetailHeader } from './IncidentDetailHeader';
 import { IncidentUpdatePanel } from './IncidentUpdatePanel';
 import { IncidentTimeline } from './IncidentTimeline';
+import { IncidentAiSummary } from './IncidentAiSummary';
 import { useIncidentQuery, useIncidentTimelineQuery } from '../hooks/useIncidents';
 import styles from './IncidentDetailView.module.css';
 
@@ -66,6 +67,8 @@ export function IncidentDetailView({ incidentId }: IncidentDetailViewProps) {
 
       <IncidentDetailHeader incident={incident} />
 
+      <IncidentAiSummary incident={incident} />
+
       {/* Grid stacking single column < 1024px */}
       <div className={styles.layoutGrid}>
         <IncidentUpdatePanel incident={incident} onReload={handleReloadAll} />
@@ -75,7 +78,7 @@ export function IncidentDetailView({ incidentId }: IncidentDetailViewProps) {
             <Spinner size="md" />
           </div>
         ) : (
-          <IncidentTimeline events={timelineEvents} />
+          <IncidentTimeline events={timelineEvents} incidentId={incident.id} />
         )}
       </div>
     </div>

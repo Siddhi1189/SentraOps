@@ -63,6 +63,23 @@
   flex: 1;
 }
 
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.navGroupTitle {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  padding: 0.25rem 0.85rem;
+  margin-top: 0.25rem;
+}
+
 .navItem {
   display: flex;
   align-items: center;
@@ -114,50 +131,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.trialCard {
-  background-color: #102837;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-md);
-  padding: 1rem 0.85rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.trialHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.25rem;
-}
-
-.trialTitle {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #FFFFFF;
-}
-
-.trialText {
-  font-size: 0.725rem;
-  color: #94A3B8;
-  margin: 0 0 0.75rem 0;
-}
-
-.upgradeBtn {
-  background-color: var(--color-amber-500);
-  color: #0B1F2A;
-  font-size: 0.775rem;
-  font-weight: 700;
-  text-align: center;
-  padding: 0.45rem;
-  border-radius: var(--radius-xs);
-  text-decoration: none;
-  transition: all var(--transition-fast);
-}
-
-.upgradeBtn:hover {
-  background-color: var(--color-amber-600);
-  color: #0B1F2A;
-}
 
 .helpCard {
   background-color: rgba(255, 255, 255, 0.03);
@@ -217,7 +190,6 @@
   inset: 0;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
-  backdrop-filter: blur(4px);
   display: flex;
   justify-content: flex-start;
 }

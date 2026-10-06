@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SentraOps Demo Target Shop</title>
+  <script src="/sentraops.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary: #3b82f6;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+    .badge-up {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-down {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: currentColor;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: -8px;
+    }
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    button {
+      padding: 12px 18px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .btn-label {
+      font-size: 0.9375rem;
+    }
+    .btn-hint {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+    .btn-error {
+      background-color: #dc2626;
+      color: #fff;
+    }
+    .btn-slow {
+      background-color: #d97706;
+      color: #fff;
+    }
+    .btn-crash {
+      background-color: #7c3aed;
+      color: #fff;
+    }
+    .btn-outage {
+      background-color: #2563eb;
+      color: #fff;
+    }
+    .btn-browser {
+      background-color: #059669;
+      color: #fff;
+    }
+    .console-box {
+      background-color: #0b1120;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.8125rem;
+      color: #38bdf8;
+      height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .log-item {
+      display: flex;
+      gap: 8px;
+    }
+    .log-time {
+      color: var(--text-muted);
+    }
+    .log-err {
+      color: #f87171;
+    }
+    .log-ok {
+      color: #4ade80;
+    }
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>Demo Shop</h1>
+        <span class="badge" id="health-badge">
+          <span class="status-dot"></span>
+          <span id="health-text">Checking...</span>
+        </span>
+      </div>
+      <div>
+        <span id="sdk-status" style="font-size: 0.8125rem; color: var(--text-muted);">SDK: Checking...</span>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2 class="card-title">Operations & Fault Injection Controls</h2>
+      <p class="card-subtitle">
+        Trigger errors, latency spikes, or full outages to observe SentraOps issue grouping, regression detection, and alert rules live.
+      </p>
+
+      <div class="btn-grid">
+        <button class="btn-error" id="btn-throw-error">
+          <span class="btn-label">Throw error</span>
+          <span class="btn-hint">GET /api/error (caught by SDK)</span>
+        </button>
+
+        <button class="btn-slow" id="btn-slow">
+          <span class="btn-label">Slow endpoint</span>
+          <span class="btn-hint">GET /api/slow (latency trigger)</span>
+        </button>
+
+        <button class="btn-crash" id="btn-crash-db">
+          <span class="btn-label">Crash DB</span>
+          <span class="btn-hint">GET /api/crash-db (captureException)</span>
+        </button>
+
+        <button class="btn-outage" id="btn-toggle-outage">
+          <span class="btn-label">Toggle outage</span>
+          <span class="btn-hint">POST /api/toggle-down (/health 500)</span>
+        </button>
+
+        <button class="btn-browser" id="btn-browser-error">
+          <span class="btn-label">Browser error</span>
+          <span class="btn-hint">SentraOps.captureException()</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="card-title">Activity Console</h2>
+        <a href="#" id="btn-clear-log" style="font-size: 0.75rem; color: var(--text-muted); text-decoration: none;">Clear</a>
+      </div>
+      <div class="console-box" id="console">
+        <div class="log-item">
+          <span class="log-time">[System]</span>
+          <span>Ready. Click any action button above to test SentraOps instrumentation.</span>
+        </div>
+      </div>
+      <div class="info-bar">
+        <span>Endpoints: /health, /api/products, /api/slow, /api/error, /api/crash-db</span>
+        <span id="port-info">Port: ...</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const consoleBox = document.getElementById('console');
+    const healthBadge = document.getElementById('health-badge');
+    const healthText = document.getElementById('health-text');
+    const sdkStatus = document.getElementById('sdk-status');
+    const portInfo = document.getElementById('port-info');
+
+    function log(msg, type = 'info') {
+      const time = new Date().toLocaleTimeString();
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.innerHTML = `<span class="log-time">[${time}]</span> <span class="${type === 'err' ? 'log-err' : type === 'ok' ? 'log-ok' : ''}">${msg}</span>`;
+      consoleBox.appendChild(item);
+      consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
+
+    async function checkStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        portInfo.textContent = `Port: ${data.port}`;
+
+        if (data.isHealthDown) {
+          healthBadge.className = 'badge badge-down';
+          healthText.textContent = 'Outage Active (/health 500)';
+        } else {
+          healthBadge.className = 'badge badge-up';
+          healthText.textContent = 'Healthy (/health 200)';
+        }
+
+        if (data.hasDsn) {
+          sdkStatus.textContent = 'SDK: Active (' + data.dsn + ')';
+          sdkStatus.style.color = 'var(--success)';
+          // Init browser snippet if DSN is set
+          if (window.SentraOps && data.dsn) {
+            window.SentraOps.init({ dsn: data.dsn, environment: 'production' });
+          }
+        } else {
+          sdkStatus.textContent = 'SDK: DSN Not Configured';
+          sdkStatus.style.color = 'var(--warning)';
+        }
+      } catch (err) {
+        healthBadge.className = 'badge badge-down';
+        healthText.textContent = 'Offline';
+      }
+    }
+
+    document.getElementById('btn-throw-error').addEventListener('click', async () => {
+      log('Calling GET /api/error...');
+      try {
+        const res = await fetch('/api/error');
+        const data = await res.json();
+        log(`Error response: ${data.error || '500'} - ${data.message}`, 'err');
+      } catch (err) {
+        log(`Error captured: ${err.message}`, 'err');
+      }
+    });
+
+    document.getElementById('btn-slow').addEventListener('click', async () => {
+      log('Calling GET /api/slow (waiting for delay)...');
+      const start = Date.now();
+      try {
+        const res = await fetch('/api/slow');
+        const data = await res.json();
+        const duration = Date.now() - start;
+        log(`Slow endpoint responded in ${duration}ms: ${data.message}`, 'ok');
+      } catch (err) {
+        log(`Slow call failed: ${err.message}`, 'err');
+      }
+    });
+
+    document.getElementById('btn-crash-db').addEventListener('click', async () => {
+      log('Calling GET /api/crash-db...');
+      try {
+        const res = await fetch('/api/crash-db');
+        const data = await res.json();
+        log(`DB Crash response: ${data.error} - ${data.message}`, 'err');
+      } catch (err) {
+        log(`Request failed: ${err.message}`, 'err');
+      }
+    });
+
+    document.getElementById('btn-toggle-outage').addEventListener('click', async () => {
+      log('Calling POST /api/toggle-down...');
+      try {
+        const res = await fetch('/api/toggle-down', { method: 'POST' });
+        const data = await res.json();
+        log(data.message, data.isHealthDown ? 'err' : 'ok');
+        await checkStatus();
+      } catch (err) {
+        log(`Toggle failed: ${err.message}`, 'err');
+      }
+    });
+
+    document.getElementById('btn-browser-error').addEventListener('click', () => {
+      log('Triggering browser-side error via window.SentraOps.captureException...');
+      try {
+        throw new Error('FrontendCheckoutError: Unable to parse cart state from LocalStorage in checkout view');
+      } catch (err) {
+        if (window.SentraOps) {
+          window.SentraOps.captureException(err, {
+            tags: { view: 'checkout', cartItems: '3' },
+            user: { id: 'usr-browser-12', email: 'shopper@test.com' },
+          });
+          log('Browser error dispatched to SentraOps Ingest!', 'ok');
+        } else {
+          log('SentraOps browser snippet not initialized', 'err');
+        }
+      }
+    });
+
+    document.getElementById('btn-clear-log').addEventListener('click', (e) => {
+      e.preventDefault();
+      consoleBox.innerHTML = '';
+      log('Console cleared.');
+    });
+
+    checkStatus();
+    setInterval(checkStatus, 5000);
+  </script>
+</body>
+</html>

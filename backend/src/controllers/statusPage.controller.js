@@ -17,5 +17,10 @@ const getStatusPageMaintenance = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, { maintenance });
 });
 
-export { getStatusPage, getStatusPageIncidents, getStatusPageMaintenance };
-export default { getStatusPage, getStatusPageIncidents, getStatusPageMaintenance };
+const getStatusPageUptime = asyncHandler(async (req, res) => {
+  const data = await StatusPageService.getStatusPageUptime(req.params.orgSlug);
+  return ApiResponse.success(res, data);
+});
+
+export { getStatusPage, getStatusPageIncidents, getStatusPageMaintenance, getStatusPageUptime };
+export default { getStatusPage, getStatusPageIncidents, getStatusPageMaintenance, getStatusPageUptime };

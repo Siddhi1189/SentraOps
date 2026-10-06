@@ -27,7 +27,7 @@ export function OverallStatusBanner({ services }: OverallStatusBannerProps) {
     degraded: {
       title: 'Partial Degradation Detected',
       subtitle: 'One or more services are experiencing performance degradation.',
-      icon: '⚠',
+      icon: '!',
       className: styles.degraded,
     },
     down: {

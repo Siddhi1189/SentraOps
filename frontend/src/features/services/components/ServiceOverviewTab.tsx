@@ -1,5 +1,6 @@
 import type { Service } from '../../../types/domain';
 import { StatusChip } from '../../../components/ui/StatusChip/StatusChip';
+import { ServicePerformanceSection } from './ServicePerformanceSection';
 import styles from './ServiceOverviewTab.module.css';
 
 export interface ServiceOverviewTabProps {
@@ -8,7 +9,10 @@ export interface ServiceOverviewTabProps {
 
 export function ServiceOverviewTab({ service }: ServiceOverviewTabProps) {
   return (
-    <div className={styles.grid}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6, 24px)' }}>
+      <ServicePerformanceSection service={service} />
+
+      <div className={styles.grid}>
       <div className={styles.card}>
         <h4 className={styles.cardTitle}>Status & Availability</h4>
         <div className={styles.detailRow}>
@@ -81,5 +85,6 @@ export function ServiceOverviewTab({ service }: ServiceOverviewTabProps) {
         )}
       </div>
     </div>
+  </div>
   );
 }

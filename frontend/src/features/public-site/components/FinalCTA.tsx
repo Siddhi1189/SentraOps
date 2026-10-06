@@ -14,8 +14,8 @@ export interface FinalCTAProps {
 
 export function FinalCTA({
   title = 'Ready to Simplify Your Operations?',
-  subtitle = 'Join 500+ engineering teams already monitoring smarter with SentraOps.',
-  primaryText = 'Start 14-Day Free Trial',
+  subtitle = 'Start monitoring your systems and automating incident response with SentraOps.',
+  primaryText = 'Get started',
   primaryLink = '/register',
   isFullWidth = false,
 }: FinalCTAProps) {
@@ -35,7 +35,6 @@ export function FinalCTA({
                 </svg>
               </Link>
             </div>
-            <span className={styles.microcopy}>No credit card required.</span>
           </div>
         </div>
       </section>
@@ -54,8 +53,6 @@ export function FinalCTA({
           <polyline points="12 5 19 12 12 19" />
         </svg>
       </Link>
-
-      <span className={styles.microcopy}>No credit card required.</span>
     </div>
   );
 }

@@ -145,6 +145,132 @@ class HealthCheckRepository {
       },
     });
   }
+
+  /**
+   * Get response time percentiles (p50, p95, p99) and uptime percentages over 24h, 7d, 30d
+   * using SQL percentile_cont aggregation.
+   * @param {string} serviceId
+   * @param {string} organizationId
+   */
+  static async getServicePerformance(serviceId, organizationId) {
+    const service = await prisma.service.findFirst({
+      where: { id: serviceId, organizationId },
+      select: { id: true, name: true, monitorType: true },
+    });
+
+    if (!service) {
+      return null;
+    }
+
+    const now = new Date();
+    const since24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const since7d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const since30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const queryAgg = async (since) => {
+      const rows = await prisma.$queryRaw`
+        SELECT
+          COUNT(*)::int AS "totalChecks",
+          COUNT(*) FILTER (WHERE status = 'up')::int AS "upChecks",
+          COALESCE(ROUND((COUNT(*) FILTER (WHERE status = 'up')::numeric / NULLIF(COUNT(*), 0)::numeric) * 100, 2)::float, 100) AS "uptimePercentage",
+          COALESCE(ROUND(percentile_cont(0.50) WITHIN GROUP (ORDER BY "response_time_ms")::numeric, 2)::float, 0) AS "p50",
+          COALESCE(ROUND(percentile_cont(0.95) WITHIN GROUP (ORDER BY "response_time_ms")::numeric, 2)::float, 0) AS "p95",
+          COALESCE(ROUND(percentile_cont(0.99) WITHIN GROUP (ORDER BY "response_time_ms")::numeric, 2)::float, 0) AS "p99"
+        FROM "health_checks"
+        WHERE "service_id" = ${serviceId}::uuid AND "checked_at" >= ${since};
+      `;
+      return rows[0] || {
+        totalChecks: 0,
+        upChecks: 0,
+        uptimePercentage: 100,
+        p50: 0,
+        p95: 0,
+        p99: 0,
+      };
+    };
+
+    const [w24h, w7d, w30d, recentPoints, latestSsl] = await Promise.all([
+      queryAgg(since24h),
+      queryAgg(since7d),
+      queryAgg(since30d),
+      prisma.healthCheck.findMany({
+        where: { serviceId },
+        select: {
+          id: true,
+          status: true,
+          responseTimeMs: true,
+          checkedAt: true,
+        },
+        orderBy: { checkedAt: 'desc' },
+        take: 50,
+      }),
+      prisma.healthCheck.findFirst({
+        where: { serviceId, sslDaysRemaining: { not: null } },
+        select: { sslDaysRemaining: true, checkedAt: true },
+        orderBy: { checkedAt: 'desc' },
+      }),
+    ]);
+
+    const orderedPoints = [...recentPoints].reverse();
+
+    return {
+      serviceId,
+      windows: {
+        '24h': w24h,
+        '7d': w7d,
+        '30d': w30d,
+      },
+      timeSeries: orderedPoints,
+      sparkline: orderedPoints.slice(-24).map((p) => p.responseTimeMs || 0),
+      ssl: latestSsl
+        ? {
+            daysRemaining: latestSsl.sslDaysRemaining,
+            checkedAt: latestSsl.checkedAt,
+          }
+        : null,
+    };
+  }
+
+  /**
+   * Get recent 24 data points per service for sparkline rendering
+   * @param {string[]} serviceIds
+   */
+  static async getRecentSparklines(serviceIds) {
+    if (!serviceIds || serviceIds.length === 0) return {};
+
+    const checks = await prisma.healthCheck.findMany({
+      where: { serviceId: { in: serviceIds } },
+      select: {
+        serviceId: true,
+        status: true,
+        responseTimeMs: true,
+        checkedAt: true,
+      },
+      orderBy: { checkedAt: 'desc' },
+      take: serviceIds.length * 24,
+    });
+
+    const sparklines = {};
+    for (const id of serviceIds) {
+      sparklines[id] = [];
+    }
+
+    for (const check of checks) {
+      if (sparklines[check.serviceId] && sparklines[check.serviceId].length < 24) {
+        sparklines[check.serviceId].push({
+          status: check.status,
+          responseTimeMs: check.responseTimeMs || 0,
+          checkedAt: check.checkedAt,
+        });
+      }
+    }
+
+    for (const id of serviceIds) {
+      sparklines[id].reverse();
+    }
+
+    return sparklines;
+  }
 }
 
 export default HealthCheckRepository;

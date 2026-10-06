@@ -242,11 +242,11 @@ export function DashboardPreviewCard() {
                 </svg>
 
                 <div className={styles.xAxis}>
-                  <span>May 1</span>
-                  <span>May 8</span>
-                  <span>May 15</span>
-                  <span>May 22</span>
-                  <span>May 29</span>
+                  <span>Day 1</span>
+                  <span>Day 7</span>
+                  <span>Day 14</span>
+                  <span>Day 21</span>
+                  <span>Day 30</span>
                 </div>
               </div>
             </div>

@@ -28,7 +28,7 @@ function setupBullBoard(app) {
   });
 
   app.use('/admin/queues', serverAdapter.getRouter());
-  logger.info('📊 Bull Board queue dashboard mounted at /admin/queues (Development Only)');
+  logger.info('Bull Board queue dashboard mounted at /admin/queues (Development Only)');
 }
 
 export { setupBullBoard };

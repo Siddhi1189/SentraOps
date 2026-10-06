@@ -70,8 +70,99 @@ const deleteService = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, { message: 'Service deleted' });
 });
 
-export { createGroup, listGroups, getGroup, updateGroup, deleteGroup, createService, listServices, getService, updateService, deleteService };
+// ─── 3.2 Management Actions ──────────────────────────────────────────────────
+
+const pauseService = asyncHandler(async (req, res) => {
+  const service = await MonitoringService.pauseService(req.user.organizationId, req.params.id);
+  await AuditService.record(req.user.organizationId, req.user.id, 'service.paused', 'Service', service.id);
+  return ApiResponse.success(res, { service, message: 'Service paused successfully' });
+});
+
+const resumeService = asyncHandler(async (req, res) => {
+  const service = await MonitoringService.resumeService(req.user.organizationId, req.params.id);
+  await AuditService.record(req.user.organizationId, req.user.id, 'service.resumed', 'Service', service.id);
+  return ApiResponse.success(res, { service, message: 'Service resumed successfully' });
+});
+
+const checkNow = asyncHandler(async (req, res) => {
+  const result = await MonitoringService.checkNow(req.user.organizationId, req.params.id);
+  return ApiResponse.success(res, result);
+});
+
+// ─── 3.2 Bulk Actions ────────────────────────────────────────────────────────
+
+const bulkPause = asyncHandler(async (req, res) => {
+  const { serviceIds } = req.body;
+  const result = await MonitoringService.bulkPause(req.user.organizationId, serviceIds);
+  await AuditService.record(req.user.organizationId, req.user.id, 'services.bulk_paused', 'Service', null, { count: result.count, serviceIds });
+  return ApiResponse.success(res, { count: result.count, message: `${result.count} services paused` });
+});
+
+const bulkResume = asyncHandler(async (req, res) => {
+  const { serviceIds } = req.body;
+  const result = await MonitoringService.bulkResume(req.user.organizationId, serviceIds);
+  await AuditService.record(req.user.organizationId, req.user.id, 'services.bulk_resumed', 'Service', null, { count: result.count, serviceIds });
+  return ApiResponse.success(res, { count: result.count, message: `${result.count} services resumed` });
+});
+
+const bulkInterval = asyncHandler(async (req, res) => {
+  const { serviceIds, checkIntervalSeconds } = req.body;
+  const result = await MonitoringService.bulkChangeInterval(req.user.organizationId, serviceIds, checkIntervalSeconds);
+  await AuditService.record(req.user.organizationId, req.user.id, 'services.bulk_interval_changed', 'Service', null, { count: result.count, checkIntervalSeconds, serviceIds });
+  return ApiResponse.success(res, { count: result.count, message: `Check interval updated for ${result.count} services` });
+});
+
+const bulkGroup = asyncHandler(async (req, res) => {
+  const { serviceIds, groupId } = req.body;
+  const result = await MonitoringService.bulkChangeGroup(req.user.organizationId, serviceIds, groupId);
+  await AuditService.record(req.user.organizationId, req.user.id, 'services.bulk_group_changed', 'Service', null, { count: result.count, groupId, serviceIds });
+  return ApiResponse.success(res, { count: result.count, message: `Group updated for ${result.count} services` });
+});
+
+const bulkDelete = asyncHandler(async (req, res) => {
+  const { serviceIds } = req.body;
+  const result = await MonitoringService.bulkDelete(req.user.organizationId, serviceIds);
+  await AuditService.record(req.user.organizationId, req.user.id, 'services.bulk_deleted', 'Service', null, { count: result.count, serviceIds });
+  return ApiResponse.success(res, { count: result.count, message: `${result.count} services deleted` });
+});
+
+export {
+  createGroup,
+  listGroups,
+  getGroup,
+  updateGroup,
+  deleteGroup,
+  createService,
+  listServices,
+  getService,
+  updateService,
+  deleteService,
+  pauseService,
+  resumeService,
+  checkNow,
+  bulkPause,
+  bulkResume,
+  bulkInterval,
+  bulkGroup,
+  bulkDelete,
+};
 export default {
-  createGroup, listGroups, getGroup, updateGroup, deleteGroup,
-  createService, listServices, getService, updateService, deleteService,
+  createGroup,
+  listGroups,
+  getGroup,
+  updateGroup,
+  deleteGroup,
+  createService,
+  listServices,
+  getService,
+  updateService,
+  deleteService,
+  pauseService,
+  resumeService,
+  checkNow,
+  bulkPause,
+  bulkResume,
+  bulkInterval,
+  bulkGroup,
+  bulkDelete,
 };

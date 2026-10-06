@@ -70,10 +70,31 @@ export async function getStatusPageIncidents(
   });
 }
 
+export interface StatusPageDailyUptime {
+  date: string;
+  totalChecks: number;
+  uptimePercentage: number;
+  status: 'up' | 'degraded' | 'down';
+}
+
+export interface StatusPageServiceWithUptime extends StatusPageService {
+  overallUptime: number;
+  history: StatusPageDailyUptime[];
+}
+
 export async function getStatusPageMaintenance(
   orgSlug: string
 ): Promise<ApiSuccess<{ maintenance: MaintenanceWindow[] }>> {
   return apiRequest<{ maintenance: MaintenanceWindow[] }>(`/status/${orgSlug}/maintenance`, {
+    method: 'GET',
+    isPublic: true,
+  });
+}
+
+export async function getStatusPageUptime(
+  orgSlug: string
+): Promise<ApiSuccess<{ services: StatusPageServiceWithUptime[] }>> {
+  return apiRequest<{ services: StatusPageServiceWithUptime[] }>(`/status/${orgSlug}/uptime`, {
     method: 'GET',
     isPublic: true,
   });

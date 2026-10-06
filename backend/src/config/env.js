@@ -25,7 +25,7 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error('❌ Invalid environment configuration:');
+  console.error('Invalid environment configuration:');
   console.error(JSON.stringify(parsed.error.format(), null, 2));
   process.exit(1);
 }
@@ -51,7 +51,7 @@ if (parsed.data.NODE_ENV === 'production') {
     parsed.data.JWT_REFRESH_SECRET.startsWith('change_me');
 
   if (isAccessPlaceholder || isRefreshPlaceholder) {
-    console.error('❌ CRITICAL SECURITY ERROR: Production deployment detected with default/placeholder JWT secrets!');
+    console.error('CRITICAL SECURITY ERROR: Production deployment detected with default/placeholder JWT secrets!');
     console.error('Please set strong, custom JWT_ACCESS_SECRET and JWT_REFRESH_SECRET values (minimum 32 characters) in your environment variables.');
     process.exit(1);
   }

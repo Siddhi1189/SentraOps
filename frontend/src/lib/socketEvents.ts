@@ -4,6 +4,8 @@ import {
   servicesKeys,
   maintenanceKeys,
   analyticsKeys,
+  issuesKeys,
+  projectsKeys,
 } from './queryKeys';
 
 export interface IncidentCreatedPayload {
@@ -43,9 +45,18 @@ export interface MaintenanceEndedPayload {
   maintenanceId?: string;
 }
 
+export interface IssueEventPayload {
+  issueId: string;
+  projectId: string;
+  title: string;
+  environment: string;
+}
+
 export interface SocketEventCallbacks {
   onIncidentCreated?: (incident: IncidentCreatedPayload['incident']) => void;
   onIncidentUpdated?: (payload: IncidentUpdatedPayload) => void;
+  onIssueCreated?: (payload: IssueEventPayload) => void;
+  onIssueRegression?: (payload: IssueEventPayload) => void;
 }
 
 /**
@@ -99,7 +110,24 @@ export function handleSocketEvent(
       break;
     }
 
+    case 'issue-created':
+    case 'issue-regression': {
+      const data = payload as IssueEventPayload;
+      queryClient.invalidateQueries({ queryKey: issuesKeys.all });
+      queryClient.invalidateQueries({ queryKey: projectsKeys.all });
+      if (data?.issueId) {
+        queryClient.invalidateQueries({ queryKey: issuesKeys.detail(data.issueId) });
+      }
+      if (eventName === 'issue-created') {
+        callbacks?.onIssueCreated?.(data);
+      } else {
+        callbacks?.onIssueRegression?.(data);
+      }
+      break;
+    }
+
     default:
       break;
   }
 }
+

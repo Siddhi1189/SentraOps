@@ -1100,4 +1100,178 @@ export const handlers = [
     mockEscalationPolicies = mockEscalationPolicies.filter((p) => p.id !== params.id);
     return HttpResponse.json({ success: true, data: { message: 'Escalation policy deleted successfully' } });
   }),
+
+  // Notifications Endpoints
+  http.get('/api/v1/notifications', ({ request }) => {
+    const url = new URL(request.url);
+    const status = url.searchParams.get('status');
+    let filtered = mockNotifications;
+    if (status && status !== 'all') {
+      filtered = mockNotifications.filter((n) => n.status === status);
+    }
+    const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
+    return HttpResponse.json({
+      success: true,
+      data: {
+        notifications: filtered,
+        unreadCount,
+      },
+      meta: {
+        total: filtered.length,
+        page: 1,
+        limit: 20,
+      },
+    });
+  }),
+
+  http.patch('/api/v1/notifications/read-all', () => {
+    mockNotifications = mockNotifications.map((n) => ({ ...n, isRead: true }));
+    return HttpResponse.json({
+      success: true,
+      data: { message: 'All notifications marked as read' },
+    });
+  }),
+
+  http.patch('/api/v1/notifications/:id/read', ({ params }) => {
+    const notif = mockNotifications.find((n) => n.id === params.id);
+    if (!notif) {
+      return HttpResponse.json(
+        { success: false, error: { code: 'NOT_FOUND', message: 'Notification not found' } },
+        { status: 404 }
+      );
+    }
+    mockNotifications = mockNotifications.map((n) =>
+      n.id === params.id ? { ...n, isRead: true } : n
+    );
+    return HttpResponse.json({
+      success: true,
+      data: { message: 'Notification marked as read' },
+    });
+  }),
+
+  // Status Page Settings Endpoints
+  http.get('/api/v1/status-page-settings', () => {
+    return HttpResponse.json({
+      success: true,
+      data: { settings: mockStatusPageSettings },
+    });
+  }),
+
+  http.patch('/api/v1/status-page-settings', async ({ request }) => {
+    const authHeader = request.headers.get('Authorization');
+    if (authHeader?.includes('viewer')) {
+      return HttpResponse.json(
+        { success: false, error: { code: 'FORBIDDEN', message: 'Viewer cannot update status page settings' } },
+        { status: 403 }
+      );
+    }
+    const body = (await request.json()) as Partial<typeof mockStatusPageSettings>;
+    mockStatusPageSettings = {
+      ...mockStatusPageSettings,
+      ...body,
+    };
+    return HttpResponse.json({
+      success: true,
+      data: { settings: mockStatusPageSettings },
+    });
+  }),
+
+  // Analytics Performance Endpoint
+  http.get('/api/v1/analytics/services/:id/performance', ({ params }) => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        serviceId: params.id,
+        windows: {
+          '24h': { totalChecks: 144, upChecks: 144, uptimePercentage: 100, p50: 45, p95: 110, p99: 210 },
+          '7d': { totalChecks: 1008, upChecks: 1005, uptimePercentage: 99.7, p50: 48, p95: 115, p99: 220 },
+          '30d': { totalChecks: 4320, upChecks: 4300, uptimePercentage: 99.54, p50: 50, p95: 120, p99: 230 },
+        },
+        timeSeries: [
+          { id: '1', status: 'up', responseTimeMs: 42, checkedAt: new Date().toISOString() },
+          { id: '2', status: 'up', responseTimeMs: 50, checkedAt: new Date(Date.now() - 60000).toISOString() },
+        ],
+        sparkline: [42, 45, 48, 50, 43, 44, 46],
+        ssl: { daysRemaining: 78, checkedAt: new Date().toISOString() },
+      },
+    });
+  }),
+
+  // Public Status Page 90-Day Uptime Endpoint
+  http.get('/api/v1/status/:orgSlug/uptime', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        services: mockServices.map((s) => ({
+          id: s.id,
+          name: s.name,
+          currentStatus: s.currentStatus,
+          environment: s.environment,
+          group: null,
+          overallUptime: 99.9,
+          history: Array.from({ length: 90 }, (_, i) => ({
+            date: `2026-0${Math.floor(i / 30) + 1}-${(i % 30) + 1}`,
+            totalChecks: 24,
+            uptimePercentage: 100,
+            status: 'up' as const,
+          })),
+        })),
+      },
+    });
+  }),
 ];
+
+let mockNotifications = [
+  {
+    id: 'notif-1',
+    channel: 'email' as const,
+    recipient: 'devops@sentraops.com',
+    status: 'sent' as const,
+    sentAt: new Date(Date.now() - 300000).toISOString(),
+    createdAt: new Date(Date.now() - 300000).toISOString(),
+    title: 'Incident: Authentication Latency Spike',
+    isRead: false,
+    incident: {
+      id: 'inc-11111111-1111-4111-8111-111111111111',
+      title: 'Authentication Latency Spike',
+      severity: 'high' as const,
+    },
+    maintenance: null,
+  },
+  {
+    id: 'notif-2',
+    channel: 'slack' as const,
+    recipient: '#alerts-prod',
+    status: 'sent' as const,
+    sentAt: new Date(Date.now() - 1200000).toISOString(),
+    createdAt: new Date(Date.now() - 1200000).toISOString(),
+    title: 'Maintenance: Database Schema Migration',
+    isRead: false,
+    incident: null,
+    maintenance: {
+      id: 'maint-1',
+      title: 'Database Schema Migration',
+    },
+  },
+  {
+    id: 'notif-3',
+    channel: 'webhook' as const,
+    recipient: 'https://pager.acme.corp/webhook',
+    status: 'failed' as const,
+    sentAt: null,
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    title: 'Notification via webhook',
+    isRead: true,
+    incident: null,
+    maintenance: null,
+  },
+];
+
+let mockStatusPageSettings = {
+  id: 'sps-1',
+  organizationId: 'o1',
+  subdomain: 'acme-corp',
+  customDomain: 'status.acme.corp',
+  logoUrl: 'https://acme.corp/logo.png',
+  theme: 'light',
+};

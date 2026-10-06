@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useIncidentsQuery } from '../../incidents/hooks/useIncidents';
 import { Spinner } from '../../../components/ui/Spinner/Spinner';
 import { ErrorState } from '../../../components/ui/ErrorState/ErrorState';
+import { EmptyState } from '../../../components/ui/EmptyState/EmptyState';
 import styles from './RecentIncidentsSection.module.css';
 
 export function RecentIncidentsSection() {
@@ -32,15 +33,21 @@ export function RecentIncidentsSection() {
     );
   }
 
-  const fetchedIncidents = incidentsRes?.data || [];
+  const incidents = incidentsRes?.data || [];
 
-  // If no backend incidents yet, render standard operational list
-  const incidents = fetchedIncidents.length > 0 ? fetchedIncidents : [
-    { id: '1', title: 'API Gateway Timeout', severity: 'critical', createdAt: '2m ago' },
-    { id: '2', title: 'Payment Service 5XX', severity: 'high', createdAt: '15m ago' },
-    { id: '3', title: 'User Service Slow Response', severity: 'low', createdAt: '1h ago' },
-    { id: '4', title: 'Inventory Service Down', severity: 'high', createdAt: '2h ago' },
-  ];
+  if (incidents.length === 0) {
+    return (
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Recent Incidents</h2>
+        </div>
+        <EmptyState
+          title="No Recent Incidents"
+          description="All systems are operating normally. No active incidents detected."
+        />
+      </div>
+    );
+  }
 
   const severityColorMap: Record<string, string> = {
     critical: '#EF4444',

@@ -26,11 +26,26 @@ import escalationRoutes from './routes/escalation.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import statusPageRoutes from './routes/statusPage.routes.js';
 import auditLogRoutes from './routes/auditLog.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
+import statusPageSettingsRoutes from './routes/statusPageSettings.routes.js';
+import projectRoutes from './routes/project.routes.js';
+import ingestRoutes from './routes/ingest.routes.js';
+import issueRoutes from './routes/issue.routes.js';
+import alertChannelRoutes from './routes/alertChannel.routes.js';
+import alertRuleRoutes from './routes/alertRule.routes.js';
+import heartbeatRoutes from './routes/heartbeat.routes.js';
+import limitsRoutes from './routes/limits.routes.js';
+import demoRoutes from './routes/demo.routes.js';
+
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json');
 
 const app = express();
+
+// Ingest API open CORS (allows cross-origin error reporting from browser SDK snippet)
+app.use('/api/ingest', cors({ origin: '*' }), ingestRoutes);
+app.use('/api/v1/ingest', cors({ origin: '*' }), ingestRoutes);
 
 // Security and Performance Middlewares
 app.use(helmet());
@@ -87,9 +102,35 @@ v1Router.use('/escalation-policies', apiRateLimiter, escalationRoutes);
 v1Router.use('/analytics', apiRateLimiter, analyticsRoutes);
 v1Router.use('/status', statusPageRoutes);
 v1Router.use('/audit-logs', apiRateLimiter, auditLogRoutes);
+v1Router.use('/notifications', apiRateLimiter, notificationRoutes);
+v1Router.use('/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
+v1Router.use('/projects', apiRateLimiter, projectRoutes);
+v1Router.use('/issues', apiRateLimiter, issueRoutes);
+v1Router.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
+v1Router.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
+v1Router.use('/heartbeat', heartbeatRoutes);
+v1Router.use('/limits', apiRateLimiter, limitsRoutes);
+v1Router.use('/demo', apiRateLimiter, demoRoutes);
+
 
 // Mount versioned API router at /api/v1
 app.use('/api/v1', v1Router);
+
+// Direct /api mount for non-v1 prefixed calls (e.g. /api/notifications, /api/status-page-settings, /api/projects, /api/issues)
+app.use('/api/services', apiRateLimiter, serviceRoutes);
+app.use('/api/incidents', apiRateLimiter, incidentRoutes);
+app.use('/api/analytics', apiRateLimiter, analyticsRoutes);
+app.use('/api/status', statusPageRoutes);
+app.use('/api/notifications', apiRateLimiter, notificationRoutes);
+app.use('/api/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
+app.use('/api/projects', apiRateLimiter, projectRoutes);
+app.use('/api/issues', apiRateLimiter, issueRoutes);
+app.use('/api/alert-channels', apiRateLimiter, alertChannelRoutes);
+app.use('/api/alert-rules', apiRateLimiter, alertRuleRoutes);
+app.use('/api/heartbeat', heartbeatRoutes);
+app.use('/api/limits', apiRateLimiter, limitsRoutes);
+app.use('/api/demo', apiRateLimiter, demoRoutes);
+
 
 // Unversioned fallback routing for backward compatibility
 app.use('/auth', authRateLimiter, authRoutes);
@@ -102,6 +143,13 @@ app.use('/escalation-policies', apiRateLimiter, escalationRoutes);
 app.use('/analytics', apiRateLimiter, analyticsRoutes);
 app.use('/status', statusPageRoutes);
 app.use('/audit-logs', apiRateLimiter, auditLogRoutes);
+app.use('/notifications', apiRateLimiter, notificationRoutes);
+app.use('/status-page-settings', apiRateLimiter, statusPageSettingsRoutes);
+app.use('/projects', apiRateLimiter, projectRoutes);
+app.use('/issues', apiRateLimiter, issueRoutes);
+app.use('/alert-channels', apiRateLimiter, alertChannelRoutes);
+app.use('/alert-rules', apiRateLimiter, alertRuleRoutes);
+app.use('/heartbeat', heartbeatRoutes);
 
 // Return JSON for unmatched API routes instead of Express's default "Cannot GET /path".
 app.use((req, res) => ApiResponse.error(

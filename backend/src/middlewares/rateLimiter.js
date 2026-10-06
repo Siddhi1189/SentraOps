@@ -37,8 +37,26 @@ const apiRateLimiter = rateLimit({
   },
 });
 
-export { authRateLimiter, apiRateLimiter };
+// Public heartbeat rate limiter (e.g. 120 pings per minute per token/IP)
+const heartbeatRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 120, // 120 requests per minute
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.params?.token || req.ip,
+  handler: (req, res) => {
+    return ApiResponse.error(
+      res,
+      'TOO_MANY_REQUESTS',
+      'Heartbeat rate limit exceeded. Please reduce ping frequency.',
+      429
+    );
+  },
+});
+
+export { authRateLimiter, apiRateLimiter, heartbeatRateLimiter };
 export default {
   authRateLimiter,
   apiRateLimiter,
+  heartbeatRateLimiter,
 };

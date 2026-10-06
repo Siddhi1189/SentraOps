@@ -11,9 +11,13 @@ import { NotificationChannels, NotificationStatuses } from '../../src/constants.
 async function processNotificationJob(job) {
   const { organizationId, incidentId, maintenanceId, channel, recipient, subject, body } = job.data;
 
-  // Determine target recipient email addresses
+  // Determine target recipients
   let recipients = [];
-  if (recipient) {
+  if (Array.isArray(recipient)) {
+    recipients = recipient.filter(Boolean);
+  } else if (typeof recipient === 'string' && recipient.includes(',')) {
+    recipients = recipient.split(',').map((s) => s.trim()).filter(Boolean);
+  } else if (recipient) {
     recipients = [recipient];
   } else {
     // If no explicit recipient is specified, broadcast to organization admins/owners
@@ -28,18 +32,25 @@ async function processNotificationJob(job) {
     return;
   }
 
-  for (const targetEmail of recipients) {
+  for (const targetRecipient of recipients) {
+    // Safe recipient representation for DB record (max 255 chars)
+    const dbRecipient = targetRecipient.length > 255 ? targetRecipient.substring(0, 255) : targetRecipient;
     const notificationRecord = await NotificationRepository.create(organizationId, {
       incidentId: incidentId || null,
       maintenanceId: maintenanceId || null,
       channel: channel || NotificationChannels.EMAIL,
-      recipient: targetEmail,
+      recipient: dbRecipient,
       status: NotificationStatuses.PENDING,
     });
 
+    // Safely display target in logs without revealing full secret webhook tokens
+    const logTarget = targetRecipient.startsWith('http')
+      ? targetRecipient.replace(/\/[^/]+$/, '/...****')
+      : targetRecipient;
+
     try {
       await NotificationService.dispatch(channel || NotificationChannels.EMAIL, {
-        recipient: targetEmail,
+        recipient: targetRecipient,
         subject,
         body,
       });
@@ -49,14 +60,14 @@ async function processNotificationJob(job) {
         NotificationStatuses.SENT,
         new Date()
       );
-      logger.info(`Notification sent successfully to ${targetEmail}`);
+      logger.info(`Notification sent successfully to ${logTarget}`);
     } catch (err) {
       await NotificationRepository.workerUpdateStatus(
         notificationRecord.id,
         NotificationStatuses.FAILED,
         null
       );
-      logger.error(`Notification attempt ${job.attemptsMade} failed for ${targetEmail}: ${err.message}`);
+      logger.error(`Notification attempt ${job.attemptsMade} failed for ${logTarget}: ${err.message}`);
       
       const maxAttempts = job.opts?.attempts || 3;
       if (job.attemptsMade < maxAttempts) {

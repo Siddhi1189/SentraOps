@@ -7,6 +7,8 @@ import {
   updateIncident,
   getIncidentTimeline,
   listOrganizationMembers,
+  acknowledgeIncident,
+  addIncidentComment,
 } from '../../../api/incidents';
 import type {
   IncidentQueryParams,
@@ -66,3 +68,40 @@ export function useOrganizationMembersQuery(filters?: MemberQueryParams) {
     queryFn: () => listOrganizationMembers(filters),
   });
 }
+
+export function useAcknowledgeIncidentMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: ({ id, updatedAt }: { id: string; updatedAt?: string }) =>
+      acknowledgeIncident(id, updatedAt),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: incidentsKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: incidentsKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: incidentsKeys.timeline(id) });
+      toast.showToast('Incident acknowledged', 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to acknowledge incident', 'error');
+    },
+  });
+}
+
+export function useAddIncidentCommentMutation() {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation({
+    mutationFn: ({ id, comment }: { id: string; comment: string }) =>
+      addIncidentComment(id, comment),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: incidentsKeys.timeline(id) });
+      toast.showToast('Note added to timeline', 'success');
+    },
+    onError: (err: ApiError) => {
+      toast.showToast(err.error?.message || 'Failed to add note', 'error');
+    },
+  });
+}
+

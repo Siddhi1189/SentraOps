@@ -98,13 +98,45 @@ async function enqueueMaintenanceCheck(payload, delayMs = 0) {
   return maintenanceQueue.add('check', payload, { delay: delayMs });
 }
 
-export { healthCheckQueue, notificationQueue, maintenanceQueue, registerServiceJob, removeServiceJob, enqueueNotification, enqueueMaintenanceCheck };
-export default {
+// Dedicated Queue 4: Ingest event processing queue
+const ingestQueue = new Queue('ingest', {
+  connection,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 1000 },
+    removeOnComplete: { count: 500 },
+    removeOnFail: { count: 200 },
+  },
+});
+
+/**
+ * Enqueue an error event ingest task
+ * @param {Object} payload
+ */
+async function enqueueIngestEvent(payload) {
+  return ingestQueue.add('process-event', payload);
+}
+
+export {
   healthCheckQueue,
   notificationQueue,
   maintenanceQueue,
+  ingestQueue,
   registerServiceJob,
   removeServiceJob,
   enqueueNotification,
   enqueueMaintenanceCheck,
+  enqueueIngestEvent,
+};
+
+export default {
+  healthCheckQueue,
+  notificationQueue,
+  maintenanceQueue,
+  ingestQueue,
+  registerServiceJob,
+  removeServiceJob,
+  enqueueNotification,
+  enqueueMaintenanceCheck,
+  enqueueIngestEvent,
 };

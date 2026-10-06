@@ -10,6 +10,7 @@ import { processHealthCheckJob } from './processors/healthCheck.processor.js';
 import { processNotificationJob } from './processors/notification.processor.js';
 import { processMaintenanceJob } from './processors/maintenance.processor.js';
 import { processCleanupJob } from './processors/cleanup.processor.js';
+import { processIngestJob } from './processors/ingest.processor.js';
 
 // Redis publisher client for sending event messages to the API server pub/sub bridge
 const publisher = new Redis(env.REDIS_URL);
@@ -70,6 +71,19 @@ const maintenanceWorker = new Worker(
   { connection, concurrency: 2 }
 );
 
+// 4. Dedicated Ingest queue worker
+const ingestWorker = new Worker(
+  'ingest',
+  async (job) => {
+    logger.debug(`Processing ingest event job: ${job.id}`, {
+      jobId: job.id,
+      workerName: 'ingestWorker',
+    });
+    await processIngestJob(job, publishEvent);
+  },
+  { connection, concurrency: 10 }
+);
+
 // Synchronize all active services on startup
 async function syncActiveServiceJobs() {
   try {
@@ -103,7 +117,7 @@ const cleanupInterval = setInterval(async () => {
 }, 24 * 60 * 60 * 1000);
 
 // Initialize worker
-logger.info('⚡ SentraOps Worker Process initialized and listening for jobs.');
+logger.info('SentraOps Worker Process initialized and listening for jobs.');
 syncActiveServiceJobs();
 processCleanupJob();
 
@@ -127,6 +141,7 @@ async function shutdown(signal) {
       healthCheckWorker.close(),
       notificationWorker.close(),
       maintenanceWorker.close(),
+      ingestWorker.close(),
     ]);
     logger.info('All BullMQ workers closed.');
 

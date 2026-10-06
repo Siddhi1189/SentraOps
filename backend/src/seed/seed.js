@@ -10,7 +10,8 @@ async function seed() {
     where: { slug: 'acme-corp' },
   });
 
-  const passwordHash = await hashPassword('Password123!');
+  const seedPassword = process.env.DEMO_SEED_PASSWORD || 'ChangeMeInEnv!';
+  const passwordHash = await hashPassword(seedPassword);
 
   // 1. Create Organization
   const org = await prisma.organization.create({
@@ -71,52 +72,43 @@ async function seed() {
     },
   });
 
-  // 6. Create Demo Services
-  const servicesData = [
-    {
-      name: 'Authentication Service',
-      url: 'https://httpbin.org/status/200',
-      groupId: coreGroup.id,
-      checkIntervalSeconds: 30,
-      priority: 'high',
-      environment: 'production',
-    },
-    {
-      name: 'Payment Gateway API',
-      url: 'https://httpbin.org/status/200',
-      groupId: coreGroup.id,
-      checkIntervalSeconds: 60,
-      priority: 'critical',
-      environment: 'production',
-    },
-    {
-      name: 'Search Indexer',
-      url: 'https://httpbin.org/delay/1',
-      checkIntervalSeconds: 60,
-      priority: 'medium',
-      environment: 'production',
-    },
-    {
-      name: 'Failing Test Service',
-      url: 'https://httpbin.org/status/500',
-      checkIntervalSeconds: 30,
-      priority: 'low',
-      environment: 'staging',
-    },
-  ];
-
-  for (const sData of servicesData) {
-    const service = await prisma.service.create({
-      data: {
-        ...sData,
-        organizationId: org.id,
-        currentStatus: 'up',
+  // 6. Create Demo Services (targets demo app if configured)
+  const demoAppBaseUrl = process.env.DEMO_APP_BASE_URL;
+  if (demoAppBaseUrl) {
+    const servicesData = [
+      {
+        name: 'Demo Shop Uptime Service',
+        url: `${demoAppBaseUrl}/health`,
+        groupId: coreGroup.id,
+        checkIntervalSeconds: 30,
+        priority: 'high',
+        environment: 'production',
       },
-    });
-    logger.info(`Created Service: ${service.name} (${service.url})`);
+      {
+        name: 'Demo Shop Products API',
+        url: `${demoAppBaseUrl}/api/products`,
+        groupId: coreGroup.id,
+        checkIntervalSeconds: 60,
+        priority: 'medium',
+        environment: 'production',
+      },
+    ];
+
+    for (const sData of servicesData) {
+      const service = await prisma.service.create({
+        data: {
+          ...sData,
+          organizationId: org.id,
+          currentStatus: 'up',
+        },
+      });
+      logger.info(`Created Service: ${service.name} (${service.url})`);
+    }
+  } else {
+    logger.info('DEMO_APP_BASE_URL not set — skipping demo service seeding (targets demo-shop in Phase 4).');
   }
 
-  logger.info('✅ SentraOps database seed completed successfully.');
+  logger.info('SentraOps database seed completed successfully.');
 }
 
 seed()

@@ -7,13 +7,7 @@ import { AuditLogGuard } from './AuditLogGuard';
 
 // Public Website Pages
 import { HomePage } from '../../pages/public/HomePage';
-import { PlatformPage } from '../../pages/public/PlatformPage';
-import { PublicServicesPage } from '../../pages/public/PublicServicesPage';
-import { PublicIncidentsPage } from '../../pages/public/PublicIncidentsPage';
-import { PublicMaintenancePage } from '../../pages/public/PublicMaintenancePage';
-import { PublicAnalyticsPage } from '../../pages/public/PublicAnalyticsPage';
-import { AboutPage } from '../../pages/public/AboutPage';
-import { ContactPage } from '../../pages/public/ContactPage';
+import { DocsPage } from '../../pages/public/DocsPage';
 
 // Authentication Pages
 import { LoginPage } from '../../pages/LoginPage';
@@ -36,11 +30,22 @@ import { OrganizationPage } from '../../pages/OrganizationPage';
 import { TeamPage } from '../../pages/TeamPage';
 import { EscalationPoliciesPage } from '../../pages/EscalationPoliciesPage';
 import { AuditLogPage } from '../../pages/AuditLogPage';
+import { NotificationsPage } from '../../pages/NotificationsPage';
+import { StatusPageSettingsPage } from '../../pages/StatusPageSettingsPage';
+import { IssuesPage } from '../../pages/IssuesPage';
+import { IssueDetailPage } from '../../pages/IssueDetailPage';
+import { ProjectsPage } from '../../pages/ProjectsPage';
+import { AlertsPage } from '../../pages/AlertsPage';
+import { LimitsPage } from '../../pages/LimitsPage';
+
 
 // Public Customer Status Pages
 import { PublicStatusOverviewPage } from '../../pages/PublicStatusOverviewPage';
 import { PublicStatusIncidentsPage } from '../../pages/PublicStatusIncidentsPage';
 import { PublicStatusMaintenancePage } from '../../pages/PublicStatusMaintenancePage';
+import { StatusConfirmPage } from '../../pages/StatusConfirmPage';
+import { StatusUnsubscribePage } from '../../pages/StatusUnsubscribePage';
+
 
 import { SocketProvider } from '../providers/SocketProvider';
 
@@ -61,20 +66,27 @@ export function AppRouter() {
     <BrowserRouter>
       <Routes>
         {/* Unauthenticated Public Status Page Routes — Rendered OUTSIDE SessionProvider & ToastProvider */}
+        {/* Confirm/unsubscribe MUST come before :orgSlug to avoid param conflict */}
+        <Route path="/status/confirm/:token" element={<StatusConfirmPage />} />
+        <Route path="/status/unsubscribe/:token" element={<StatusUnsubscribePage />} />
         <Route path="/status/:orgSlug" element={<PublicStatusOverviewPage />} />
         <Route path="/status/:orgSlug/incidents" element={<PublicStatusIncidentsPage />} />
         <Route path="/status/:orgSlug/maintenance" element={<PublicStatusMaintenancePage />} />
         <Route path="/status" element={<Navigate to="/status/acme-corp" replace />} />
 
-        {/* Public Marketing Website Pages */}
+
+        {/* Public Website Pages */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/platform" element={<PlatformPage />} />
-        <Route path="/services" element={<PublicServicesPage />} />
-        <Route path="/incidents" element={<PublicIncidentsPage />} />
-        <Route path="/maintenance" element={<PublicMaintenancePage />} />
-        <Route path="/analytics" element={<PublicAnalyticsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/docs" element={<DocsPage />} />
+
+        {/* Redirects for removed marketing sub-pages */}
+        <Route path="/platform" element={<Navigate to="/" replace />} />
+        <Route path="/services" element={<Navigate to="/" replace />} />
+        <Route path="/incidents" element={<Navigate to="/" replace />} />
+        <Route path="/maintenance" element={<Navigate to="/" replace />} />
+        <Route path="/analytics" element={<Navigate to="/" replace />} />
+        <Route path="/about" element={<Navigate to="/" replace />} />
+        <Route path="/contact" element={<Navigate to="/" replace />} />
 
         {/* Authenticated Application Shell (mounts SessionProvider, ToastProvider, SocketProvider) */}
         <Route element={<AuthenticatedAppShell />}>
@@ -90,6 +102,8 @@ export function AppRouter() {
           {/* Protected Application Console Routes under /app */}
           <Route path="/app" element={<ProtectedRoute />}>
             <Route index element={<OverviewPage />} />
+            <Route path="issues" element={<IssuesPage />} />
+            <Route path="issues/:id" element={<IssueDetailPage />} />
             <Route path="services" element={<ServicesPage />} />
             <Route path="services/:id" element={<ServiceDetailPage />} />
             <Route path="incidents" element={<IncidentsPage />} />
@@ -97,11 +111,18 @@ export function AppRouter() {
             <Route path="maintenance" element={<MaintenancePage />} />
             <Route path="maintenance/:id" element={<MaintenanceDetailPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="status-pages" element={<Navigate to="/app/settings/status-page" replace />} />
             <Route path="settings" element={<SettingsPage />}>
               <Route index element={<Navigate to="/app/settings/organization" replace />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="alerts" element={<AlertsPage />} />
               <Route path="organization" element={<OrganizationPage />} />
               <Route path="team" element={<TeamPage />} />
               <Route path="escalation-policies" element={<EscalationPoliciesPage />} />
+              <Route path="status-page" element={<StatusPageSettingsPage />} />
+              <Route path="limits" element={<LimitsPage />} />
+
               <Route
                 path="audit-log"
                 element={

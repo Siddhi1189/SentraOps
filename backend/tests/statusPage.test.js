@@ -65,7 +65,8 @@ describe('Public Status Page API Endpoints (/status)', () => {
     expect(redis.del).toHaveBeenCalledWith(
       'status:org-999',
       'status:org-999:incidents',
-      'status:org-999:maintenance'
+      'status:org-999:maintenance',
+      'status:org-999:uptime'
     );
   });
 });

@@ -187,4 +187,42 @@ describe('Phase 4 — Services & Groups Integration & Compliance', () => {
       });
     });
   });
+
+  describe('Step 3.1: Richer Monitor Types & Assertions Form UI', () => {
+    it('switches between HTTP and Heartbeat monitor types and displays ping URL', async () => {
+      const user = userEvent.setup();
+      renderWithProviders(['/services']);
+
+      await waitFor(() => {
+        expect(screen.getByText('Authentication API')).toBeInTheDocument();
+      });
+
+      // Open Create Service Drawer
+      const createBtn = screen.getByRole('button', { name: /\+ add service/i });
+      await user.click(createBtn);
+
+      await waitFor(() => {
+        expect(screen.getByRole('heading', { level: 2, name: /create new service/i })).toBeInTheDocument();
+      });
+
+      // Default is HTTP monitor
+      expect(screen.getByLabelText(/target url/i)).toBeInTheDocument();
+      expect(screen.getByText(/assertions \(max 10\)/i)).toBeInTheDocument();
+
+      // Add an assertion
+      const addAssertionBtn = screen.getByRole('button', { name: /\+ add assertion/i });
+      await user.click(addAssertionBtn);
+
+      expect(screen.getByText('Assertion #1')).toBeInTheDocument();
+
+      // Switch to Heartbeat monitor
+      const monitorTypeSelect = screen.getByLabelText(/monitor type/i);
+      await user.selectOptions(monitorTypeSelect, 'heartbeat');
+
+      // HTTP specific fields hidden, Heartbeat configuration displayed
+      expect(screen.queryByLabelText(/target url/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/heartbeat ping configuration/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /copy ping url/i })).toBeInTheDocument();
+    });
+  });
 });

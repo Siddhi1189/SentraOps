@@ -189,3 +189,60 @@ export async function getHealthChecks(
     pagination: pagination as any,
   };
 }
+
+export async function pauseService(id: string): Promise<ApiSuccess<Service>> {
+  const res = await apiRequest<any>(`/services/${id}/pause`, { method: 'POST' });
+  const service = res.data && typeof res.data === 'object' && 'service' in res.data ? res.data.service : res.data;
+  return { ...res, data: service };
+}
+
+export async function resumeService(id: string): Promise<ApiSuccess<Service>> {
+  const res = await apiRequest<any>(`/services/${id}/resume`, { method: 'POST' });
+  const service = res.data && typeof res.data === 'object' && 'service' in res.data ? res.data.service : res.data;
+  return { ...res, data: service };
+}
+
+export async function checkNow(id: string): Promise<ApiSuccess<{ enqueued: boolean; message: string }>> {
+  return apiRequest<any>(`/services/${id}/check-now`, { method: 'POST' });
+}
+
+export async function bulkPause(serviceIds: string[]): Promise<ApiSuccess<{ count: number }>> {
+  return apiRequest<any>('/services/bulk/pause', {
+    method: 'POST',
+    body: { serviceIds },
+  });
+}
+
+export async function bulkResume(serviceIds: string[]): Promise<ApiSuccess<{ count: number }>> {
+  return apiRequest<any>('/services/bulk/resume', {
+    method: 'POST',
+    body: { serviceIds },
+  });
+}
+
+export async function bulkInterval(
+  serviceIds: string[],
+  checkIntervalSeconds: number
+): Promise<ApiSuccess<{ count: number }>> {
+  return apiRequest<any>('/services/bulk/interval', {
+    method: 'POST',
+    body: { serviceIds, checkIntervalSeconds },
+  });
+}
+
+export async function bulkGroup(
+  serviceIds: string[],
+  groupId: string | null
+): Promise<ApiSuccess<{ count: number }>> {
+  return apiRequest<any>('/services/bulk/group', {
+    method: 'POST',
+    body: { serviceIds, groupId },
+  });
+}
+
+export async function bulkDelete(serviceIds: string[]): Promise<ApiSuccess<{ count: number }>> {
+  return apiRequest<any>('/services/bulk', {
+    method: 'DELETE',
+    body: { serviceIds },
+  });
+}

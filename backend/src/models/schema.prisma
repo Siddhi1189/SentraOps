@@ -41,6 +41,11 @@ enum HealthStatus {
   timeout
 }
 
+enum MonitorType {
+  http
+  heartbeat
+}
+
 enum IncidentStatus {
   open
   investigating
@@ -91,6 +96,24 @@ enum EnvironmentType {
   staging
 }
 
+enum PlatformType {
+  node
+  browser
+  other
+}
+
+enum ErrorLevel {
+  error
+  warning
+  info
+}
+
+enum IssueStatus {
+  unresolved
+  resolved
+  ignored
+}
+
 model Organization {
   id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                String               @db.VarChar(255)
@@ -108,6 +131,11 @@ model Organization {
   statusPageSettings  StatusPageSettings?
   auditLogs           AuditLog[]
   inviteTokens        InviteToken[]
+  projects            Project[]
+  issues              Issue[]
+  alertChannels       AlertChannel[]
+  alertRules          AlertRule[]
+  subscribers         StatusSubscriber[]
 
   @@map("organizations")
 }
@@ -128,7 +156,10 @@ model User {
   refreshTokens  RefreshToken[]
   passwordResetTokens PasswordResetToken[]
   incidents      Incident[]
+  acknowledgedIncidents Incident[]          @relation("AcknowledgedIncidents")
   auditLogs      AuditLog[]
+  notificationReads NotificationRead[]
+  assignedIssues Issue[]              @relation("AssignedIssues")
 
   @@index([organizationId], map: "idx_users_organization_id")
   @@map("users")
@@ -197,16 +228,25 @@ model Service {
   organizationId        String              @map("organization_id") @db.Uuid
   groupId               String?             @map("group_id") @db.Uuid
   name                  String              @db.VarChar(255)
-  url                   String
+  url                   String?
+  monitorType           MonitorType         @default(http) @map("monitor_type")
   httpMethod            HttpMethod          @default(GET) @map("http_method")
   expectedStatusCode    Int                 @default(200) @map("expected_status_code")
   timeoutMs             Int                 @default(5000) @map("timeout_ms")
   checkIntervalSeconds  Int                 @default(60) @map("check_interval_seconds")
+  requestHeaders        Json?               @map("request_headers")
+  requestBody           String?             @map("request_body") @db.Text
+  assertions            Json?               @default("[]")
+  heartbeatToken        String?             @unique @map("heartbeat_token") @db.VarChar(64)
+  heartbeatIntervalSeconds Int?             @map("heartbeat_interval_seconds")
+  heartbeatGraceSeconds Int?                @map("heartbeat_grace_seconds")
+  lastHeartbeatAt       DateTime?           @map("last_heartbeat_at") @db.Timestamptz
   environment           EnvironmentType     @default(production) @map("environment")
   priority              PriorityLevel       @default(medium) @map("priority")
   currentStatus         ServiceStatus       @default(unknown) @map("current_status")
   consecutiveFailures   Int                 @default(0) @map("consecutive_failures")
   isActive              Boolean             @default(true) @map("is_active")
+  isDemo                Boolean             @default(false) @map("is_demo")
   createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz
   updatedAt             DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   organization          Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -216,11 +256,13 @@ model Service {
   incidents             Incident[]
   maintenanceWindows    MaintenanceWindow[]
   escalationPolicies    EscalationPolicy[]
+  alertRules            AlertRule[]
 
   @@index([organizationId], map: "idx_services_organization_id")
   @@index([groupId], map: "idx_services_group_id")
   @@index([currentStatus], map: "idx_services_current_status")
   @@index([createdAt(sort: Desc)], map: "idx_services_created_at")
+  @@index([heartbeatToken], map: "idx_services_heartbeat_token")
   @@map("services")
 }
 
@@ -246,14 +288,17 @@ model ServiceTag {
 }
 
 model HealthCheck {
-  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  serviceId      String       @map("service_id") @db.Uuid
-  status         HealthStatus
-  httpStatusCode Int?         @map("http_status_code")
-  responseTimeMs Int?         @map("response_time_ms")
-  errorMessage   String?      @map("error_message")
-  checkedAt      DateTime     @default(now()) @map("checked_at") @db.Timestamptz
-  service        Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId         String       @map("service_id") @db.Uuid
+  status            HealthStatus
+  httpStatusCode    Int?         @map("http_status_code")
+  responseTimeMs    Int?         @map("response_time_ms")
+  sslDaysRemaining  Int?         @map("ssl_days_remaining")
+  failedAssertion   Json?        @map("failed_assertion")
+  errorMessage      String?      @map("error_message")
+  isDemo            Boolean      @default(false) @map("is_demo")
+  checkedAt         DateTime     @default(now()) @map("checked_at") @db.Timestamptz
+  service           Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@index([serviceId, checkedAt(sort: Desc)], map: "idx_health_checks_service_time")
   @@map("health_checks")
@@ -263,20 +308,26 @@ model Incident {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   organizationId String           @map("organization_id") @db.Uuid
   serviceId      String           @map("service_id") @db.Uuid
-  assignedUserId String?          @map("assigned_user_id") @db.Uuid
-  title          String           @db.VarChar(255)
-  status         IncidentStatus   @default(open)
-  severity       IncidentSeverity @default(medium)
-  rootCause      String?          @map("root_cause")
-  resolutionNotes String?         @map("resolution_notes")
-  detectedAt     DateTime         @default(now()) @map("detected_at") @db.Timestamptz
-  resolvedAt     DateTime?        @map("resolved_at") @db.Timestamptz
-  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt      DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
-  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  service        Service          @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  assignedUser   User?            @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
-  timelineEvents TimelineEvent[]
+  assignedUserId        String?          @map("assigned_user_id") @db.Uuid
+  acknowledgedAt        DateTime?        @map("acknowledged_at") @db.Timestamptz
+  acknowledgedByUserId  String?          @map("acknowledged_by_user_id") @db.Uuid
+  title                 String           @db.VarChar(255)
+  status                IncidentStatus   @default(open)
+  severity              IncidentSeverity @default(medium)
+  rootCause             String?          @map("root_cause")
+  resolutionNotes       String?          @map("resolution_notes")
+  detectedAt            DateTime         @default(now()) @map("detected_at") @db.Timestamptz
+  resolvedAt            DateTime?        @map("resolved_at") @db.Timestamptz
+  aiSummary             String?          @map("ai_summary") @db.Text
+  isDemo                Boolean          @default(false) @map("is_demo")
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization          Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  service               Service          @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  assignedUser          User?            @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+  acknowledgedByUser    User?            @relation("AcknowledgedIncidents", fields: [acknowledgedByUserId], references: [id], onDelete: SetNull)
+  timelineEvents        TimelineEvent[]
+  issues         Issue[]          @relation("LinkedIssues")
   notifications  Notification[]
 
   @@index([organizationId, createdAt(sort: Desc)], map: "idx_incidents_org_created")
@@ -292,6 +343,7 @@ model TimelineEvent {
   eventType   TimelineEventType @map("event_type")
   description String
   metadata    Json?             @default("{}")
+  isDemo      Boolean           @default(false) @map("is_demo")
   createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
   incident    Incident          @relation(fields: [incidentId], references: [id], onDelete: Cascade)
 
@@ -347,6 +399,7 @@ model Notification {
   organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   incident       Incident?           @relation(fields: [incidentId], references: [id], onDelete: Cascade)
   maintenance    MaintenanceWindow?  @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+  notificationReads NotificationRead[]
 
   @@index([organizationId], map: "idx_notifications_org_id")
   @@index([status], map: "idx_notifications_status")
@@ -380,3 +433,212 @@ model AuditLog {
   @@index([organizationId, createdAt(sort: Desc)], map: "idx_audit_logs_org_id")
   @@map("audit_logs")
 }
+
+model NotificationRead {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId String       @map("notification_id") @db.Uuid
+  userId         String       @map("user_id") @db.Uuid
+  readAt         DateTime     @default(now()) @map("read_at") @db.Timestamptz
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, userId])
+  @@index([userId], map: "idx_notification_reads_user_id")
+  @@map("notification_reads")
+}
+
+model Project {
+  id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId     String          @map("organization_id") @db.Uuid
+  name               String          @db.VarChar(255)
+  platform           PlatformType    @default(node)
+  environmentDefault EnvironmentType @default(production) @map("environment_default")
+  isDemo             Boolean         @default(false) @map("is_demo")
+  createdAt          DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization       Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  apiKeys            ApiKey[]
+  errorEvents        ErrorEvent[]
+  issues             Issue[]
+  alertRules         AlertRule[]
+  releases           Release[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId], map: "idx_projects_org_id")
+  @@map("projects")
+}
+
+model ApiKey {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId  String    @map("project_id") @db.Uuid
+  name       String    @db.VarChar(255)
+  keyPrefix  String    @map("key_prefix") @db.VarChar(16)
+  keyHash    String    @unique @map("key_hash") @db.VarChar(64)
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([keyHash], map: "idx_api_keys_key_hash")
+  @@index([projectId], map: "idx_api_keys_project_id")
+  @@map("api_keys")
+}
+
+model Issue {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId         String       @map("project_id") @db.Uuid
+  organizationId    String       @map("organization_id") @db.Uuid
+  fingerprint       String       @db.VarChar(64)
+  title             String       @db.VarChar(255)
+  type              String       @db.VarChar(100)
+  level             ErrorLevel   @default(error)
+  status            IssueStatus  @default(unresolved)
+  environment       String       @default("production") @db.VarChar(50)
+  firstSeenAt       DateTime     @default(now()) @map("first_seen_at") @db.Timestamptz
+  lastSeenAt        DateTime     @default(now()) @map("last_seen_at") @db.Timestamptz
+  eventCount        Int          @default(1) @map("event_count")
+  userCount         Int          @default(0) @map("user_count")
+  assignedUserId    String?      @map("assigned_user_id") @db.Uuid
+  resolvedAt        DateTime?    @map("resolved_at") @db.Timestamptz
+  resolvedInRelease String?      @map("resolved_in_release") @db.VarChar(100)
+  regressedInRelease String?     @map("regressed_in_release") @db.VarChar(100)
+  isRegression      Boolean      @default(false) @map("is_regression")
+  isDemo            Boolean      @default(false) @map("is_demo")
+  linkedIncidentId  String?      @map("linked_incident_id") @db.Uuid
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  project           Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedUser      User?        @relation("AssignedIssues", fields: [assignedUserId], references: [id], onDelete: SetNull)
+  linkedIncident    Incident?    @relation("LinkedIssues", fields: [linkedIncidentId], references: [id], onDelete: SetNull)
+  errorEvents       ErrorEvent[]
+
+  @@unique([projectId, fingerprint, environment])
+  @@index([organizationId, status, lastSeenAt(sort: Desc)], map: "idx_issues_org_status_last_seen")
+  @@index([projectId], map: "idx_issues_project_id")
+  @@map("issues")
+}
+
+model ErrorEvent {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId   String     @map("project_id") @db.Uuid
+  issueId     String?    @map("issue_id") @db.Uuid
+  releaseId   String?    @map("release_id") @db.Uuid
+  type        String     @db.VarChar(100)
+  message     String     @db.Text
+  stack       String?    @db.Text
+  environment String     @default("production") @db.VarChar(50)
+  release     String?    @db.VarChar(100)
+  level       ErrorLevel @default(error)
+  tags        Json?      @default("{}")
+  breadcrumbs Json?      @default("[]")
+  user        Json?
+  request     Json?
+  isDemo      Boolean    @default(false) @map("is_demo")
+  occurredAt  DateTime   @default(now()) @map("occurred_at") @db.Timestamptz
+  receivedAt  DateTime   @default(now()) @map("received_at") @db.Timestamptz
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issue       Issue?     @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  releaseRef  Release?   @relation(fields: [releaseId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, occurredAt(sort: Desc)], map: "idx_error_events_project_occurred")
+  @@index([issueId, occurredAt(sort: Desc)], map: "idx_error_events_issue_occurred")
+  @@index([releaseId], map: "idx_error_events_release_id")
+  @@map("error_events")
+}
+
+model Release {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId   String       @map("project_id") @db.Uuid
+  version     String       @db.VarChar(100)
+  commitSha   String?      @map("commit_sha") @db.VarChar(100)
+  deployedAt  DateTime     @default(now()) @map("deployed_at") @db.Timestamptz
+  environment String       @default("production") @db.VarChar(50)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  errorEvents ErrorEvent[]
+
+  @@unique([projectId, version, environment], map: "uq_releases_project_version_env")
+  @@index([projectId], map: "idx_releases_project_id")
+  @@map("releases")
+}
+
+enum AlertRuleTrigger {
+  service_down_consecutive_failures
+  new_issue_in_environment
+  event_rate_threshold
+  response_time_threshold
+  ssl_expiration_warning
+}
+
+model AlertChannel {
+  id             String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String              @map("organization_id") @db.Uuid
+  type           NotificationChannel
+  name           String              @db.VarChar(255)
+  config         Json                @default("{}")
+  isActive       Boolean             @default(true) @map("is_active")
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  rules          AlertRule[]         @relation("AlertRuleChannels")
+
+  @@index([organizationId], map: "idx_alert_channels_org_id")
+  @@map("alert_channels")
+}
+
+model AlertRule {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId  String           @map("organization_id") @db.Uuid
+  name            String           @db.VarChar(255)
+  trigger         AlertRuleTrigger
+  conditions      Json             @default("{}")
+  serviceId       String?          @map("service_id") @db.Uuid
+  projectId       String?          @map("project_id") @db.Uuid
+  cooldownSeconds Int              @default(300) @map("cooldown_seconds")
+  snoozedUntil    DateTime?        @map("snoozed_until") @db.Timestamptz
+  isActive        Boolean          @default(true) @map("is_active")
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  service         Service?         @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  project         Project?         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  channels        AlertChannel[]   @relation("AlertRuleChannels")
+  fires           AlertRuleFire[]
+
+  @@index([organizationId], map: "idx_alert_rules_org_id")
+  @@index([serviceId], map: "idx_alert_rules_service_id")
+  @@index([projectId], map: "idx_alert_rules_project_id")
+  @@map("alert_rules")
+}
+
+model AlertRuleFire {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ruleId    String    @map("rule_id") @db.Uuid
+  firedAt   DateTime  @default(now()) @map("fired_at") @db.Timestamptz
+  context   Json?     @default("{}")
+  rule      AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId, firedAt(sort: Desc)], map: "idx_alert_rule_fires_rule_fired")
+  @@map("alert_rule_fires")
+}
+
+model StatusSubscriber {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId    String       @map("organization_id") @db.Uuid
+  email             String       @db.VarChar(255)
+  confirmToken      String       @unique @map("confirm_token") @db.VarChar(255)
+  unsubscribeToken  String       @unique @map("unsubscribe_token") @db.VarChar(255)
+  confirmedAt       DateTime?    @map("confirmed_at") @db.Timestamptz
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+  @@index([confirmToken])
+  @@index([unsubscribeToken])
+  @@map("status_subscribers")
+}
+

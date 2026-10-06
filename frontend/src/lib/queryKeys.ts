@@ -58,4 +58,47 @@ export const statusKeys = {
   overview: (orgSlug: string) => [...statusKeys.all, orgSlug, 'overview'] as const,
   incidents: (orgSlug: string) => [...statusKeys.all, orgSlug, 'incidents'] as const,
   maintenance: (orgSlug: string) => [...statusKeys.all, orgSlug, 'maintenance'] as const,
+  uptime: (orgSlug: string) => [...statusKeys.all, orgSlug, 'uptime'] as const,
 };
+
+export const notificationsKeys = {
+  all: ['notifications'] as const,
+  lists: () => [...notificationsKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...notificationsKeys.lists(), { filters }] as const,
+};
+
+export const statusPageSettingsKeys = {
+  all: ['status-page-settings'] as const,
+  settings: () => [...statusPageSettingsKeys.all, 'current'] as const,
+};
+
+export const issuesKeys = {
+  all: ['issues'] as const,
+  lists: () => [...issuesKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...issuesKeys.lists(), { filters }] as const,
+  details: () => [...issuesKeys.all, 'detail'] as const,
+  detail: (id: string) => [...issuesKeys.details(), id] as const,
+  events: (id: string, filters?: Record<string, unknown>) => [...issuesKeys.detail(id), 'events', { filters }] as const,
+};
+
+export const projectsKeys = {
+  all: ['projects'] as const,
+  lists: () => [...projectsKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...projectsKeys.lists(), { filters }] as const,
+  details: () => [...projectsKeys.all, 'detail'] as const,
+  detail: (id: string) => [...projectsKeys.details(), id] as const,
+  keys: (id: string) => [...projectsKeys.detail(id), 'keys'] as const,
+};
+
+export const alertChannelsKeys = {
+  all: ['alert-channels'] as const,
+  lists: () => [...alertChannelsKeys.all, 'list'] as const,
+  detail: (id: string) => [...alertChannelsKeys.all, 'detail', id] as const,
+};
+
+export const alertRulesKeys = {
+  all: ['alert-rules'] as const,
+  lists: () => [...alertRulesKeys.all, 'list'] as const,
+  detail: (id: string) => [...alertRulesKeys.all, 'detail', id] as const,
+};
+

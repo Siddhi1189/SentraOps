@@ -1,0 +1,258 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-light);
+  font-family: var(--font-sans);
+}
+
+.main {
+  flex: 1;
+}
+
+.heroSection {
+  background-color: var(--surface-cream);
+  padding: 4rem 1.5rem 3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.heroContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.categoryBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-amber-600);
+  background-color: rgba(232, 163, 61, 0.15);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0;
+}
+
+.contentSection {
+  padding: 3rem 1.5rem 5rem;
+}
+
+.gridContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .gridContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar {
+  position: sticky;
+  top: 6rem;
+  background-color: var(--surface-light);
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.sidebarTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.75rem 0;
+}
+
+.sidebarList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebarLink {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.sidebarLink:hover {
+  color: var(--color-amber-600);
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.sectionBlock {
+  scroll-margin-top: 6rem;
+}
+
+.sectionHeading {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 0.85rem 0;
+}
+
+.paragraph {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  margin: 0 0 1rem 0;
+}
+
+.bulletList {
+  padding-left: 1.25rem;
+  margin: 0 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.bulletList strong {
+  color: var(--color-text-primary);
+}
+
+.codeBlock {
+  background-color: var(--surface-dark);
+  color: var(--color-text-inverse);
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 1rem 0;
+}
+
+.sectionBlock code {
+  background-color: var(--surface-cream);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem;
+}
+
+.limitsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-light);
+  box-shadow: var(--elevation-rest);
+  margin-bottom: 1.5rem;
+}
+
+.limitsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-sans);
+}
+
+.limitsTable thead {
+  background-color: var(--surface-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.limitsTh {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: var(--color-teal-600);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.limitsTr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.limitsTr:last-child {
+  border-bottom: none;
+}
+
+.limitsTr:hover {
+  background-color: var(--surface-muted);
+}
+
+.limitsTdFeature {
+  padding: 0.75rem 1rem;
+  color: var(--color-text-primary);
+}
+
+.limitsTdValue {
+  padding: 0.75rem 1rem;
+  color: var(--color-teal-600);
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+}
+
+.sectionSubheading {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+.featureList {
+  padding-left: 1.25rem;
+  margin: 0 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.featureList strong {
+  color: var(--color-text-primary);
+}
+
+.unsupportedList {
+  padding-left: 1.25rem;
+  margin: 0 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}

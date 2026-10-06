@@ -24,6 +24,19 @@ class AnalyticsService {
   }
 
   /**
+   * Get service performance percentiles (p50, p95, p99) and uptime over 24h, 7d, 30d
+   * @param {string} serviceId
+   * @param {string} organizationId
+   */
+  static async getServicePerformance(serviceId, organizationId) {
+    const data = await HealthCheckRepository.getServicePerformance(serviceId, organizationId);
+    if (!data) {
+      throw new AppError('Service not found', 404, 'NOT_FOUND');
+    }
+    return data;
+  }
+
+  /**
    * Get incident analytics: MTTD, MTTR, frequency, severity distribution
    * @param {string} organizationId
    * @param {Object} query

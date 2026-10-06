@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.keyAlert {
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  border-radius: 6px;
+  padding: var(--space-3, 12px);
+  color: var(--color-warning);
+  font-size: 0.8125rem;
+}
+
+.keyBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  background-color: var(--surface-cream);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.keyText {
+  flex: 1;
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  overflow-x: auto;
+}
+
+.sectionTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: var(--space-2, 8px);
+  margin-bottom: var(--space-1, 4px);
+}
+
+.codeSnippet {
+  background-color: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  border-radius: 6px;
+  padding: var(--space-3, 12px);
+  font-family: var(--font-family-mono);
+  font-size: 0.8125rem;
+  overflow-x: auto;
+  margin: 0;
+  white-space: pre;
+}
+
+.statusCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 12px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  border-radius: 6px;
+  margin-top: var(--space-2, 8px);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.waitingStatus {
+  background-color: var(--surface-stone);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.receivedStatus {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+
+.pulseDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-info);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.successDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-status-healthy);
+}

@@ -75,3 +75,19 @@ jobs:
       - name: Verify API Startup
         working-directory: backend
         run: node -e "require('./src/app'); console.log('API syntax verification passed.'); process.exit(0)"
+
+      - name: Install SDK Dependencies
+        working-directory: packages/sdk-node
+        run: npm ci
+
+      - name: Build Node SDK
+        working-directory: packages/sdk-node
+        run: npm run build
+
+      - name: Test Node SDK
+        working-directory: packages/sdk-node
+        run: npm test
+
+      - name: Test CLI
+        working-directory: packages/cli
+        run: npm test
