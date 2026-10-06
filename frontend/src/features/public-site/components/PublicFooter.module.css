@@ -13,7 +13,7 @@
 
 .topGrid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1.4fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
   gap: 2rem;
   padding-bottom: 3.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -155,7 +155,7 @@
   padding-top: 2rem;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .copyright {
@@ -163,11 +163,12 @@
   font-size: 0.775rem;
   color: #64748B;
   margin: 0;
+  text-align: center;
 }
 
 @media (max-width: 1024px) {
   .topGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     row-gap: 2.5rem;
   }
 }
