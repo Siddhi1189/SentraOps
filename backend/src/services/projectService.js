@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import ProjectRepository from '../repositories/project.repository.js';
 import ApiKeyRepository from '../repositories/apiKey.repository.js';
 import AuditService from './auditService.js';
-import AppError from '../utils/appError.js';
+import AppError from '../utils/AppError.js';
 
 class ProjectService {
   /**

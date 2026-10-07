@@ -4,7 +4,7 @@ import ServiceRepository from '../repositories/service.repository.js';
 import IncidentRepository from '../repositories/incident.repository.js';
 import TimelineEventRepository from '../repositories/timelineEvent.repository.js';
 import AuditService from './auditService.js';
-import AppError from '../utils/appError.js';
+import AppError from '../utils/AppError.js';
 import { TimelineEventTypes } from '../constants.js';
 
 class IssueService {
