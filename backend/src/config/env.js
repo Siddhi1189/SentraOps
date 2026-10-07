@@ -11,7 +11,12 @@ const envSchema = z.object({
   CLIENT_ORIGIN: z
     .string()
     .default('http://localhost:3000')
-    .transform((val) => val.split(',').map((origin) => origin.trim()).filter(Boolean)),
+    .transform((val) =>
+      val
+        .split(',')
+        .map((origin) => origin.trim().replace(/\/+$/, ''))
+        .filter(Boolean)
+    ),
   JWT_ACCESS_SECRET: z.string().min(32, { message: 'JWT_ACCESS_SECRET must be at least 32 characters' }),
   JWT_REFRESH_SECRET: z.string().min(32, { message: 'JWT_REFRESH_SECRET must be at least 32 characters' }),
   SMTP_HOST: z.string(),

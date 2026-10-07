@@ -101,6 +101,79 @@ npm run dev      # Accessible at http://localhost:5173
 
 ---
 
+## Deployment
+
+Follow this guide to deploy SentraOps to [Render](https://render.com) (Backend API & Background Worker) and [Vercel](https://vercel.com) (Frontend).
+
+### Recommended Deployment Order
+1. **Render PostgreSQL**: Provision a managed PostgreSQL instance.
+2. **Render Redis**: Provision a managed Key Value / Redis instance.
+3. **Render Web Service (API)**: Deploy the `backend/` directory as a Web Service.
+4. **Render Background Worker**: Deploy the `backend/` directory as a Background Worker using the same database and Redis connections.
+5. **Vercel Frontend**: Deploy the `frontend/` directory to Vercel.
+6. **Configure Web Origin**: Set `CLIENT_ORIGIN` and `FRONTEND_URL` on both Render services to the Vercel production URL, then redeploy the backend services.
+
+---
+
+### Render Configuration
+
+#### 1. Web Service (Backend API)
+- **Root Directory**: `backend`
+- **Environment**: Node
+- **Build Command**: `npm install --include=dev && npx prisma migrate deploy --schema=src/models/schema.prisma`
+- **Start Command**: `npm start`
+- **Health Check Path**: `/health`
+
+#### 2. Background Worker
+- **Root Directory**: `backend`
+- **Environment**: Node
+- **Build Command**: `npm install --include=dev && npx prisma migrate deploy --schema=src/models/schema.prisma`
+- **Start Command**: `npm run start:worker`
+
+#### Environment Variables for Render (Web Service & Worker)
+
+| Variable | Requirement | Description |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | **Required** | PostgreSQL connection URL (e.g. internal Render connection string with `?schema=public`). |
+| `REDIS_URL` | **Required** | Redis connection URL for BullMQ queues and pub/sub relay. |
+| `JWT_ACCESS_SECRET` | **Required** | Random signing secret for JWT access tokens (minimum 32 characters; placeholders rejected in production). |
+| `JWT_REFRESH_SECRET` | **Required** | Random signing secret for JWT refresh tokens (minimum 32 characters; placeholders rejected in production). |
+| `SMTP_HOST` | **Required** | Outbound SMTP server host for transactional emails. |
+| `SMTP_USER` | **Required** | SMTP authentication username. |
+| `SMTP_PASS` | **Required** | SMTP authentication password. |
+| `CLIENT_ORIGIN` | Optional | Comma-separated allowed CORS web origins with no trailing slashes (e.g. `https://<your-app>.vercel.app`). |
+| `FRONTEND_URL` | Optional | Public frontend URL for notification emails and subscriber confirmation links. |
+| `PORT` | Optional | Web server HTTP port (automatically set by Render; defaults to `4000`). |
+| `NODE_ENV` | Optional | Runtime mode: `production`. |
+| `SMTP_PORT` | Optional | SMTP port (defaults to `587`). |
+| `SMTP_FROM` | Optional | Sender address (defaults to `noreply@sentraops.com`). |
+| `ANTHROPIC_API_KEY` | Optional | Anthropic API key for AI-assisted incident summaries. |
+| `ANTHROPIC_MODEL` | Optional | Anthropic Claude model identifier (defaults to `claude-sonnet-5-5`). |
+| `DEMO_SEED_PASSWORD` | Optional | Password for demo accounts when running manual seed. |
+| `DEMO_APP_BASE_URL` | Optional | Base URL for target demo store monitored during seed. |
+| `HEALTH_CHECK_RETENTION_DAYS` | Optional | Retention period in days for health check logs (defaults to `30`). |
+| `AUDIT_LOG_RETENTION_DAYS` | Optional | Retention period in days for audit log entries (defaults to `90`). |
+| `ERROR_EVENT_RETENTION_DAYS` | Optional | Retention period in days for error events (defaults to `30`). |
+
+---
+
+### Vercel Configuration (Frontend)
+
+- **Root Directory**: `frontend`
+- **Framework Preset**: Vite
+- **Build Command**: `npx vite build`
+- **Output Directory**: `dist`
+
+> **Note**: The Vercel Build Command uses `npx vite build` because `npm run build` runs `tsc` first and the repo has known pre-existing TypeScript errors.
+
+#### Environment Variables for Vercel
+
+| Variable | Requirement | Description |
+| :--- | :--- | :--- |
+| `VITE_API_URL` | Optional | Full base URL of the backend API including the `/api/v1` prefix (e.g. `https://<your-render-service>.onrender.com/api/v1`). If omitted, defaults to `/api/v1` (for setups where Vercel rewrites `/api` to Render). |
+
+---
+
 ## SDK Usage
 
 Install `@sentraops/node` in your Node/Express project:
