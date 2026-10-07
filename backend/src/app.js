@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import { createRequire } from 'module';
 import env from './config/env.js';
+import { corsOriginCallback } from './config/cors.js';
 import swaggerSpec from './docs/swagger.js';
 import correlationIdMiddleware from './middlewares/correlationId.js';
 import requestLogger from './middlewares/requestLogger.js';
@@ -51,13 +52,7 @@ app.use('/api/v1/ingest', cors({ origin: '*' }), ingestRoutes);
 app.use(helmet());
 app.use(compression());
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || env.CLIENT_ORIGIN.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: corsOriginCallback,
   credentials: true,
 }));
 

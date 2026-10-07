@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import { verifyAccessToken } from '../utils/jwt.js';
 import logger from '../utils/logger.js';
-import env from './env.js';
+import { corsOriginCallback } from './cors.js';
 
 let io = null;
 
@@ -12,13 +12,7 @@ let io = null;
 function initSocket(httpServer) {
   io = new Server(httpServer, {
     cors: {
-      origin: (origin, callback) => {
-        if (!origin || env.CLIENT_ORIGIN.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
+      origin: corsOriginCallback,
       methods: ['GET', 'POST'],
       credentials: true,
     },
